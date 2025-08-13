@@ -19,15 +19,15 @@ onload = () => {
 
     const world = new World();
 
+    const human = new Human();
+    human.x = canvas.width / 2 + 200;
+    human.y = canvas.height / 2 - 50;
+    world.addEntity(human);
+
     const cat = new Cat();
     cat.x = canvas.width / 2;
     cat.y = canvas.height / 2;
     world.addEntity(cat);
-
-    const human = new Human();
-    human.x = canvas.width / 2 + 200;
-    human.y = canvas.height / 2 + 100;
-    world.addEntity(human);
 
     let lastFrame = performance.now();
 
@@ -117,6 +117,8 @@ class Cat extends Entity {
         super();
         this.categories.push('cat');
         this.facing = 1;
+        this.attackCooldown = 0;
+        this.lastAttack = 0;
     }
 
     cycle(elapsed) {
@@ -130,6 +132,14 @@ class Cat extends Entity {
         this.x += speed * elapsed;
         this.walking = !!x;
         this.facing = x || this.facing;
+
+        if (downKeys[32] && this.attackCooldown <= 0) {
+            this.attackCooldown = 0.1;
+            this.lastAttack = this.age;
+            // TODO wap!
+        }
+
+        this.attackCooldown -= elapsed;
     }
 
     render() {
@@ -150,6 +160,8 @@ class Cat extends Entity {
         const EAR_LENGTH = 10;
         const EAR_WIDTH = 5;
 
+        const ATTACK_ANIMATION_DURATION = 0.2;
+
         // Body
         ctx.fillStyle = '#000';
         ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
@@ -160,9 +172,27 @@ class Cat extends Entity {
 
         // Legs
         ctx.save();
+
         ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 + legAngle);
-        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+
+        let length = LEG_LENGTH;
+        let thickness = LEG_THICKNESS;
+        if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
+            const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
+            const startAngle = -Math.PI / 3;
+            const endAngle = Math.PI / 2;
+
+            ctx.translate(0, (1 - progress) * -BODY_THICKNESS / 2);
+
+            ctx.rotate(startAngle + (endAngle - startAngle) * progress);
+
+            length += (1 - progress) * LEG_LENGTH;
+            thickness += (1 - progress) * LEG_THICKNESS * 0.5;
+        } else {
+            ctx.rotate(Math.PI / 2 + legAngle);
+        }
+
+        ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
         ctx.restore();
 
         ctx.save();
