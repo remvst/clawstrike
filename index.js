@@ -38,6 +38,7 @@ onload = () => {
 class World {
     constructor() {
         this.entities = [];
+        this.categories = new Map();
     }
 
     cycle(elapsed) {
@@ -59,6 +60,15 @@ class World {
 
     addEntity(entity) {
         this.entities.push(entity);
+
+        for (const categoryId of entity.categories) {
+            const category = this.categories.get(categoryId);
+            if (!category) {
+                this.categories.set(categoryId, new Set([entity]));
+            } else {
+                category.add(entity);
+            }
+        }
     }
 
     removeEntity(entity) {
@@ -66,12 +76,21 @@ class World {
         if (index !== -1) {
             this.entities.splice(index, 1);
         }
+
+        for (const category of entity.categories) {
+            this.categories.get(category)?.delete(entity);
+        }
+    }
+
+    category(categoryId) {
+        return this.categories.get(categoryId) || [];
     }
 }
 
 class Entity {
     constructor() {
         this.x = this.y = this.age = 0;
+        this.categories = [];
     }
 
     cycle(elapsed) {
@@ -84,6 +103,11 @@ class Entity {
 }
 
 class Cat extends Entity {
+    constructor() {
+        super();
+        this.categories.push('cat');
+    }
+
     render() {
         ctx.translate(this.x, this.y);
 
