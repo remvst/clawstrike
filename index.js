@@ -15,7 +15,19 @@ onload = () => {
     cat.y = canvas.height / 2;
     world.addEntity(cat);
 
-    world.render();
+    let lastFrame = performance.now();
+
+    const frame = () => {
+        const now = performance.now();
+        const elapsed = (now - lastFrame) / 1000;
+        lastFrame = now;
+
+        world.cycle(elapsed);
+        world.render();
+
+        requestAnimationFrame(frame);
+    };
+    frame();
 }
 
 class World {
@@ -54,11 +66,11 @@ class World {
 
 class Entity {
     constructor() {
-        this.x = this.y = 0;
+        this.x = this.y = this.age = 0;
     }
 
     cycle(elapsed) {
-
+        this.age += elapsed;
     }
 
     render() {
@@ -90,13 +102,25 @@ class Cat extends Entity {
         // Legs
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2);
+        ctx.rotate(Math.PI / 2 + Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
+        ctx.rotate(Math.PI / 2 - Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2);
+        ctx.rotate(Math.PI / 2 + Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
+        ctx.rotate(Math.PI / 2 - Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
@@ -108,8 +132,10 @@ class Cat extends Entity {
         ctx.strokeStyle = '#000';
         ctx.lineWidth = TAIL_THICKNESS;
         ctx.beginPath();
+        const phase = this.age * Math.PI * 3;
         for (let x = 0 ; x < TAIL_LENGTH; x += 1) {
-            ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2) * 5);
+            const amplitudeFactor = x / TAIL_LENGTH;
+            ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
         }
         ctx.stroke();
 
@@ -119,13 +145,21 @@ class Cat extends Entity {
         // Head
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - 5, -BODY_THICKNESS / 2 - 5);
+        ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 32);
         ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 
+        // Eyes
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(-3, -5, -4, 4);
+        ctx.fillRect(3, -5, 4, 4);
+        ctx.restore();
+
+        // Ears
         ctx.beginPath();
         ctx.moveTo(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
         ctx.lineTo(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
         ctx.lineTo(-HEAD_WIDTH / 2 + EAR_WIDTH, -HEAD_HEIGHT / 2);
-
         ctx.lineTo(HEAD_WIDTH / 2 - EAR_WIDTH, -HEAD_HEIGHT / 2);
         ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
         ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
