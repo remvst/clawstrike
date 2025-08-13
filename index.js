@@ -15,6 +15,11 @@ onload = () => {
     cat.y = canvas.height / 2;
     world.addEntity(cat);
 
+    const human = new Human();
+    human.x = canvas.width / 2 + 200;
+    human.y = canvas.height / 2;
+    world.addEntity(human);
+
     let lastFrame = performance.now();
 
     const frame = () => {
@@ -42,7 +47,7 @@ class World {
     }
 
     render() {
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         for (const entity of this.entities) {
@@ -82,10 +87,10 @@ class Cat extends Entity {
     render() {
         ctx.translate(this.x, this.y);
 
-        const BODY_LENGTH = 50;
+        const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
         const LEG_LENGTH = 15;
-        const LEG_THICKNESS = 5;
+        const LEG_THICKNESS = 4;
         const TAIL_LENGTH = 30;
         const TAIL_THICKNESS = 5;
 
@@ -164,6 +169,71 @@ class Cat extends Entity {
         ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
         ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
         ctx.fill();
+
+        ctx.restore();
+
+        // ctx.fillStyle = '#ff0';
+        // ctx.fillRect( -25,  -25, 50, 50);
+    }
+}
+
+class Human extends Entity {
+    render() {
+        ctx.translate(this.x, this.y);
+
+        const BODY_LENGTH = 60;
+        const BODY_THICKNESS = 30;
+
+        const LEG_LENGTH = 40;
+        const LEG_THICKNESS = 12;
+
+        const HEAD_WIDTH = 25;
+        const HEAD_HEIGHT = 25;
+
+        const NECK_THICKNESS = 12;
+        const NECK_LENGTH = 4;
+
+        const ARM_LENGTH = 40;
+        const ARM_THICKNESS = 10;
+
+        // Body
+        ctx.fillStyle = '#f00'
+        ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
+
+        // Legs
+        ctx.save();
+        ctx.translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, BODY_LENGTH / 2);
+        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, BODY_LENGTH / 2);
+        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH);
+        ctx.restore();
+
+        // Head
+        ctx.save();
+        ctx.translate(0, -BODY_LENGTH / 2);
+
+        ctx.fillRect(-NECK_THICKNESS / 2, 0, NECK_THICKNESS, -NECK_LENGTH);
+
+        ctx.translate(0, -NECK_LENGTH - HEAD_HEIGHT / 2);
+        ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
+        ctx.restore();
+
+        // Arm
+        ctx.save();
+        ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS, -BODY_LENGTH / 2 + NECK_LENGTH);
+        // ctx.rotate(Math.PI);
+        ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH, ARM_THICKNESS);
+
+        // Gun
+        ctx.save();
+        ctx.fillStyle = '#000';
+        ctx.translate(ARM_LENGTH, -2);
+        ctx.fillRect(0, 0, 30, -10);
+        ctx.fillRect(0, 0, 10, 10);
+        ctx.restore();
 
         ctx.restore();
 
