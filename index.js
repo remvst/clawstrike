@@ -1,5 +1,14 @@
 let canvas;
 let ctx;
+let downKeys = {};
+
+document.addEventListener('keydown', (event) => {
+    downKeys[event.keyCode] = true;
+});
+
+document.addEventListener('keyup', (event) => {
+    downKeys[event.keyCode] = false;
+});
 
 onload = () => {
     canvas = document.querySelector('canvas');
@@ -17,7 +26,7 @@ onload = () => {
 
     const human = new Human();
     human.x = canvas.width / 2 + 200;
-    human.y = canvas.height / 2;
+    human.y = canvas.height / 2 + 100;
     world.addEntity(human);
 
     let lastFrame = performance.now();
@@ -59,6 +68,7 @@ class World {
     }
 
     addEntity(entity) {
+        entity.world = this;
         this.entities.push(entity);
 
         for (const categoryId of entity.categories) {
@@ -106,10 +116,26 @@ class Cat extends Entity {
     constructor() {
         super();
         this.categories.push('cat');
+        this.facing = 1;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        let x = 0;
+        if (downKeys[37]) x = -1;
+        if (downKeys[39]) x = 1;
+
+        const speed = 500 * x;
+        this.x += speed * elapsed;
+        this.walking = !!x;
+        this.facing = x || this.facing;
     }
 
     render() {
         ctx.translate(this.x, this.y);
+
+        ctx.scale(this.facing, 1);
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
@@ -128,28 +154,32 @@ class Cat extends Entity {
         ctx.fillStyle = '#000';
         ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
 
+        const legAngle = this.walking
+            ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8
+            : 0;
+
         // Legs
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 + Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.rotate(Math.PI / 2 + legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 - Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.rotate(Math.PI / 2 - legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 + Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.rotate(Math.PI / 2 + legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 - Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8);
+        ctx.rotate(Math.PI / 2 - legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
@@ -161,7 +191,7 @@ class Cat extends Entity {
         ctx.strokeStyle = '#000';
         ctx.lineWidth = TAIL_THICKNESS;
         ctx.beginPath();
-        const phase = this.age * Math.PI * 3;
+        const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
         for (let x = 0 ; x < TAIL_LENGTH; x += 1) {
             const amplitudeFactor = x / TAIL_LENGTH;
             ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
@@ -174,7 +204,7 @@ class Cat extends Entity {
         // Head
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - 5, -BODY_THICKNESS / 2 - 5);
-        ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 32);
+        if (this.walking) ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 16);
         ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 
         // Eyes
@@ -202,8 +232,27 @@ class Cat extends Entity {
 }
 
 class Human extends Entity {
+
+    constructor() {
+        super();
+        this.categories.push('human');
+        this.aim = 0;
+        this.facing = 1;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        // Aim at the cat
+        for (const cat of this.world.category('cat')) {
+            this.aim = Math.atan2(cat.y - this.y, cat.x - this.x);
+            this.facing = Math.sign(cat.x - this.x) || this.facing;
+        }
+    }
+
     render() {
         ctx.translate(this.x, this.y);
+        ctx.scale(this.facing, 1);
 
         const BODY_LENGTH = 60;
         const BODY_THICKNESS = 30;
@@ -248,7 +297,13 @@ class Human extends Entity {
         // Arm
         ctx.save();
         ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS, -BODY_LENGTH / 2 + NECK_LENGTH);
-        // ctx.rotate(Math.PI);
+
+        let angle = this.aim;
+        if (this.facing < 0) {
+            angle = Math.atan2(Math.sin(angle), Math.cos(angle) * -1);
+        }
+
+        ctx.rotate(angle);
         ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH, ARM_THICKNESS);
 
         // Gun
