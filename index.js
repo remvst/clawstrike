@@ -1,3 +1,5 @@
+const CELL_SIZE = 100;
+
 let canvas;
 let ctx;
 let downKeys = {};
@@ -63,6 +65,17 @@ onload = () => {
 
     const world = new World();
 
+    const structure = new Structure([
+        [1, 1, 1, 1,1,1,1,1,1,1,1, 1],
+        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
+        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
+        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
+        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
+        [1, 0, 1, 0,0,0,0,0,0,0,0, 1],
+        [1, 1, 1, 1,1,1,1,1,1,1,1, 1],
+    ]);
+    world.addEntity(structure);
+
     const human = new Human();
     human.x = canvas.width / 2 + 200;
     human.y = canvas.height / 2 - 50;
@@ -103,7 +116,7 @@ class World {
     }
 
     render() {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         for (const entity of this.entities) {
@@ -596,4 +609,35 @@ class ClawEffect extends Entity {
 
         ctx.fill();
     }
+}
+
+class Structure extends Entity {
+    constructor(matrix) {
+        super();
+        this.categories.push('structure');
+        this.matrix = matrix;
+    }
+
+    render() {
+
+        const rows = this.matrix.length;
+        const cols = this.matrix[0].length;
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, cols * CELL_SIZE, rows * CELL_SIZE);
+
+        ctx.fillStyle = '#000';
+        ctx.save();
+        for (const row of this.matrix) {
+            ctx.translate(0, CELL_SIZE);
+            ctx.save();
+            for (const cell of row) {
+                if (cell) ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
+                ctx.translate(CELL_SIZE, 0);
+            }
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+
 }
