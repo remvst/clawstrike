@@ -120,6 +120,9 @@ class Cat extends Entity {
         this.facing = 1;
         this.attackCooldown = 0;
         this.lastAttack = 0;
+        this.heat = 0;
+        this.nextHeatReset = 0;
+        this.releasedAttack = false;
     }
 
     cycle(elapsed) {
@@ -134,15 +137,29 @@ class Cat extends Entity {
         this.walking = !!x;
         this.facing = x || this.facing;
 
-        if (downKeys[32] && this.attackCooldown <= 0) {
+        if (!downKeys[32]) {
+            this.releasedAttack = true;
+        } else if (this.attackCooldown <= 0 && this.releasedAttack) {
             this.attackCooldown = 0.1;
             this.lastAttack = this.age;
+            this.releasedAttack = false;
             // TODO wap!
 
             const attack = new ClawEffect();
             attack.x = this.x + this.facing * 30 + Math.random() * 20 * this.facing;
             attack.y = this.y - 20 + Math.random() * 40;
             this.world.addEntity(attack);
+
+            this.nextHeatReset = 0.5;
+            this.heat++;
+            if (this.heat >= 3) {
+                this.attackCooldown = 1;
+            }
+        }
+
+        this.nextHeatReset -= elapsed;
+        if (this.nextHeatReset <= 0) {
+            this.heat = 0;
         }
 
         this.attackCooldown -= elapsed;
