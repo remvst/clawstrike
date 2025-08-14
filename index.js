@@ -10,6 +10,50 @@ document.addEventListener('keyup', (event) => {
     downKeys[event.keyCode] = false;
 });
 
+function easeOutExpo(x) {
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+}
+
+function easeOutCubic(x) {
+    return 1 - Math.pow(1 - x, 3);
+}
+
+function easeOutQuad(x) {
+    return 1 - (1 - x) * (1 - x);
+}
+
+function easeInQuad(x) {
+    return x * x;
+}
+
+function easeOutSine(x) {
+  return Math.sin((x * Math.PI) / 2);
+
+}
+
+function linear(x) {
+  return x;
+
+}
+
+function normalizeAngle(angle) {
+    let normalized = angle;
+    while (normalized < -Math.PI) normalized += Math.PI * 2;
+    while (normalized > Math.PI) normalized -= Math.PI * 2;
+    return normalized;
+}
+
+function between(a, b, c) {
+    if (b < a) return a;
+    if (b > c) return c;
+    return b;
+}
+
+function interpolate(a, b, t) {
+    return a + (b - a) * between(0, t, 1);
+}
+
+
 onload = () => {
     canvas = document.querySelector('canvas');
     canvas.width = 1600;
@@ -33,8 +77,10 @@ onload = () => {
 
     const frame = () => {
         const now = performance.now();
-        const elapsed = (now - lastFrame) / 1000;
+        let elapsed = (now - lastFrame) / 1000;
         lastFrame = now;
+
+        if (downKeys[71]) elapsed *= 0.1;
 
         world.cycle(elapsed);
         world.render();
@@ -99,13 +145,16 @@ class World {
 
 class Entity {
     constructor() {
-        this.x = this.y = this.age = 0;
+        this.x = this.y = this.previousX = this.previousY = this.age = 0;
         this.categories = [];
         this.seed = Math.random();
     }
 
     cycle(elapsed) {
         this.age += elapsed;
+
+        this.previousX = this.x;
+        this.previousY = this.y;
     }
 
     render() {
@@ -123,6 +172,28 @@ class Cat extends Entity {
         this.heat = 0;
         this.nextHeatReset = 0;
         this.releasedAttack = false;
+
+        this.releasedJump = false;
+        this.jumpStartAge = this.jumpEndAge = -9999;
+        this.jumpStartY = 0;
+        this.jumpHoldTime = 0;
+        this.landed = false;
+        this.vY = 0;
+
+        this.viewAngle = 0;
+    }
+
+    jump() {
+        if (this.age < this.jumpEndAge) return;
+        if (!this.releasedJump) return;
+        if (!this.landed) return;
+
+        this.jumpStartAge = this.age;
+        // this.jumpEndAge = this.age + 0.3;
+        this.releasedJump = false;
+        this.jumpStartY = this.y;
+        this.jumpHoldTime = 0;
+        this.landed = false;
     }
 
     cycle(elapsed) {
@@ -132,10 +203,50 @@ class Cat extends Entity {
         if (downKeys[37]) x = -1;
         if (downKeys[39]) x = 1;
 
-        const speed = 500 * x;
+        const speed = 800 * x;
         this.x += speed * elapsed;
         this.walking = !!x;
         this.facing = x || this.facing;
+
+        if (downKeys[38]) {
+            if (!this.releasedJump) {
+                this.jumpHoldTime += elapsed;
+            }
+
+            this.jump();
+        } else {
+            this.releasedJump = true;
+        }
+
+        const { jumpPeakAge, isRising, currentY } = this.jumpData();
+        if (isRising) {
+            // Rising
+            this.y = currentY;
+            this.vY = 0;
+        } else {
+            // Falling
+            this.y += this.vY * elapsed;
+            this.vY += elapsed * 2000;
+
+            if (this.y >= 450) {
+                this.landed = true;
+                this.y = 450;
+            }
+        }
+
+        let targetAngle = 0;
+        let angleSpeed = Math.PI * 2;
+        if (this.landed) {
+            targetAngle = 0;
+            angleSpeed *= 4;
+        } else if (isRising) {
+            targetAngle = -Math.PI / 3;
+        } else {
+            targetAngle = Math.PI / 4;
+        }
+
+        const angleDiff = normalizeAngle(targetAngle - this.viewAngle);
+        this.viewAngle += between(-elapsed * angleSpeed, angleDiff, elapsed * angleSpeed);
 
         if (!downKeys[32]) {
             this.releasedAttack = true;
@@ -177,10 +288,34 @@ class Cat extends Entity {
         this.attackCooldown -= elapsed;
     }
 
+    jumpData() {
+        const jumpPower = Math.min(1, this.jumpHoldTime / 0.2);
+        const jumpHeight = 50 + jumpPower * 200;
+        const peakY = this.jumpStartY - jumpHeight;
+
+        const riseDuration = 0.2 + jumpPower * 0.1;
+        const riseProgress = between(0, (this.age - this.jumpStartAge) / riseDuration, 1);
+
+        const isRising = riseProgress < 1;
+
+        const currentY = -easeOutSine(riseProgress) * jumpHeight + this.jumpStartY;
+
+        return { peakY, isRising, currentY, jumpAge: this.age - this.jumpStartAge };
+    }
+
     render() {
+
+        const { peakY, jumpAge } = this.jumpData();
+
+        // ctx.fillStyle = '#f00';
+        // ctx.fillRect(0, peakY, 800, 2);
+        // ctx.fillRect(0, this.jumpStartY, 800, 2);
+
         ctx.translate(this.x, this.y);
 
         ctx.scale(this.facing, 1);
+
+        ctx.rotate(this.viewAngle);
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
@@ -201,6 +336,8 @@ class Cat extends Entity {
         ctx.fillStyle = '#000';
         ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
 
+        const frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
+        const backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
         const legAngle = this.walking
             ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8
             : 0;
@@ -224,7 +361,7 @@ class Cat extends Entity {
             length += (1 - progress) * LEG_LENGTH;
             thickness += (1 - progress) * LEG_THICKNESS * 0.5;
         } else {
-            ctx.rotate(Math.PI / 2 + legAngle);
+            ctx.rotate(frontLegsBaseAngle + legAngle);
         }
 
         ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
@@ -232,19 +369,19 @@ class Cat extends Entity {
 
         ctx.save();
         ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 - legAngle);
+        ctx.rotate(frontLegsBaseAngle - legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 + legAngle);
+        ctx.rotate(backLegsBaseAngle + legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
         ctx.save();
         ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
-        ctx.rotate(Math.PI / 2 - legAngle);
+        ctx.rotate(backLegsBaseAngle - legAngle);
         ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         ctx.restore();
 
