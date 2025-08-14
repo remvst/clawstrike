@@ -140,21 +140,34 @@ class Cat extends Entity {
         if (!downKeys[32]) {
             this.releasedAttack = true;
         } else if (this.attackCooldown <= 0 && this.releasedAttack) {
-            this.attackCooldown = 0.1;
-            this.lastAttack = this.age;
             this.releasedAttack = false;
-            // TODO wap!
+
+            this.lastAttack = this.age;
 
             const attack = new ClawEffect();
-            attack.x = this.x + this.facing * 30 + Math.random() * 20 * this.facing;
-            attack.y = this.y - 20 + Math.random() * 40;
+            attack.x = this.x + this.facing * 30;
+            attack.y = this.y;
             this.world.addEntity(attack);
 
             this.nextHeatReset = 0.5;
             this.heat++;
             if (this.heat >= 3) {
                 this.attackCooldown = 1;
+            } else {
+                this.attackCooldown = 0.1;
             }
+
+
+            for (const human of this.world.category('human')) {
+                const dx = Math.abs(human.x - attack.x);
+                const dy = Math.abs(human.y - attack.y);
+                if (dx < 50 && dy < 80) {
+                    human.damage();
+                }
+            }
+
+            attack.x += Math.random() * 30 - 15;
+            attack.y += Math.random() * 50 - 25;
         }
 
         this.nextHeatReset -= elapsed;
@@ -291,6 +304,7 @@ class Human extends Entity {
         this.categories.push('human');
         this.aim = 0;
         this.facing = 1;
+        this.lastDamage = -9;
     }
 
     cycle(elapsed) {
@@ -301,6 +315,10 @@ class Human extends Entity {
             this.aim = Math.atan2(cat.y - this.y, cat.x - this.x);
             this.facing = Math.sign(cat.x - this.x) || this.facing;
         }
+    }
+
+    damage() {
+        this.lastDamage = this.age;
     }
 
     render() {
@@ -322,8 +340,9 @@ class Human extends Entity {
         const ARM_LENGTH = 40;
         const ARM_THICKNESS = 10;
 
+        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#f00' : '#000';
+
         // Body
-        ctx.fillStyle = '#000'
         ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
 
         // Legs
@@ -379,7 +398,7 @@ class ClawEffect extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
-        if (this.age > 2) {
+        if (this.age > 1) {
             this.world.removeEntity(this);
         }
     }
@@ -388,7 +407,7 @@ class ClawEffect extends Entity {
         ctx.translate(this.x, this.y);
 
         const fadeDuration = 0.25;
-        const fadeProgress = (this.age - (2 - fadeDuration)) / fadeDuration;
+        const fadeProgress = (this.age - (1 - fadeDuration)) / fadeDuration;
         ctx.globalAlpha = 1 - Math.min(1, Math.max(0, fadeProgress));
 
         ctx.fillStyle = '#ff0';
