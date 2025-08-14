@@ -101,6 +101,7 @@ class Entity {
     constructor() {
         this.x = this.y = this.age = 0;
         this.categories = [];
+        this.seed = Math.random();
     }
 
     cycle(elapsed) {
@@ -137,6 +138,11 @@ class Cat extends Entity {
             this.attackCooldown = 0.1;
             this.lastAttack = this.age;
             // TODO wap!
+
+            const attack = new ClawEffect();
+            attack.x = this.x + this.facing * 30 + Math.random() * 20 * this.facing;
+            attack.y = this.y - 20 + Math.random() * 40;
+            this.world.addEntity(attack);
         }
 
         this.attackCooldown -= elapsed;
@@ -257,7 +263,7 @@ class Cat extends Entity {
         ctx.restore();
 
         // ctx.fillStyle = '#ff0';
-        // ctx.fillRect( -25,  -25, 50, 50);
+        // ctx.fillRect( -4,  -4, 8, 8);
     }
 }
 
@@ -300,7 +306,7 @@ class Human extends Entity {
         const ARM_THICKNESS = 10;
 
         // Body
-        ctx.fillStyle = '#f00'
+        ctx.fillStyle = '#000'
         ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
 
         // Legs
@@ -348,5 +354,75 @@ class Human extends Entity {
 
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -25,  -25, 50, 50);
+    }
+}
+
+class ClawEffect extends Entity {
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        if (this.age > 2) {
+            this.world.removeEntity(this);
+        }
+    }
+
+    render() {
+        ctx.translate(this.x, this.y);
+
+        const fadeDuration = 0.25;
+        const fadeProgress = (this.age - (2 - fadeDuration)) / fadeDuration;
+        ctx.globalAlpha = 1 - Math.min(1, Math.max(0, fadeProgress));
+
+        ctx.fillStyle = '#ff0';
+
+        ctx.rotate(this.seed * Math.PI * 2);
+
+        const s = 1 + this.seed * 0.5;
+        ctx.scale(s, s);
+
+        ctx.save();
+        this.drawClaw();
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(0, -5);
+        ctx.scale(0.8, 0.8);
+        this.drawClaw();
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(0, 5);
+        ctx.scale(0.8, 0.8);
+        this.drawClaw();
+        ctx.restore();
+
+        // ctx.fillStyle = '#ff0';
+        // ctx.fillRect( -4,  -4, 8, 8);
+    }
+
+    drawClaw() {
+        ctx.strokeStyle = ctx.fillStyle = '#f00';
+        ctx.beginPath();
+
+        const THICKNESS = 5;
+        const LENGTH = 40;
+        const l = LENGTH * Math.min(1, this.age / 0.1);
+
+        ctx.translate(-LENGTH / 2, 0);
+
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(
+            l / 2, -THICKNESS / 2,
+            l / 2, -THICKNESS / 2,
+            l, 0
+        );
+        ctx.bezierCurveTo(
+            l / 2, THICKNESS / 2,
+            l / 2, THICKNESS / 2,
+            0, 0
+        );
+
+        ctx.fill();
     }
 }
