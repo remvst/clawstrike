@@ -51,6 +51,18 @@ function between(a, b, c) {
     return b;
 }
 
+function isBetween(a, b, c) {
+    return (a <= b && b <= c) || (a >= b && b >= c);
+}
+
+function floorToNearest(x, precision) {
+    return Math.floor(x / precision) * precision;
+}
+
+function ceilToNearest(x, precision) {
+    return Math.ceil(x / precision) * precision;
+}
+
 function interpolate(a, b, t) {
     return a + (b - a) * between(0, t, 1);
 }
@@ -67,8 +79,8 @@ onload = () => {
 
     const structure = new Structure([
         [1, 1, 1, 1,1,1,1,1,1,1,1, 1],
-        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
-        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
+        [1, 1, 0, 0,0,1,0,0,0,0,0, 1],
+        [1, 0, 0, 0,0,1,0,0,0,0,0, 1],
         [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
         [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
         [1, 0, 1, 0,0,0,0,0,0,0,0, 1],
@@ -194,6 +206,9 @@ class Cat extends Entity {
         this.vY = 0;
 
         this.viewAngle = 0;
+
+        this.radiusX = 20;
+        this.radiusY = 20;
     }
 
     jump() {
@@ -212,14 +227,17 @@ class Cat extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
-        let x = 0;
-        if (downKeys[37]) x = -1;
-        if (downKeys[39]) x = 1;
+        // Left-right movement
+        {
+            let x = 0;
+            if (downKeys[37]) x = -1;
+            if (downKeys[39]) x = 1;
 
-        const speed = 800 * x;
-        this.x += speed * elapsed;
-        this.walking = !!x;
-        this.facing = x || this.facing;
+            const speed = 800 * x;
+            this.x += speed * elapsed;
+            this.walking = !!x;
+            this.facing = x || this.facing;
+        }
 
         if (downKeys[38]) {
             if (!this.releasedJump) {
@@ -299,6 +317,16 @@ class Cat extends Entity {
         }
 
         this.attackCooldown -= elapsed;
+
+        const { x, y } = this;
+        for (const strucure of this.world.category('structure')) {
+            strucure.reposition(this, this.radiusX, this.radiusY);
+        }
+
+        if (this.y > y) {
+            console.log('bonk');
+            this.jumpStartAge = -999;
+        }
     }
 
     jumpData() {
@@ -443,6 +471,10 @@ class Cat extends Entity {
 
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -4,  -4, 8, 8);
+
+        ctx.fillStyle = '#f00';
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
     }
 }
 
@@ -629,15 +661,72 @@ class Structure extends Entity {
         ctx.fillStyle = '#000';
         ctx.save();
         for (const row of this.matrix) {
-            ctx.translate(0, CELL_SIZE);
             ctx.save();
             for (const cell of row) {
                 if (cell) ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
                 ctx.translate(CELL_SIZE, 0);
             }
             ctx.restore();
+            ctx.translate(0, CELL_SIZE);
         }
         ctx.restore();
     }
 
+    reposition(entity, radiusX, radiusY, lastPass = false) {
+        let remainingIterations = 2;
+        while (remainingIterations-- > 0) {
+            const { x, y } = entity;
+            const leftX = entity.x - radiusX;
+            const rightX = entity.x + radiusX;
+            const topY = entity.y - radiusY;
+            const bottomY = entity.y + radiusY;
+
+            const top = this.cellAt(x, topY);
+            const right = this.cellAt(rightX, y);
+            const left = this.cellAt(leftX, y);
+            const bottom = this.cellAt(x, bottomY);
+
+            const topLeft = this.cellAt(leftX, topY);
+            const topRight = this.cellAt(rightX, topY);
+            const bottomLeft = this.cellAt(leftX, bottomY);
+            const bottomRight = this.cellAt(rightX, bottomY);
+
+            const verticalCollisionCount = !!top + !!topLeft + !!topRight + !!bottom + !!bottomLeft + !!bottomRight;
+            const horizontalCollisionCount = !!left + !!topLeft + !!bottomLeft + !!right + !!topRight + !!bottomRight;
+
+            if (verticalCollisionCount + horizontalCollisionCount == 0) {
+                break;
+            }
+
+            const resolveVertical = () => {
+                // console.log('vertical')
+                if (top) entity.y = ceilToNearest(topY, CELL_SIZE) + radiusY;
+                if (bottom) entity.y = floorToNearest(bottomY, CELL_SIZE) - radiusY - 1;
+            };
+
+            const resolveHorizontal = () => {
+                // console.log('horizontal')
+                if (left) entity.x = ceilToNearest(leftX, CELL_SIZE) + radiusX;
+                if (right) entity.x = floorToNearest(rightX, CELL_SIZE) - radiusX - 1;
+            };
+
+            // console.log('solve', { remainingIterations, verticalCollisionCount, horizontalCollisionCount });
+
+            if (remainingIterations == 0) {
+                resolveVertical();
+                resolveHorizontal();
+            } else if (verticalCollisionCount > 0) {
+                resolveVertical();
+            } else {
+                resolveHorizontal();
+            }
+        }
+    }
+
+    cellAt(x, y) {
+        if (!isBetween(this.x, x, this.x + this.matrix[0].length * CELL_SIZE)) return null;
+        if (!isBetween(this.y, y, this.y + this.matrix.length * CELL_SIZE)) return null;
+
+        return this.matrix[Math.floor((y - this.y) / CELL_SIZE)][Math.floor((x - this.x) / CELL_SIZE)] || 0;
+    }
 }
