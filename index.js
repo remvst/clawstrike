@@ -1,4 +1,4 @@
-const CELL_SIZE = 100;
+const CELL_SIZE = 50;
 
 let canvas;
 let ctx;
@@ -77,15 +77,7 @@ onload = () => {
 
     const world = new World();
 
-    const structure = new Structure([
-        [1, 1, 1, 1,1,1,1,1,1,1,1, 1],
-        [1, 1, 0, 0,0,1,0,0,0,0,0, 1],
-        [1, 0, 0, 0,0,1,0,0,0,0,0, 1],
-        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
-        [1, 0, 0, 0,0,0,0,0,0,0,0, 1],
-        [1, 0, 1, 0,0,0,0,0,0,0,0, 1],
-        [1, 1, 1, 1,1,1,1,1,1,1,1, 1],
-    ]);
+    const structure = new Structure([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0],[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,0,1,0,1,1,0],[1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,0,1,1,1,1,0],[1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]);
     world.addEntity(structure);
 
     const human = new Human();
@@ -202,7 +194,7 @@ class Cat extends Entity {
         this.jumpStartAge = this.jumpEndAge = -9999;
         this.jumpStartY = 0;
         this.jumpHoldTime = 0;
-        this.landed = false;
+        this.lastLanded = -9;
         this.vY = 0;
 
         this.viewAngle = 0;
@@ -221,7 +213,7 @@ class Cat extends Entity {
         this.releasedJump = false;
         this.jumpStartY = this.y;
         this.jumpHoldTime = 0;
-        this.landed = false;
+        this.lastLanded = -9;
     }
 
     cycle(elapsed) {
@@ -233,7 +225,7 @@ class Cat extends Entity {
             if (downKeys[37]) x = -1;
             if (downKeys[39]) x = 1;
 
-            const speed = 800 * x;
+            const speed = 400 * x;
             this.x += speed * elapsed;
             this.walking = !!x;
             this.facing = x || this.facing;
@@ -249,7 +241,7 @@ class Cat extends Entity {
             this.releasedJump = true;
         }
 
-        const { jumpPeakAge, isRising, currentY } = this.jumpData();
+        const { isRising, currentY } = this.jumpData();
         if (isRising) {
             // Rising
             this.y = currentY;
@@ -258,11 +250,6 @@ class Cat extends Entity {
             // Falling
             this.y += this.vY * elapsed;
             this.vY += elapsed * 2000;
-
-            if (this.y >= 450) {
-                this.landed = true;
-                this.y = 450;
-            }
         }
 
         let targetAngle = 0;
@@ -324,17 +311,24 @@ class Cat extends Entity {
         }
 
         if (this.y > y) {
-            console.log('bonk');
             this.jumpStartAge = -999;
+        } else if (this.y < y) {
+            this.vY = 0;
+            this.lastLanded = this.age;
+            this.viewAngle = 0;
         }
     }
 
+    get landed() {
+        return this.age - this.lastLanded < 0.1;
+    }
+
     jumpData() {
-        const jumpPower = Math.min(1, this.jumpHoldTime / 0.2);
-        const jumpHeight = 50 + jumpPower * 200;
+        const jumpPower = Math.min(1, this.jumpHoldTime / 0.1);
+        const jumpHeight = 25 + jumpPower * 150;
         const peakY = this.jumpStartY - jumpHeight;
 
-        const riseDuration = 0.2 + jumpPower * 0.1;
+        const riseDuration = 0.1 + jumpPower * 0.1;
         const riseProgress = between(0, (this.age - this.jumpStartAge) / riseDuration, 1);
 
         const isRising = riseProgress < 1;
@@ -346,7 +340,7 @@ class Cat extends Entity {
 
     render() {
 
-        const { peakY, jumpAge } = this.jumpData();
+        // const { peakY, jumpAge } = this.jumpData();
 
         // ctx.fillStyle = '#f00';
         // ctx.fillRect(0, peakY, 800, 2);
@@ -435,7 +429,7 @@ class Cat extends Entity {
         ctx.lineWidth = TAIL_THICKNESS;
         ctx.beginPath();
         const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
-        for (let x = 0 ; x < TAIL_LENGTH; x += 1) {
+        for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
             const amplitudeFactor = x / TAIL_LENGTH;
             ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
         }
@@ -472,9 +466,9 @@ class Cat extends Entity {
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -4,  -4, 8, 8);
 
-        ctx.fillStyle = '#f00';
-        ctx.globalAlpha = 0.5;
-        ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
+        // ctx.fillStyle = '#f00';
+        // ctx.globalAlpha = 0.5;
+        // ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
     }
 }
 
@@ -701,13 +695,13 @@ class Structure extends Entity {
             const resolveVertical = () => {
                 // console.log('vertical')
                 if (top) entity.y = ceilToNearest(topY, CELL_SIZE) + radiusY;
-                if (bottom) entity.y = floorToNearest(bottomY, CELL_SIZE) - radiusY - 1;
+                if (bottom) entity.y = floorToNearest(bottomY, CELL_SIZE) - radiusY;
             };
 
             const resolveHorizontal = () => {
                 // console.log('horizontal')
                 if (left) entity.x = ceilToNearest(leftX, CELL_SIZE) + radiusX;
-                if (right) entity.x = floorToNearest(rightX, CELL_SIZE) - radiusX - 1;
+                if (right) entity.x = floorToNearest(rightX, CELL_SIZE) - radiusX;
             };
 
             // console.log('solve', { remainingIterations, verticalCollisionCount, horizontalCollisionCount });
