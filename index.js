@@ -157,7 +157,6 @@ class Cat extends Entity {
                 this.attackCooldown = 0.1;
             }
 
-
             for (const human of this.world.category('human')) {
                 const dx = Math.abs(human.x - attack.x);
                 const dy = Math.abs(human.y - attack.y);
@@ -410,12 +409,11 @@ class ClawEffect extends Entity {
         const fadeProgress = (this.age - (1 - fadeDuration)) / fadeDuration;
         ctx.globalAlpha = 1 - Math.min(1, Math.max(0, fadeProgress));
 
-        ctx.fillStyle = '#ff0';
-
         ctx.rotate(this.seed * Math.PI * 2);
 
         const s = 1 + this.seed * 0.5;
         ctx.scale(s, s);
+        ctx.scale(1 + this.seed * 0.5, 1);
 
         ctx.save();
         this.drawClaw();
@@ -438,7 +436,7 @@ class ClawEffect extends Entity {
     }
 
     drawClaw() {
-        ctx.strokeStyle = ctx.fillStyle = '#f00';
+        ctx.strokeStyle = ctx.fillStyle = '#f80';
         ctx.beginPath();
 
         const THICKNESS = 5;
