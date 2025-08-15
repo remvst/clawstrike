@@ -206,6 +206,9 @@ class Cat extends Entity {
 
         this.radiusX = 20;
         this.radiusY = 20;
+
+        this.wallStickX = 0;
+        this.wallStickDirection = 0;
     }
 
     jump() {
@@ -218,6 +221,23 @@ class Cat extends Entity {
         this.jumpStartY = this.y;
         this.jumpHoldTime = 0;
         this.lastLanded = -9;
+    }
+
+    get stickingToWall() {
+        if (Math.abs(this.x - this.wallStickX) > 2) return false;
+        if (this.landed) return false;
+
+        let hasWall = false;
+        for (const strucure of this.world.category('structure')) {
+            if (
+                strucure.cellAt(this.x - CELL_SIZE * this.wallStickDirection, this.y)
+            ) {
+                hasWall = true;
+                break;
+            }
+        }
+
+        return hasWall;
     }
 
     cycle(elapsed) {
@@ -298,7 +318,7 @@ class Cat extends Entity {
         } else {
             // Falling
             this.y += this.vY * elapsed;
-            this.vY += elapsed * 2000;
+            this.vY += elapsed * (this.stickingToWall ? 100 : 2000);
         }
 
         let targetAngle = 0;
@@ -368,7 +388,22 @@ class Cat extends Entity {
         }
 
         if (x !== this.x) {
-            this.vX = 0;
+            const readjustmentDirection = Math.sign(this.x - x);
+            if (this.facing !== readjustmentDirection) {
+                this.vX = 0;
+            }
+
+            if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
+                // console.log('stick to wall');
+                this.wallStickX = this.x;
+                this.wallStickDirection = readjustmentDirection;
+            }
+        }
+
+        if (!this.stickingToWall) {
+            this.wallStickX = 0;
+        } else {
+            this.viewAngle = -Math.PI / 2;
         }
     }
 
@@ -404,6 +439,8 @@ class Cat extends Entity {
         ctx.scale(this.facing, 1);
 
         ctx.rotate(this.viewAngle);
+
+        if (this.stickingToWall) ctx.translate(0, 8);
 
         ctx.rotate(this.rollingAge * Math.PI * 6);
 
