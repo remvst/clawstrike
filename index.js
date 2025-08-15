@@ -612,10 +612,40 @@ class Human extends Entity {
         this.aim = 0;
         this.facing = 1;
         this.lastDamage = -9;
+        this.vY = 0;
+        this.walkingDirection = 1;
+
+        this.radiusX = 20;
+        this.radiusY = 40;
     }
 
     cycle(elapsed) {
         super.cycle(elapsed);
+
+        // Left-right movement
+        if ((this.age % 8) < 5)
+        this.x += this.walkingDirection * 100 * elapsed;
+
+        // Fall down
+        this.vY += elapsed * 400;
+        this.y += this.vY * elapsed;
+
+        const { x, y } = this;
+
+        for (const structure of this.world.category('structure')) {
+            structure.reposition(this, this.radiusX, this.radiusY);
+
+            if (!structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)) {
+                // this.
+                this.walkingDirection = 1;
+            }
+
+            if (!structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)) {
+                this.walkingDirection = -1;
+            }
+        }
+
+        if (y !== this.y) this.vY = 0;
 
         // Aim at the cat
         for (const cat of this.world.category('cat')) {
@@ -697,6 +727,10 @@ class Human extends Entity {
 
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -25,  -25, 50, 50);
+
+        ctx.fillStyle = '#f00';
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
     }
 }
 
