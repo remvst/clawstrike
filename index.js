@@ -214,17 +214,24 @@ class Cat extends Entity {
     jump() {
         if (this.age < this.jumpEndAge) return;
         if (!this.releasedJump) return;
-        if (!this.landed) return;
+        if (!this.landed && !this.stickingToWall) return;
 
         this.jumpStartAge = this.age;
         this.releasedJump = false;
         this.jumpStartY = this.y;
         this.jumpHoldTime = 0;
         this.lastLanded = -9;
+
+        if (this.stickingToWall) {
+            this.vX = this.wallStickDirection * 200;
+        }
+
+        this.wallStickX = 0;
+        this.wallStickDirection = 0;
     }
 
     get stickingToWall() {
-        if (Math.abs(this.x - this.wallStickX) > 2) return false;
+        if (Math.abs(this.x - this.wallStickX) > 5) return false;
         if (this.landed) return false;
 
         let hasWall = false;
@@ -277,7 +284,7 @@ class Cat extends Entity {
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
-                        acceleration = 2000;
+                        acceleration = 500;
                     } else if (pushing) {
                         acceleration = 500;
                     } else {
@@ -297,7 +304,8 @@ class Cat extends Entity {
             // const speed = (this.rolling ? 600 : 400) * x;
             this.x += this.vX * elapsed;
             this.walking = !!x;
-            this.facing = x || this.facing;
+
+            if (!this.stickingToWall) this.facing = x || this.facing;
         }
 
         if (downKeys[38]) {
@@ -393,10 +401,11 @@ class Cat extends Entity {
                 this.vX = 0;
             }
 
+            if (!this.stickingToWall)
             if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
-                // console.log('stick to wall');
                 this.wallStickX = this.x;
                 this.wallStickDirection = readjustmentDirection;
+                console.log('go stick wall!');
             }
         }
 
