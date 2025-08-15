@@ -190,6 +190,9 @@ class Cat extends Entity {
         this.nextHeatReset = 0;
         this.releasedAttack = false;
 
+        this.rolling = false;
+        this.rollingAge = 0;
+
         this.releasedJump = false;
         this.jumpStartAge = this.jumpEndAge = -9999;
         this.jumpStartY = 0;
@@ -209,7 +212,6 @@ class Cat extends Entity {
         if (!this.landed) return;
 
         this.jumpStartAge = this.age;
-        // this.jumpEndAge = this.age + 0.3;
         this.releasedJump = false;
         this.jumpStartY = this.y;
         this.jumpHoldTime = 0;
@@ -219,13 +221,21 @@ class Cat extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
+        this.rolling = downKeys[40] && this.landed;
+        if (this.rolling) {
+            this.rollingAge += elapsed;
+        } else {
+            this.rollingAge = 0;
+        }
+
         // Left-right movement
         {
             let x = 0;
             if (downKeys[37]) x = -1;
             if (downKeys[39]) x = 1;
+            if (this.rolling) x = this.facing;
 
-            const speed = 400 * x;
+            const speed = (this.rolling ? 600 : 400) * x;
             this.x += speed * elapsed;
             this.walking = !!x;
             this.facing = x || this.facing;
@@ -352,9 +362,11 @@ class Cat extends Entity {
 
         ctx.rotate(this.viewAngle);
 
+        ctx.rotate(this.rollingAge * Math.PI * 6);
+
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
-        const LEG_LENGTH = 15;
+        const LEG_LENGTH = true ? 15 : 15;
         const LEG_THICKNESS = 4;
         const TAIL_LENGTH = 30;
         const TAIL_THICKNESS = 5;
@@ -368,11 +380,26 @@ class Cat extends Entity {
         const ATTACK_ANIMATION_DURATION = 0.2;
 
         // Body
-        ctx.fillStyle = '#000';
-        ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
+        ctx.fillStyle = ctx.strokeStyle = '#000';
 
-        const frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
-        const backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
+        ctx.lineWidth = BODY_THICKNESS;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-BODY_LENGTH / 2, 0);
+        if (this.rolling) ctx.lineTo(0, -10);
+        ctx.lineTo(BODY_LENGTH / 2, 0);
+        ctx.stroke();
+
+        // ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
+
+        let frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
+        let backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
+
+        if (this.rolling) {
+            frontLegsBaseAngle += Math.PI / 4;
+            backLegsBaseAngle -= Math.PI / 4;
+        }
+
         const legAngle = this.walking
             ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8
             : 0;
@@ -422,8 +449,14 @@ class Cat extends Entity {
 
         // Tail
         ctx.save();
-        ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
-        ctx.rotate(-Math.PI / 2 - Math.PI / 4);
+
+        if (this.rolling) {
+            ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2 + 4, BODY_THICKNESS / 2 - 4);
+            ctx.rotate(Math.PI / 2 - Math.PI / 4);
+        } else {
+            ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
+            ctx.rotate(-Math.PI / 2 - Math.PI / 4);
+        }
 
         ctx.strokeStyle = '#000';
         ctx.lineWidth = TAIL_THICKNESS;
@@ -440,25 +473,35 @@ class Cat extends Entity {
 
         // Head
         ctx.save();
-        ctx.translate(BODY_LENGTH / 2 - 5, -BODY_THICKNESS / 2 - 5);
+        ctx.translate(BODY_LENGTH / 2 - 5, 0);
+
+        ctx.rotate(-Math.PI / 2);
+        if (this.rolling) ctx.rotate(Math.PI - Math.PI / 3);
+
+        ctx.translate(10, 0);
+
         if (this.walking) ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 16);
         ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 
         // Eyes
         ctx.save();
         ctx.fillStyle = '#fff';
-        ctx.fillRect(-3, -5, -4, 4);
-        ctx.fillRect(3, -5, 4, 4);
+        ctx.fillRect(0, -3, 4, -4);
+        ctx.fillRect(0, 3, 4, 4);
         ctx.restore();
 
         // Ears
         ctx.beginPath();
-        ctx.moveTo(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
-        ctx.lineTo(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
-        ctx.lineTo(-HEAD_WIDTH / 2 + EAR_WIDTH, -HEAD_HEIGHT / 2);
-        ctx.lineTo(HEAD_WIDTH / 2 - EAR_WIDTH, -HEAD_HEIGHT / 2);
-        ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
-        ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
+        ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
+        ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
+        ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 + EAR_WIDTH);
+        ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2 - EAR_WIDTH);
+        ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
+        ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
+        // ctx.lineTo(HEAD_WIDTH / 2 + EAR_WIDTH, -HEAD_HEIGHT / 2);
+        // ctx.lineTo(HEAD_WIDTH / 2 - EAR_WIDTH, -HEAD_HEIGHT / 2);
+        // ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
+        // ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
         ctx.fill();
 
         ctx.restore();
