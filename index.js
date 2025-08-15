@@ -198,6 +198,8 @@ class Cat extends Entity {
         this.jumpStartY = 0;
         this.jumpHoldTime = 0;
         this.lastLanded = -9;
+
+        this.vX = 0;
         this.vY = 0;
 
         this.viewAngle = 0;
@@ -235,8 +237,45 @@ class Cat extends Entity {
             if (downKeys[39]) x = 1;
             if (this.rolling) x = this.facing;
 
-            const speed = (this.rolling ? 600 : 400) * x;
-            this.x += speed * elapsed;
+            const resisting = x && Math.sign(x) !== Math.sign(this.vX);
+            const pushing = x && !resisting;
+
+            {
+                let targetVX;
+                let acceleration;
+                if (this.rolling) {
+                    acceleration = 8000;
+                    targetVX = 600 * x;
+                } else if (this.landed) {
+                    if (resisting) {
+                        acceleration = 4000;
+                    } else if (pushing) {
+                        acceleration = 2000;
+                    } else {
+                        acceleration = 3000;
+                    }
+                    targetVX = 400 * x;
+                } else {
+                    if (resisting) {
+                        acceleration = 2000;
+                    } else if (pushing) {
+                        acceleration = 500;
+                    } else {
+                        acceleration = 0;
+                    }
+
+                    targetVX = 600 * x;
+                }
+
+                if (pushing) {
+                    targetVX = x * Math.max(Math.abs(targetVX), Math.abs(this.vX));
+                }
+
+                this.vX += between(-elapsed * acceleration, targetVX - this.vX, elapsed * acceleration);
+            }
+
+            // const speed = (this.rolling ? 600 : 400) * x;
+            this.x += this.vX * elapsed;
             this.walking = !!x;
             this.facing = x || this.facing;
         }
@@ -326,6 +365,10 @@ class Cat extends Entity {
             this.vY = 0;
             this.lastLanded = this.age;
             this.viewAngle = 0;
+        }
+
+        if (x !== this.x) {
+            this.vX = 0;
         }
     }
 
