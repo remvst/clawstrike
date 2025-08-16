@@ -95,7 +95,7 @@ class Human extends Entity {
             bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
             bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
             this.world.addEntity(bullet);
-            this.nextShot = 0.5;
+            this.nextShot = 0.2;
         }
     }
 
