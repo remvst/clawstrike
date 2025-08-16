@@ -8,7 +8,6 @@ class Raycaster {
         const castHorizontal = this.castAgainstHorizontal(x, y, angle, maxDistance);
         const castVertical = this.castAgainstVertical(x, y, angle, maxDistance);
 
-        let cast;
         let impact;
         if (!castHorizontal) {
             impact = castVertical;
@@ -60,7 +59,7 @@ class Raycaster {
             if (DEBUG) {
                 G.castIterations++;
             }
-            if (this.structure.cellAt(x, y)) {
+            if (this.hasBlock(x, y, 0)) {
                 // Got a block!
                 return {
                     'x': x,

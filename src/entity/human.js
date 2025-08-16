@@ -15,13 +15,15 @@ class Human extends Entity {
         this.radiusY = 40;
 
         this.nextShot = 0;
+        this.lastSeenCat = -9;
+        this.lastCatCheck = 0;
     }
 
     cycle(elapsed) {
         super.cycle(elapsed);
 
         // Left-right movement
-        this.walking = ((this.age + this.seed * 8) % 8) < 5;
+        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2;
         if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
         }
@@ -48,27 +50,44 @@ class Human extends Entity {
         if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
 
         // Aim at the cat
-        this.seesCat = null;
-        outer: for (const cat of this.world.category('cat')) {
-            const angleToCat = angleBetween(this, cat);
-            const distanceToCat = distance(this, cat);
+        const { seesCat } = this;
 
-            for (const structure of this.world.category('structure')) {
-                const impact = structure.raycaster.castRay(this.x, this.y, angleToCat, distanceToCat);
-                if (impact && distance(this, impact) < distanceToCat) {
-                    continue outer; // Cat is blocked by the structure, move on to the next cat
+        if (this.age - this.lastCatCheck > 0.2) {
+            this.lastCatCheck = this.age;
+
+            this.seesCat = null;
+            outer: for (const cat of this.world.category('cat')) {
+                // Cat is in our back, don't even look at it
+                if (Math.sign(cat.x - this.x) !== this.facing && !seesCat) continue;
+
+                const angleToCat = angleBetween(this, cat);
+                const distanceToCat = distance(this, cat);
+
+                if (distanceToCat > CELL_SIZE * 10) continue; // Too far away
+
+                for (const structure of this.world.category('structure')) {
+                    const impact = structure.raycaster.castRay(this.x, this.y, angleToCat, distanceToCat);
+                    if (impact && distance(this, impact) < distanceToCat) {
+                        continue outer; // Cat is blocked by the structure, move on to the next cat
+                    }
                 }
-            }
 
-            this.seesCat = cat;
+                this.seesCat = cat;
+
+                // Cat was just spotted, delay the next shot a bit
+                if (!seesCat) this.nextShot = 0.5;
+            }
         }
 
         if (this.seesCat) {
             this.facing = Math.sign(this.seesCat.x - this.x) || 1;
             this.aim = Math.atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
+            this.lastSeenCat = this.age;
         } else {
-            this.facing = this.walkingDirection;
-            this.aim = Math.atan2(1, this.facing / 2);
+            if (this.age - this.lastSeenCat > 2) {
+                this.facing = this.walkingDirection;
+                this.aim = Math.atan2(1, this.facing / 2);
+            }
         }
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
@@ -85,22 +104,22 @@ class Human extends Entity {
     }
 
     render() {
-        for (const cat of this.world.category('cat')) {
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(cat.x, cat.y);
-            ctx.stroke();
-        }
+        // for (const cat of this.world.category('cat')) {
+        //     ctx.strokeStyle = '#fff';
+        //     ctx.lineWidth = 2;
+        //     ctx.beginPath();
+        //     ctx.moveTo(this.x, this.y);
+        //     ctx.lineTo(cat.x, cat.y);
+        //     ctx.stroke();
+        // }
 
-        if (this.seesCat) {
-            ctx.strokeStyle = '#0f0';
-            ctx.lineWidth = 10;
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.seesCat.x, this.seesCat.y);
-            ctx.stroke();
-        }
+        // if (this.seesCat) {
+        //     ctx.strokeStyle = '#0f0';
+        //     ctx.lineWidth = 10;
+        //     ctx.moveTo(this.x, this.y);
+        //     ctx.lineTo(this.seesCat.x, this.seesCat.y);
+        //     ctx.stroke();
+        // }
 
         ctx.translate(this.x, this.y);
         ctx.scale(this.facing, 1);
@@ -170,6 +189,23 @@ class Human extends Entity {
         ctx.restore();
 
         ctx.restore();
+
+        if (this.age - this.lastSeenCat < 1) {
+            ctx.save();
+            ctx.translate(0, -70);
+            ctx.scale(this.facing, 1);
+
+            ctx.fillStyle = '#fff';
+            ctx.shadowColor = '#000';
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            ctx.fillText(this.seesCat ? '!' : '?', 0, 0);
+            ctx.restore();
+        }
 
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -25,  -25, 50, 50);
