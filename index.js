@@ -240,9 +240,9 @@ class Cat extends Entity {
         if (this.landed) return false;
 
         let hasWall = false;
-        for (const strucure of this.world.category('structure')) {
+        for (const structure of this.world.category('structure')) {
             if (
-                strucure.cellAt(this.x - CELL_SIZE * this.wallStickDirection, this.y)
+                structure.cellAt(this.x - CELL_SIZE * this.wallStickDirection, this.y)
             ) {
                 hasWall = true;
                 break;
@@ -362,7 +362,7 @@ class Cat extends Entity {
 
             this.nextHeatReset = 0.5;
             this.heat++;
-            if (this.heat >= 3) {
+            if (this.heat >= 5) {
                 this.attackCooldown = 1;
             } else {
                 this.attackCooldown = 0.1;
@@ -388,8 +388,8 @@ class Cat extends Entity {
         this.attackCooldown -= elapsed;
 
         const { x, y } = this;
-        for (const strucure of this.world.category('structure')) {
-            strucure.reposition(this, this.radiusX, this.radiusY);
+        for (const structure of this.world.category('structure')) {
+            structure.reposition(this, this.radiusX, this.radiusY);
         }
 
         if (this.y > y) {
@@ -457,6 +457,8 @@ class Cat extends Entity {
         if (this.stickingToWall) ctx.translate(0, 8);
 
         ctx.rotate(this.rollingAge * Math.PI * 6);
+
+        if (this.rolling) ctx.scale(0.8, 0.8);
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
@@ -624,6 +626,8 @@ class Human extends Entity {
 
         this.radiusX = 10;
         this.radiusY = 40;
+
+        this.nextShot = 0;
     }
 
     cycle(elapsed) {
@@ -668,7 +672,8 @@ class Human extends Entity {
         for (const cat of this.world.category('cat')) {
             this.aim = Math.atan2(cat.y - this.y, cat.x - this.x);
             this.facing = Math.sign(cat.x - this.x) || this.facing;
-            // seesCat = cat;
+            // TODO raycasting
+            seesCat = cat;
         }
 
         if (seesCat) {
@@ -677,6 +682,15 @@ class Human extends Entity {
         } else {
             this.facing = this.walkingDirection;
             this.aim = Math.atan2(1, this.facing / 2);
+        }
+
+        this.nextShot -= elapsed;
+        if (this.nextShot <= 0) {
+            const bullet = new Bullet(this.aim);
+            bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
+            bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
+            this.world.addEntity(bullet);
+            this.nextShot = 0.5;
         }
     }
 
@@ -703,7 +717,7 @@ class Human extends Entity {
         const ARM_LENGTH = 20;
         const ARM_THICKNESS = 5;
 
-        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#f00' : '#000';
+        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
 
         // Body
         ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
@@ -807,7 +821,7 @@ class ClawEffect extends Entity {
     }
 
     drawClaw() {
-        ctx.strokeStyle = ctx.fillStyle = '#f80';
+        ctx.strokeStyle = ctx.fillStyle = '#fff';
         ctx.beginPath();
 
         const THICKNESS = 5;
@@ -840,14 +854,13 @@ class Structure extends Entity {
     }
 
     render() {
-
         const rows = this.matrix.length;
         const cols = this.matrix[0].length;
 
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#f00';
         ctx.fillRect(0, 0, cols * CELL_SIZE, rows * CELL_SIZE);
 
-        ctx.fillStyle = '#eee';
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
         for (let x = 0 ; x < cols * CELL_SIZE; x += CELL_SIZE * 20) {
             ctx.beginPath();
             ctx.moveTo(x, 0);
@@ -928,5 +941,45 @@ class Structure extends Entity {
         if (!isBetween(this.y, y, this.y + this.matrix.length * CELL_SIZE)) return null;
 
         return this.matrix[Math.floor((y - this.y) / CELL_SIZE)][Math.floor((x - this.x) / CELL_SIZE)] || 0;
+    }
+}
+
+class Bullet extends Entity {
+    constructor(angle) {
+        super();
+        this.angle = angle;
+    }
+
+    cycle(elapsed) {
+        const BULLET_SPEED = 800;
+        this.x += elapsed * Math.cos(this.angle) * BULLET_SPEED;
+        this.y += elapsed * Math.sin(this.angle) * BULLET_SPEED;
+
+        // Structure hits
+        for (const structure of this.world.category('structure')) {
+            if (structure.cellAt(this.x, this.y)) {
+                this.world.removeEntity(this);
+                return;
+            }
+        }
+
+        // Cat hits
+        for (const cat of this.world.category('cat')) {
+            if (Math.abs(cat.x - this.x) < cat.radiusX && Math.abs(cat.y - this.y) < cat.radiusY) {
+                this.world.removeEntity(this);
+                return;
+            }
+        }
+    }
+
+    render() {
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(3, -3, -20, 6);
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(-3, -3, 10, 6);
     }
 }
