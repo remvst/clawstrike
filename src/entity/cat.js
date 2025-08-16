@@ -43,6 +43,7 @@ class Cat extends Entity {
 
         if (this.stickingToWall) {
             this.vX = this.wallStickDirection * 200;
+            this.facing = this.wallStickDirection;
         }
 
         this.wallStickX = 0;
@@ -292,13 +293,15 @@ class Cat extends Entity {
         ctx.fillStyle = ctx.strokeStyle = '#000';
 
         // Body
-        ctx.lineWidth = BODY_THICKNESS;
-        ctx.lineJoin = 'round';
-        ctx.beginPath();
-        ctx.moveTo(-BODY_LENGTH / 2, 0);
-        if (this.rolling) ctx.lineTo(0, -10);
-        ctx.lineTo(BODY_LENGTH / 2, 0);
-        ctx.stroke();
+        ctx.wrap(() => {
+            ctx.lineWidth = BODY_THICKNESS;
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(-BODY_LENGTH / 2, 0);
+            if (this.rolling) ctx.lineTo(0, -10);
+            ctx.lineTo(BODY_LENGTH / 2, 0);
+            ctx.stroke();
+        });
 
         let frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
         let backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
@@ -308,8 +311,8 @@ class Cat extends Entity {
             backLegsBaseAngle -= Math.PI / 4;
         }
 
-        const legAngle = this.walking
-            ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 8
+        const legsWalkAngle = this.walking
+            ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 4 * (this.stickingToWall ? 0.5 : 1)
             : 0;
 
         // Legs
@@ -330,7 +333,7 @@ class Cat extends Entity {
                 length += (1 - progress) * LEG_LENGTH;
                 thickness += (1 - progress) * LEG_THICKNESS * 0.5;
             } else {
-                ctx.rotate(frontLegsBaseAngle + legAngle);
+                ctx.rotate(frontLegsBaseAngle + legsWalkAngle);
             }
 
             ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
@@ -338,19 +341,19 @@ class Cat extends Entity {
 
         ctx.wrap(() => {
             ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
-            ctx.rotate(frontLegsBaseAngle - legAngle);
+            ctx.rotate(frontLegsBaseAngle - legsWalkAngle);
             ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         });
 
         ctx.wrap(() => {
             ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-            ctx.rotate(backLegsBaseAngle + legAngle);
+            ctx.rotate(backLegsBaseAngle + legsWalkAngle);
             ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         });
 
         ctx.wrap(() => {
             ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
-            ctx.rotate(backLegsBaseAngle - legAngle);
+            ctx.rotate(backLegsBaseAngle - legsWalkAngle);
             ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
         });
 
