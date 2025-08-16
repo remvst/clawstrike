@@ -121,7 +121,7 @@ class Cat extends Entity {
             }
 
             // const speed = (this.rolling ? 600 : 400) * x;
-            this.x += this.vX * elapsed;
+            this.x += this.vX * elapsed * (this.age - this.lastAttack > 0.2 ? 1 : 0.5);
             this.walking = !!x;
 
             if (!this.stickingToWall) this.facing = x || this.facing;
