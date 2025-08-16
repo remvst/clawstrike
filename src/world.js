@@ -11,14 +11,14 @@ class World {
     }
 
     render() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, can.width, can.height);
+        ctx.wrap(() => {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, can.width, can.height);
 
-        for (const entity of this.entities) {
-            ctx.save();
-            entity.render();
-            ctx.restore();
-        }
+            for (const entity of this.entities) {
+                ctx.wrap(() => entity.render());
+            }
+        });
     }
 
     addEntity(entity) {

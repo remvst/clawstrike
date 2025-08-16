@@ -289,9 +289,9 @@ class Cat extends Entity {
 
         const ATTACK_ANIMATION_DURATION = 0.2;
 
-        // Body
         ctx.fillStyle = ctx.strokeStyle = '#000';
 
+        // Body
         ctx.lineWidth = BODY_THICKNESS;
         ctx.lineJoin = 'round';
         ctx.beginPath();
@@ -299,8 +299,6 @@ class Cat extends Entity {
         if (this.rolling) ctx.lineTo(0, -10);
         ctx.lineTo(BODY_LENGTH / 2, 0);
         ctx.stroke();
-
-        // ctx.fillRect(-BODY_LENGTH / 2, -BODY_THICKNESS / 2, BODY_LENGTH, BODY_THICKNESS);
 
         let frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
         let backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
@@ -315,106 +313,99 @@ class Cat extends Entity {
             : 0;
 
         // Legs
-        ctx.save();
+        ctx.wrap(() => {
+            ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
 
-        ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
+            let length = LEG_LENGTH;
+            let thickness = LEG_THICKNESS;
+            if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
+                const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
+                const startAngle = -Math.PI / 3;
+                const endAngle = Math.PI / 2;
 
-        let length = LEG_LENGTH;
-        let thickness = LEG_THICKNESS;
-        if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
-            const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
-            const startAngle = -Math.PI / 3;
-            const endAngle = Math.PI / 2;
+                ctx.translate(0, (1 - progress) * -BODY_THICKNESS / 2);
 
-            ctx.translate(0, (1 - progress) * -BODY_THICKNESS / 2);
+                ctx.rotate(startAngle + (endAngle - startAngle) * progress);
 
-            ctx.rotate(startAngle + (endAngle - startAngle) * progress);
+                length += (1 - progress) * LEG_LENGTH;
+                thickness += (1 - progress) * LEG_THICKNESS * 0.5;
+            } else {
+                ctx.rotate(frontLegsBaseAngle + legAngle);
+            }
 
-            length += (1 - progress) * LEG_LENGTH;
-            thickness += (1 - progress) * LEG_THICKNESS * 0.5;
-        } else {
-            ctx.rotate(frontLegsBaseAngle + legAngle);
-        }
+            ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
+        });
 
-        ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
-        ctx.restore();
+        ctx.wrap(() => {
+            ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
+            ctx.rotate(frontLegsBaseAngle - legAngle);
+            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+        });
 
-        ctx.save();
-        ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
-        ctx.rotate(frontLegsBaseAngle - legAngle);
-        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        ctx.restore();
+        ctx.wrap(() => {
+            ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
+            ctx.rotate(backLegsBaseAngle + legAngle);
+            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+        });
 
-        ctx.save();
-        ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-        ctx.rotate(backLegsBaseAngle + legAngle);
-        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        ctx.restore();
-
-        ctx.save();
-        ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
-        ctx.rotate(backLegsBaseAngle - legAngle);
-        ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        ctx.restore();
+        ctx.wrap(() => {
+            ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
+            ctx.rotate(backLegsBaseAngle - legAngle);
+            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
+        });
 
         // Tail
-        ctx.save();
+        ctx.wrap(() => {
+            if (this.rolling) {
+                ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2 + 4, BODY_THICKNESS / 2 - 4);
+                ctx.rotate(Math.PI / 2 - Math.PI / 4);
+            } else {
+                ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
+                ctx.rotate(-Math.PI / 2 - Math.PI / 4);
+            }
 
-        if (this.rolling) {
-            ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2 + 4, BODY_THICKNESS / 2 - 4);
-            ctx.rotate(Math.PI / 2 - Math.PI / 4);
-        } else {
-            ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
-            ctx.rotate(-Math.PI / 2 - Math.PI / 4);
-        }
-
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = TAIL_THICKNESS;
-        ctx.beginPath();
-        const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
-        for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
-            const amplitudeFactor = x / TAIL_LENGTH;
-            ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
-        }
-        ctx.stroke();
-
-        // ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        ctx.restore();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = TAIL_THICKNESS;
+            ctx.beginPath();
+            const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
+            for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
+                const amplitudeFactor = x / TAIL_LENGTH;
+                ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
+            }
+            ctx.stroke();
+        });
 
         // Head
-        ctx.save();
-        ctx.translate(BODY_LENGTH / 2 - 5, 0);
+        ctx.wrap(() => {
+            ctx.translate(BODY_LENGTH / 2 - 5, 0);
 
-        ctx.rotate(-Math.PI / 2);
-        if (this.rolling) ctx.rotate(Math.PI - Math.PI / 3);
+            ctx.rotate(-Math.PI / 2);
+            if (this.rolling) ctx.rotate(Math.PI - Math.PI / 3);
 
-        ctx.translate(10, 0);
+            ctx.translate(10, 0);
+            if (this.walking) ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 16);
 
-        if (this.walking) ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 16);
-        ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
+            ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 
-        // Eyes
-        ctx.save();
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, -3, 4, -4);
-        ctx.fillRect(0, 3, 4, 4);
-        ctx.restore();
+            // Eyes
+            ctx.wrap(() => {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, -3, 4, -4);
+                ctx.fillRect(0, 3, 4, 4);
+            });
 
-        // Ears
-        ctx.beginPath();
-        ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
-        ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
-        ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 + EAR_WIDTH);
-        ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2 - EAR_WIDTH);
-        ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
-        ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
-        // ctx.lineTo(HEAD_WIDTH / 2 + EAR_WIDTH, -HEAD_HEIGHT / 2);
-        // ctx.lineTo(HEAD_WIDTH / 2 - EAR_WIDTH, -HEAD_HEIGHT / 2);
-        // ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 - EAR_LENGTH);
-        // ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
-        ctx.fill();
+            // Ears
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
+            ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
+            ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 + EAR_WIDTH);
+            ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2 - EAR_WIDTH);
+            ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
+            ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
+            ctx.fill();
 
-        ctx.restore();
+        });
 
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -4,  -4, 8, 8);
