@@ -1,6 +1,6 @@
 class Raycaster {
-    constructor(matrix) {
-        this.matrix = matrix;
+    constructor(structure) {
+        this.structure = structure;
     }
 
 
@@ -9,10 +9,11 @@ class Raycaster {
         const castVertical = this.castAgainstVertical(x, y, angle, maxDistance);
 
         let cast;
+        let impact;
         if (!castHorizontal) {
-            cast = castVertical;
+            impact = castVertical;
         } else if(!castVertical) {
-            cast = castHorizontal;
+            impact = castHorizontal;
         } else {
             impact = pointDistance(x, y, castHorizontal.x, castHorizontal.y) < pointDistance(x, y, castVertical.x, castVertical.y) ? castHorizontal : castVertical;
         }
@@ -48,7 +49,7 @@ class Raycaster {
         const xStep = pointingRight ? CELL_SIZE : -CELL_SIZE;
         const yStep = xStep * tan(angle);
 
-        return TouchList.doCast(x, y, xStep, yStep, maxDistance);
+        return this.doCast(x, y, xStep, yStep, maxDistance);
     }
 
     doCast(startX, startY, xStep, yStep, maxDistance){
@@ -59,13 +60,13 @@ class Raycaster {
             if (DEBUG) {
                 G.castIterations++;
             }
-            if (this.internalHasBlock(x, y)) {
+            if (this.structure.cellAt(x, y)) {
                 // Got a block!
                 return {
                     'x': x,
                     'y': y
                 };
-            } else if(isOut(x, y)) {
+            } else if(this.isOut(x, y)) {
                 // Out of bounds
                 break;
             } else {

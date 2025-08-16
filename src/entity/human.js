@@ -35,18 +35,11 @@ class Human extends Entity {
         for (const structure of this.world.category('structure')) {
             structure.reposition(this, this.radiusX, this.radiusY);
 
-            if (
-                !structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)
-                // structure.cellAt(this.x - this.radiusX, this.y)
-            ) {
-                // this.
+            if (!structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)) {
                 this.walkingDirection = 1;
             }
 
-            if (
-                !structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)
-                // structure.cellAt(this.x + this.radiusX, this.y)
-            ) {
+            if (!structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)) {
                 this.walkingDirection = -1;
             }
         }
@@ -55,24 +48,30 @@ class Human extends Entity {
         if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
 
         // Aim at the cat
-        let seesCat;
-        for (const cat of this.world.category('cat')) {
-            this.aim = Math.atan2(cat.y - this.y, cat.x - this.x);
-            this.facing = Math.sign(cat.x - this.x) || this.facing;
-            // TODO raycasting
-            seesCat = cat;
+        this.seesCat = null;
+        outer: for (const cat of this.world.category('cat')) {
+            const angleToCat = angleBetween(this, cat);
+            const distanceToCat = distance(this, cat);
+
+            for (const structure of this.world.category('structure')) {
+                const impact = structure.raycaster.castRay(this.x, this.y, angleToCat, distanceToCat);
+                if (impact && distance(this, impact) < distanceToCat) {
+                    continue outer; // Cat is blocked by the structure, move on to the next cat
+                }
+            }
+
+            this.seesCat = cat;
         }
 
-        if (seesCat) {
-            this.facing = Math.sign(seesCat.x - this.x) || 1;
-            this.aim = Math.atan2(seesCat.y - this.y, seesCat.x - this.x);
+        if (this.seesCat) {
+            this.facing = Math.sign(this.seesCat.x - this.x) || 1;
+            this.aim = Math.atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
         } else {
             this.facing = this.walkingDirection;
             this.aim = Math.atan2(1, this.facing / 2);
         }
 
-        this.nextShot -= elapsed;
-        if (this.nextShot <= 0) {
+        if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
             const bullet = new Bullet(this.aim);
             bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
             bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
@@ -86,6 +85,23 @@ class Human extends Entity {
     }
 
     render() {
+        for (const cat of this.world.category('cat')) {
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(cat.x, cat.y);
+            ctx.stroke();
+        }
+
+        if (this.seesCat) {
+            ctx.strokeStyle = '#0f0';
+            ctx.lineWidth = 10;
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.seesCat.x, this.seesCat.y);
+            ctx.stroke();
+        }
+
         ctx.translate(this.x, this.y);
         ctx.scale(this.facing, 1);
 

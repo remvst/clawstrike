@@ -35,6 +35,10 @@ pointDistance = (x1, y1, x2, y2) => {
     return hypot(x1 - x2, y1 - y2);
 }
 
+angleBetween = (a, b) => {
+    return Math.atan2(b.y - a.y, b.x - a.x);
+}
+
 // Make Math global
 const math = Math;
 Object.getOwnPropertyNames(math).forEach(n => window[n] = window[n] || math[n]);
