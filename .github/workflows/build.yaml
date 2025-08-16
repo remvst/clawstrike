@@ -22,9 +22,9 @@ jobs:
           npm install
       - name: Build game
         run: make
-      - name: Save artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload build/
+        uses: actions/upload-artifact@v3
         with:
-          name: code-coverage-report
+          name: build
           path: build/
-      # TODO upload the game
+          retention-days: 30
