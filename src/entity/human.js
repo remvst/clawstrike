@@ -22,7 +22,7 @@ class Human extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
-        // Left-right movement
+        // Left/right movement
         this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2;
         if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
@@ -37,11 +37,19 @@ class Human extends Entity {
         for (const structure of this.world.category('structure')) {
             structure.reposition(this, this.radiusX, this.radiusY);
 
-            if (!structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)) {
+            if (
+                !structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1) ||
+                structure.cellAt(this.x - this.radiusX + 1, this.y) ||
+                structure.cellAt(this.x - this.radiusX + 1, this.y - this.radiusY + 1)
+            ) {
                 this.walkingDirection = 1;
             }
 
-            if (!structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)) {
+            if (
+                !structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1) ||
+                structure.cellAt(this.x + this.radiusX, this.y) ||
+                structure.cellAt(this.x + this.radiusX, this.y - this.radiusY + 1)
+            ) {
                 this.walkingDirection = -1;
             }
         }
@@ -213,11 +221,10 @@ class Human extends Entity {
             ctx.fillText(this.seesCat ? '!' : '?', 0, 0);
         });
 
-        // ctx.fillStyle = '#ff0';
-        // ctx.fillRect( -25,  -25, 50, 50);
-
-        // ctx.fillStyle = '#f00';
-        // ctx.globalAlpha = 0.5;
-        // ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
+        if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
+            ctx.strokeStyle = '#fff';
+            // ctx.globalAlpha = 0.5;
+            ctx.strokeRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
+        });
     }
 }

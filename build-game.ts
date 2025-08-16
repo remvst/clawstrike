@@ -43,6 +43,8 @@ const CONSTANTS = {
 
     "INPUT_MODE_KEYBOARD": 0,
     "INPUT_MODE_TOUCH": 1,
+
+    "DEBUG_HITBOXES": 0,
 };
 
 const MANGLE_PARAMS = {
