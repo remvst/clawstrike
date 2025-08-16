@@ -16,6 +16,8 @@ const JS_FILES = [
     'utils/resizer.js',
     'utils/raycasting.js',
 
+    'graphics/wrap.js',
+
     'entity/entity.js',
     'entity/human.js',
     'entity/bullet.js',
