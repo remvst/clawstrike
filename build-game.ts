@@ -25,6 +25,9 @@ const JS_FILES = [
     'entity/cat.js',
     'entity/structure.js',
 
+    'sound/sonantx.js',
+    'sound/ZzFXMicro.js',
+
     'world.js',
     'game.js',
     'main.js',
