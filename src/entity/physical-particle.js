@@ -1,0 +1,45 @@
+class PhysicalParticle extends Entity {
+    constructor() {
+        super();
+
+        this.speed = rnd(200, 400);
+        this.angle = rnd(-Math.PI / 6, -Math.PI * 5 / 6);
+
+        this.vX = Math.cos(this.angle) * this.speed;
+        this.vY = Math.sin(this.angle) * this.speed;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        this.vY += elapsed * 800; // Gravity
+
+        this.x += this.vX * elapsed;
+        this.y += this.vY * elapsed;
+
+        const { x, y } = this;
+        for (const structure of this.world.category('structure')) {
+            structure.reposition(this, 2, 2);
+        }
+
+        if (x !== this.x) this.vX *= -0.5;
+        if (y !== this.y) {
+            this.vX *= 0.5;
+            this.vY *= -0.5;
+        }
+
+        if (this.age > 4 || pointDistance(0, 0, this.vX, this.vY) < 10) {
+            this.world.removeEntity(this);
+        }
+    }
+
+    render() {
+        const speed = pointDistance(0, 0, this.vX, this.vY);
+
+        ctx.translate(this.x, this.y);
+        ctx.rotate(atan2(this.vY, this.vX));
+        ctx.scale(speed / 50, 2);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(-1, -1, 2, 2);
+    }
+}

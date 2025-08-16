@@ -43,6 +43,9 @@ pick = (arr) => {
     return arr[~~floor(random() * arr.length)];
 }
 
+rnd = (min, max) => {
+    return random() * (max - min) + min;
+}
 
 // Make Math global
 const math = Math;

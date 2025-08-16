@@ -23,6 +23,8 @@ class Cat extends Entity {
 
         this.viewAngle = 0;
 
+        this.health = 1;
+
         this.radiusX = 20;
         this.radiusY = 20;
 
@@ -108,7 +110,7 @@ class Cat extends Entity {
                     } else if (pushing) {
                         acceleration = 2000;
                     } else {
-                        acceleration = 0;
+                        acceleration = 1000;
                     }
 
                     targetVX = 600 * x;
@@ -244,7 +246,16 @@ class Cat extends Entity {
     }
 
     damage() {
-        this.world.removeEntity(this);
+        if (--this.health <= 0) {
+            this.world.removeEntity(this);
+        }
+
+        for (let i = 0; i < 100; i++) {
+            const part = new PhysicalParticle();
+            part.x = this.x;
+            part.y = this.y;
+            this.world.addEntity(part);
+        }
     }
 
     jumpData() {

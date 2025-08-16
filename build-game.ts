@@ -24,6 +24,7 @@ const JS_FILES = [
     'entity/claw-effect.js',
     'entity/cat.js',
     'entity/structure.js',
+    'entity/physical-particle.js',
 
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
