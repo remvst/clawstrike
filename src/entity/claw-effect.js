@@ -21,40 +21,27 @@ class ClawEffect extends Entity {
         ctx.scale(s, s);
         ctx.scale(1 + this.seed * 0.5, 1);
 
-        ctx.save();
-        this.drawClaw();
-        ctx.restore();
-
-        ctx.save();
-        ctx.translate(0, -5);
-        ctx.scale(0.8, 0.8);
-        this.drawClaw();
-        ctx.restore();
-
-        ctx.save();
-        ctx.translate(0, 5);
-        ctx.scale(0.8, 0.8);
-        this.drawClaw();
-        ctx.restore();
-
-        // ctx.fillStyle = '#ff0';
-        // ctx.fillRect( -4,  -4, 8, 8);
+        for (const [y, s] of [[0, 1], [-5, 0.8], [5, 0.8]]) {
+            ctx.wrap(() => {
+                ctx.translate(0, y);
+                ctx.scale(s, s);
+                this.drawClaw();
+            });
+        }
     }
 
     drawClaw() {
         ctx.strokeStyle = ctx.fillStyle = '#fff';
-
         ctx.shadowColor = '#000';
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
-        ctx.beginPath();
 
         const THICKNESS = 5;
         const LENGTH = 40;
         const l = LENGTH * Math.min(1, this.age / 0.1);
 
+        ctx.beginPath();
         ctx.translate(-LENGTH / 2, 0);
-
         ctx.moveTo(0, 0);
         ctx.bezierCurveTo(
             l / 2, -THICKNESS / 2,
@@ -66,7 +53,6 @@ class ClawEffect extends Entity {
             l / 2, THICKNESS / 2,
             0, 0
         );
-
         ctx.fill();
     }
 }

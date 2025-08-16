@@ -27,17 +27,17 @@ class Structure extends Entity {
         }
 
         ctx.fillStyle = '#000';
-        ctx.save();
-        for (const row of this.matrix) {
-            ctx.save();
-            for (const cell of row) {
-                if (cell) ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-                ctx.translate(CELL_SIZE, 0);
+        ctx.wrap(() => {
+            for (const row of this.matrix) {
+                ctx.wrap(() => {
+                    for (const cell of row) {
+                        if (cell) ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
+                        ctx.translate(CELL_SIZE, 0);
+                    }
+                });
+                ctx.translate(0, CELL_SIZE);
             }
-            ctx.restore();
-            ctx.translate(0, CELL_SIZE);
-        }
-        ctx.restore();
+        });
     }
 
     reposition(entity, radiusX, radiusY, lastPass = false) {
