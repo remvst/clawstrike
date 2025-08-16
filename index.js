@@ -85,6 +85,11 @@ onload = () => {
     human.y = canvas.height / 2 - 50;
     world.addEntity(human);
 
+    const human2 = new Human();
+    human2.x = canvas.width / 2 - 400;
+    human2.y = canvas.height / 2 - 50;
+    world.addEntity(human2);
+
     const cat = new Cat();
     cat.x = canvas.width / 2;
     cat.y = canvas.height / 2;
@@ -623,8 +628,9 @@ class Human extends Entity {
         super.cycle(elapsed);
 
         // Left-right movement
-        if ((this.age % 8) < 5)
-        this.x += this.walkingDirection * 100 * elapsed;
+        if (((this.age + this.seed * 8) % 8) < 5) {
+            this.x += this.walkingDirection * 100 * elapsed;
+        }
 
         // Fall down
         this.vY += elapsed * 400;
@@ -635,17 +641,24 @@ class Human extends Entity {
         for (const structure of this.world.category('structure')) {
             structure.reposition(this, this.radiusX, this.radiusY);
 
-            if (!structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)) {
+            if (
+                !structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1)
+                // structure.cellAt(this.x - this.radiusX, this.y)
+            ) {
                 // this.
                 this.walkingDirection = 1;
             }
 
-            if (!structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)) {
+            if (
+                !structure.cellAt(this.x + this.radiusX, this.y + this.radiusY + 1)
+                // structure.cellAt(this.x + this.radiusX, this.y)
+            ) {
                 this.walkingDirection = -1;
             }
         }
 
         if (y !== this.y) this.vY = 0;
+        if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
 
         // Aim at the cat
         for (const cat of this.world.category('cat')) {
@@ -662,20 +675,20 @@ class Human extends Entity {
         ctx.translate(this.x, this.y);
         ctx.scale(this.facing, 1);
 
-        const BODY_LENGTH = 60;
-        const BODY_THICKNESS = 30;
+        const BODY_LENGTH = 40;
+        const BODY_THICKNESS = 20;
 
-        const LEG_LENGTH = 40;
-        const LEG_THICKNESS = 12;
+        const LEG_LENGTH = 20;
+        const LEG_THICKNESS = 8;
 
-        const HEAD_WIDTH = 25;
-        const HEAD_HEIGHT = 25;
+        const HEAD_WIDTH = 15;
+        const HEAD_HEIGHT = 15;
 
-        const NECK_THICKNESS = 12;
+        const NECK_THICKNESS = 8;
         const NECK_LENGTH = 4;
 
-        const ARM_LENGTH = 40;
-        const ARM_THICKNESS = 10;
+        const ARM_LENGTH = 20;
+        const ARM_THICKNESS = 5;
 
         ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#f00' : '#000';
 
@@ -719,8 +732,8 @@ class Human extends Entity {
         ctx.save();
         ctx.fillStyle = '#000';
         ctx.translate(ARM_LENGTH, -2);
-        ctx.fillRect(0, 0, 30, -10);
-        ctx.fillRect(0, 0, 10, 10);
+        ctx.fillRect(0, 0, 15, -5);
+        ctx.fillRect(0, 0, 5, 5);
         ctx.restore();
 
         ctx.restore();
