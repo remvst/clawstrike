@@ -104,7 +104,7 @@ class Cat extends Entity {
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
-                        acceleration = 1000;
+                        acceleration = 2000;
                     } else if (pushing) {
                         acceleration = 2000;
                     } else {
@@ -165,7 +165,7 @@ class Cat extends Entity {
 
         if (!downKeys[32]) {
             this.releasedAttack = true;
-        } else if (this.attackCooldown <= 0 && this.releasedAttack) {
+        } else if (this.attackCooldown <= 0 && this.releasedAttack && !this.rolling) {
             this.releasedAttack = false;
 
             this.lastAttack = this.age;
@@ -269,7 +269,7 @@ class Cat extends Entity {
 
         ctx.rotate(this.viewAngle);
 
-        if (this.stickingToWall) ctx.translate(0, 8);
+        if (this.stickingToWall) ctx.translate(0, 10);
 
         ctx.rotate(this.rollingAge * Math.PI * 6);
 
@@ -277,7 +277,7 @@ class Cat extends Entity {
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
-        const LEG_LENGTH = true ? 15 : 15;
+        const LEG_LENGTH = 15;
         const LEG_THICKNESS = 4;
         const TAIL_LENGTH = 30;
         const TAIL_THICKNESS = 5;
@@ -296,9 +296,11 @@ class Cat extends Entity {
         ctx.wrap(() => {
             ctx.lineWidth = BODY_THICKNESS;
             ctx.lineJoin = 'round';
+            if (this.walking) ctx.rotate(Math.sin(this.age * PI * 2 * 5) * Math.PI / 32);
             ctx.beginPath();
             ctx.moveTo(-BODY_LENGTH / 2, 0);
             if (this.rolling) ctx.lineTo(0, -10);
+            // if (this.walking) ctx.lineTo(0, Math.sin(this.age * Math.PI * 2 * 5) * 2);
             ctx.lineTo(BODY_LENGTH / 2, 0);
             ctx.stroke();
         });
@@ -311,51 +313,38 @@ class Cat extends Entity {
             backLegsBaseAngle -= Math.PI / 4;
         }
 
-        const legsWalkAngle = this.walking
+        const legsWalkAngle = this.walking || (!this.landed && !this.stickingToWall)
             ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 4 * (this.stickingToWall ? 0.5 : 1)
             : 0;
 
         // Legs
-        ctx.wrap(() => {
-            ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2, BODY_THICKNESS / 2);
+        const legSettings = [
+            [BODY_LENGTH / 2 - LEG_THICKNESS / 2, frontLegsBaseAngle + legsWalkAngle],
+            [BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, frontLegsBaseAngle - legsWalkAngle],
+            [-BODY_LENGTH / 2 + LEG_THICKNESS / 2, backLegsBaseAngle - legsWalkAngle],
+            [-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, backLegsBaseAngle + legsWalkAngle],
+        ];
+        if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
+            const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
+            const startAngle = -Math.PI / 3;
+            const endAngle = Math.PI / 2;
+            legSettings[0][1] = interpolate(startAngle, endAngle, progress);
+        }
 
-            let length = LEG_LENGTH;
-            let thickness = LEG_THICKNESS;
-            if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
-                const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
-                const startAngle = -Math.PI / 3;
-                const endAngle = Math.PI / 2;
+        for (const [x, angle] of legSettings) {
+            ctx.wrap(() => {
+                ctx.strokeStyle = '#000';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = LEG_THICKNESS;
 
-                ctx.translate(0, (1 - progress) * -BODY_THICKNESS / 2);
-
-                ctx.rotate(startAngle + (endAngle - startAngle) * progress);
-
-                length += (1 - progress) * LEG_LENGTH;
-                thickness += (1 - progress) * LEG_THICKNESS * 0.5;
-            } else {
-                ctx.rotate(frontLegsBaseAngle + legsWalkAngle);
-            }
-
-            ctx.fillRect(0, -LEG_THICKNESS / 2, length, thickness);
-        });
-
-        ctx.wrap(() => {
-            ctx.translate(BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, BODY_THICKNESS / 2);
-            ctx.rotate(frontLegsBaseAngle - legsWalkAngle);
-            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        });
-
-        ctx.wrap(() => {
-            ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2, BODY_THICKNESS / 2);
-            ctx.rotate(backLegsBaseAngle + legsWalkAngle);
-            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        });
-
-        ctx.wrap(() => {
-            ctx.translate(-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, BODY_THICKNESS / 2);
-            ctx.rotate(backLegsBaseAngle - legsWalkAngle);
-            ctx.fillRect(0, -LEG_THICKNESS / 2, LEG_LENGTH, LEG_THICKNESS);
-        });
+                ctx.translate(x, BODY_THICKNESS / 2 - LEG_THICKNESS / 2);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(LEG_LENGTH, 0);
+                ctx.stroke();
+            });
+        }
 
         // Tail
         ctx.wrap(() => {
@@ -370,6 +359,7 @@ class Cat extends Entity {
             ctx.strokeStyle = '#000';
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
+            ctx.moveTo(-10, 0);
             const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
             for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
                 const amplitudeFactor = x / TAIL_LENGTH;
