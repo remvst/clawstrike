@@ -3,6 +3,9 @@ class Structure extends Entity {
         super();
         this.categories.push('structure');
         this.matrix = matrix;
+        this.width = matrix[0].length * CELL_SIZE;
+        this.height = matrix.length * CELL_SIZE;
+        this.raycaster = new Raycaster(this);
     }
 
     render() {
@@ -10,7 +13,7 @@ class Structure extends Entity {
         const cols = this.matrix[0].length;
 
         ctx.fillStyle = '#f00';
-        ctx.fillRect(0, 0, cols * CELL_SIZE, rows * CELL_SIZE);
+        ctx.fillRect(0, 0, this.width, this.height);
 
         ctx.fillStyle = 'rgba(0,0,0,0.05)';
         for (let x = 0 ; x < cols * CELL_SIZE; x += CELL_SIZE * 20) {

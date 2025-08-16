@@ -14,6 +14,7 @@ const JS_FILES = [
     'utils/math.js',
     'utils/easing.js',
     'utils/resizer.js',
+    'utils/raycasting.js',
 
     'entity/entity.js',
     'entity/human.js',
@@ -23,6 +24,7 @@ const JS_FILES = [
     'entity/structure.js',
 
     'world.js',
+    'game.js',
     'main.js',
 ];
 

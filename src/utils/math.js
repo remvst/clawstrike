@@ -26,3 +26,17 @@ ceilToNearest = (x, precision) => {
 interpolate = (a, b, t) => {
     return a + (b - a) * between(0, t, 1);
 }
+
+distance = (a, b) => {
+    return pointDistance(a.x, a.y, b.x, b.y);
+}
+
+pointDistance = (x1, y1, x2, y2) => {
+    return hypot(x1 - x2, y1 - y2);
+}
+
+// Make Math global
+const math = Math;
+Object.getOwnPropertyNames(math).forEach(n => window[n] = window[n] || math[n]);
+
+TWO_PI = PI * 2;
