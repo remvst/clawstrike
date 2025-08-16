@@ -63,7 +63,7 @@ class Human extends Entity {
                 const angleToCat = angleBetween(this, cat);
                 const distanceToCat = distance(this, cat);
 
-                if (distanceToCat > CELL_SIZE * 10) continue; // Too far away
+                if (distanceToCat > CELL_SIZE * 15) continue; // Too far away
 
                 for (const structure of this.world.category('structure')) {
                     const impact = structure.raycaster.castRay(this.x, this.y, angleToCat, distanceToCat);
