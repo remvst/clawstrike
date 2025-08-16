@@ -1,0 +1,2 @@
+let canvas;
+let ctx;

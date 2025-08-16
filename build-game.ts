@@ -7,7 +7,9 @@ import * as terser from 'terser';
 import yargs from 'yargs/yargs';
 
 const JS_FILES = [
-    'index.js',
+    'globals.js',
+    'keyboard.js',
+    'main.js',
 ];
 
 const CONSTANTS = {
@@ -15,6 +17,8 @@ const CONSTANTS = {
     "false": 0,
     "const": "let",
     "null": 0,
+
+    "CELL_SIZE": 50,
 };
 
 const MANGLE_PARAMS = {

@@ -1,17 +1,3 @@
-const CELL_SIZE = 50;
-
-let canvas;
-let ctx;
-let downKeys = {};
-
-document.addEventListener('keydown', (event) => {
-    downKeys[event.keyCode] = true;
-});
-
-document.addEventListener('keyup', (event) => {
-    downKeys[event.keyCode] = false;
-});
-
 function easeOutExpo(x) {
     return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
 }
