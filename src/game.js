@@ -33,26 +33,28 @@ class Game {
         const elapsed = Math.min((now - this.lastFrame) / 1000, 1 / 30);
         this.lastFrame = now;
 
-        if (downKeys[71]) elapsed *= 0.1;
+        if (!DEBUG || document.hasFocus()) {
+            if (downKeys[71]) elapsed *= 0.1;
 
-        this.world.cycle(elapsed);
-        this.world.render();
+            this.world.cycle(elapsed);
+            this.world.render();
 
-        if (DEBUG) ctx.wrap(() => {
-            this.frameTimes[this.lastFrameIndex] = now;
-            const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
-            const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);
-            this.lastFrameIndex = nextIndex;
+            if (DEBUG) ctx.wrap(() => {
+                this.frameTimes[this.lastFrameIndex] = now;
+                const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
+                const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);
+                this.lastFrameIndex = nextIndex;
 
-            ctx.translate(10, 10);
-            ctx.font = '20px Courier';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#fff';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetY = 2;
-            ctx.fillText('FPS: ' + fps.toFixed(1), 0, 0);
-        });
+                ctx.translate(10, 10);
+                ctx.font = '20px Courier';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#fff';
+                ctx.shadowColor = '#000';
+                ctx.shadowOffsetY = 2;
+                ctx.fillText('FPS: ' + fps.toFixed(1), 0, 0);
+            });
+        }
 
         requestAnimationFrame(() => this.frame());
     }
