@@ -296,7 +296,7 @@ class Cat extends Entity {
         ctx.wrap(() => {
             ctx.lineWidth = BODY_THICKNESS;
             ctx.lineJoin = 'round';
-            if (this.walking) ctx.rotate(Math.sin(this.age * PI * 2 * 5) * Math.PI / 32);
+            if (this.walking) ctx.rotate(Math.sin(this.age * PI * 2 * 5) * Math.PI / 16);
             ctx.beginPath();
             ctx.moveTo(-BODY_LENGTH / 2, 0);
             if (this.rolling) ctx.lineTo(0, -10);
