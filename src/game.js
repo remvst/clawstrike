@@ -2,6 +2,11 @@ class Game {
     constructor() {
         this.world = new World();
 
+        if (DEBUG) {
+            this.lastFrameIndex = 0;
+            this.frameTimes = [0, 0, 0, 0, 0, 0, 0, 0];
+        }
+
         this.frame();
 
         const structure = new Structure([[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1],[1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1],[1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,1,1,0,0,1,1,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0],[1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0],[1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,0,0,1,0,0,0,0,0,0,1,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0],[1,0,0,0,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0]]);
@@ -32,6 +37,22 @@ class Game {
 
         this.world.cycle(elapsed);
         this.world.render();
+
+        if (DEBUG) ctx.wrap(() => {
+            this.frameTimes[this.lastFrameIndex] = now;
+            const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
+            const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);
+
+            // console.log(now, this.frameTimes[nextIndex], this.frameTimes.length);
+            this.lastFrameIndex = nextIndex;
+
+            ctx.translate(10, 10);
+            ctx.font = '20pt Courier';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#fff';
+            ctx.fillText(fps + 'fps', 0, 0);
+        });
 
         requestAnimationFrame(() => this.frame());
     }
