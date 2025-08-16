@@ -18,6 +18,8 @@ class Human extends Entity {
         this.nextShot = 0;
         this.lastSeenCat = -9;
         this.lastCatCheck = 0;
+
+        this.health = 3;
     }
 
     get landed() {
@@ -118,6 +120,10 @@ class Human extends Entity {
     damage() {
         this.lastDamage = this.age;
         this.nextShot = Math.max(this.nextShot, 0.5);
+
+        if (--this.health <= 0) {
+            this.world.removeEntity(this);
+        }
     }
 
     render() {

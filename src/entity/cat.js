@@ -243,6 +243,10 @@ class Cat extends Entity {
         return this.age - this.lastLanded < 0.1;
     }
 
+    damage() {
+        this.world.removeEntity(this);
+    }
+
     jumpData() {
         const jumpPower = Math.min(1, this.jumpHoldTime / 0.1);
         const jumpHeight = 25 + jumpPower * 150;

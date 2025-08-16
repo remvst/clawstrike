@@ -21,6 +21,7 @@ class Bullet extends Entity {
         for (const cat of this.world.category('cat')) {
             if (Math.abs(cat.x - this.x) < cat.radiusX && Math.abs(cat.y - this.y) < cat.radiusY) {
                 this.world.removeEntity(this);
+                cat.damage();
                 return;
             }
         }
