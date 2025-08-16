@@ -36,8 +36,13 @@ pointDistance = (x1, y1, x2, y2) => {
 }
 
 angleBetween = (a, b) => {
-    return Math.atan2(b.y - a.y, b.x - a.x);
+    return atan2(b.y - a.y, b.x - a.x);
 }
+
+pick = (arr) => {
+    return arr[~~floor(random() * arr.length)];
+}
+
 
 // Make Math global
 const math = Math;
