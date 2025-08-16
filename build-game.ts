@@ -9,6 +9,12 @@ import yargs from 'yargs/yargs';
 const JS_FILES = [
     'globals.js',
     'keyboard.js',
+    'entity/entity.js',
+    'entity/human.js',
+    'entity/bullet.js',
+    'entity/claw-effect.js',
+    'entity/cat.js',
+    'entity/structure.js',
     'main.js',
 ];
 
