@@ -32,8 +32,5 @@ class Bullet extends Entity {
 
         ctx.fillStyle = '#fff';
         ctx.fillRect(3, -3, -20, 6);
-
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(-3, -3, 10, 6);
     }
 }
