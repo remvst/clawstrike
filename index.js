@@ -822,6 +822,10 @@ class ClawEffect extends Entity {
 
     drawClaw() {
         ctx.strokeStyle = ctx.fillStyle = '#fff';
+
+        ctx.shadowColor = '#000';
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
         ctx.beginPath();
 
         const THICKNESS = 5;
