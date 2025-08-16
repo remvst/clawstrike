@@ -620,7 +620,9 @@ class Human extends Entity {
         this.vY = 0;
         this.walkingDirection = 1;
 
-        this.radiusX = 20;
+        this.walking = false;
+
+        this.radiusX = 10;
         this.radiusY = 40;
     }
 
@@ -628,7 +630,8 @@ class Human extends Entity {
         super.cycle(elapsed);
 
         // Left-right movement
-        if (((this.age + this.seed * 8) % 8) < 5) {
+        this.walking = ((this.age + this.seed * 8) % 8) < 5;
+        if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
         }
 
@@ -661,9 +664,19 @@ class Human extends Entity {
         if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
 
         // Aim at the cat
+        let seesCat;
         for (const cat of this.world.category('cat')) {
             this.aim = Math.atan2(cat.y - this.y, cat.x - this.x);
             this.facing = Math.sign(cat.x - this.x) || this.facing;
+            // seesCat = cat;
+        }
+
+        if (seesCat) {
+            this.facing = Math.sign(seesCat.x - this.x) || 1;
+            this.aim = Math.atan2(seesCat.y - this.y, seesCat.x - this.x);
+        } else {
+            this.facing = this.walkingDirection;
+            this.aim = Math.atan2(1, this.facing / 2);
         }
     }
 
@@ -697,13 +710,15 @@ class Human extends Entity {
 
         // Legs
         ctx.save();
-        ctx.translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, BODY_LENGTH / 2);
-        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH);
+        ctx.translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
+        if (this.walking) ctx.rotate(Math.sin(this.age * Math.PI * 2 * 2) * Math.PI / 16);
+        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
         ctx.restore();
 
         ctx.save();
-        ctx.translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, BODY_LENGTH / 2);
-        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH);
+        ctx.translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
+        if (this.walking) ctx.rotate(-Math.sin(this.age * Math.PI * 2 * 2) * Math.PI / 16);
+        ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
         ctx.restore();
 
         // Head
@@ -717,8 +732,9 @@ class Human extends Entity {
         ctx.restore();
 
         // Arm
+        // ctx.fillStyle = '#f00';
         ctx.save();
-        ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS, -BODY_LENGTH / 2 + NECK_LENGTH);
+        ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2);
 
         let angle = this.aim;
         if (this.facing < 0) {
@@ -741,9 +757,9 @@ class Human extends Entity {
         // ctx.fillStyle = '#ff0';
         // ctx.fillRect( -25,  -25, 50, 50);
 
-        ctx.fillStyle = '#f00';
-        ctx.globalAlpha = 0.5;
-        ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
+        // ctx.fillStyle = '#f00';
+        // ctx.globalAlpha = 0.5;
+        // ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
     }
 }
 
