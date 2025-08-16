@@ -1,0 +1,6 @@
+.DS_Store
+*.zip
+dist/
+build/
+node_modules/
+Efficient-Compression-Tool/

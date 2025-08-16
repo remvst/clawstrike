@@ -1,0 +1,36 @@
+{
+  "name": "@remvst/meowssassin",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "build:debug": "tsx build-game.ts --debug --html=build/debug.html",
+    "build:debug:mangled": "tsx build-game.ts --debug --mangle --html=build/debug_mangled.html",
+    "build:preprod": "tsx build-game.ts --mangle --minify --roadroll-level=1 --html=build/preprod.html",
+    "build:prod": "tsx build-game.ts --mangle --minify --roadroll-level=2 --html=build/index.html",
+    "zip:preprod": "tsx build-zip.ts --html=build/preprod.html --zip=build/preprod.zip",
+    "zip:prod": "tsx build-zip.ts --html=build/index.html --zip=build/game.zip --optimize",
+    "watch": "nodemon --watch 'src/**' -x \"npm run build:debug\" && npm run build:debug:mangled",
+    "http": "http-server build",
+    "start": "concurrently --kill-others \"npm run watch\" \"npm run http\""
+  },
+  "type": "module",
+  "author": "Rémi Vansteelandt",
+  "dependencies": {
+    "@remvst/js13k-tools": "^1.0.0",
+    "clean-css": "^5.3.3",
+    "html-minifier": "^4.0.0",
+    "roadroller": "^2.1.0",
+    "terser": "^5.31.6",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "yargs": "^17.7.2",
+    "zip-lib": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/clean-css": "^4.2.11",
+    "@types/html-minifier": "^4.0.5",
+    "concurrently": "^9.2.0",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.1.10"
+  }
+}
