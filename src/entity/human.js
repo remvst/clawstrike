@@ -104,24 +104,24 @@ class Human extends Entity {
     }
 
     render() {
-        if (DEBUG) ctx.wrap(() => {
-            for (const cat of this.world.category('cat')) {
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(cat.x, cat.y);
-                ctx.stroke();
-            }
+        // if (DEBUG) ctx.wrap(() => {
+        //     for (const cat of this.world.category('cat')) {
+        //         ctx.strokeStyle = '#fff';
+        //         ctx.lineWidth = 2;
+        //         ctx.beginPath();
+        //         ctx.moveTo(this.x, this.y);
+        //         ctx.lineTo(cat.x, cat.y);
+        //         ctx.stroke();
+        //     }
 
-            if (this.seesCat) {
-                ctx.strokeStyle = '#0f0';
-                ctx.lineWidth = 10;
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.seesCat.x, this.seesCat.y);
-                ctx.stroke();
-            }
-        });
+        //     if (this.seesCat) {
+        //         ctx.strokeStyle = '#0f0';
+        //         ctx.lineWidth = 10;
+        //         ctx.moveTo(this.x, this.y);
+        //         ctx.lineTo(this.seesCat.x, this.seesCat.y);
+        //         ctx.stroke();
+        //     }
+        // });
 
         ctx.translate(this.x, this.y);
         ctx.scale(this.facing, 1);
