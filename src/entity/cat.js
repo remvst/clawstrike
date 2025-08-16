@@ -188,11 +188,14 @@ class Cat extends Entity {
                 const dy = Math.abs(human.y - attack.y);
                 if (dx < 50 && dy < 80) {
                     human.damage();
+                    human.x += Math.sign(human.x - this.x) * 10;
                 }
             }
 
             attack.x += Math.random() * 30 - 15;
             attack.y += Math.random() * 50 - 25;
+
+            this.x += this.facing * 10;
         }
 
         this.nextHeatReset -= elapsed;

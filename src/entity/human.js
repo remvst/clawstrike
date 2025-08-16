@@ -10,6 +10,7 @@ class Human extends Entity {
         this.walkingDirection = 1;
 
         this.walking = false;
+        this.lastLanded = -9;
 
         this.radiusX = 10;
         this.radiusY = 40;
@@ -19,11 +20,15 @@ class Human extends Entity {
         this.lastCatCheck = 0;
     }
 
+    get landed() {
+        return this.age - this.lastLanded < 0.1;
+    }
+
     cycle(elapsed) {
         super.cycle(elapsed);
 
         // Left/right movement
-        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2;
+        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2 && this.landed;
         if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
         }
@@ -54,7 +59,10 @@ class Human extends Entity {
             }
         }
 
-        if (y !== this.y) this.vY = 0;
+        if (y !== this.y) {
+            this.vY = 0;
+            if (this.y <= y) this.lastLanded = this.age;
+        }
         if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
 
         // Aim at the cat
@@ -87,7 +95,7 @@ class Human extends Entity {
             }
         }
 
-        if (this.seesCat) {
+        if (this.seesCat && this.age - this.lastDamage > 0.5) {
             this.facing = Math.sign(this.seesCat.x - this.x) || 1;
             this.aim = Math.atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
             this.lastSeenCat = this.age;
@@ -109,6 +117,7 @@ class Human extends Entity {
 
     damage() {
         this.lastDamage = this.age;
+        this.nextShot = Math.max(this.nextShot, 0.5);
     }
 
     render() {
