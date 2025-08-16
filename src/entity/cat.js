@@ -94,7 +94,7 @@ class Cat extends Entity {
                     targetVX = 600 * x;
                 } else if (this.landed) {
                     if (resisting) {
-                        acceleration = 4000;
+                        acceleration = 8000;
                     } else if (pushing) {
                         acceleration = 2000;
                     } else {
@@ -103,9 +103,9 @@ class Cat extends Entity {
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
-                        acceleration = 500;
+                        acceleration = 1000;
                     } else if (pushing) {
-                        acceleration = 500;
+                        acceleration = 2000;
                     } else {
                         acceleration = 0;
                     }

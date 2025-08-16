@@ -31,7 +31,7 @@ onload = () => {
 
     const frame = () => {
         const now = performance.now();
-        let elapsed = (now - lastFrame) / 1000;
+        let elapsed = Math.min((now - lastFrame) / 1000, 1 / 60);
         lastFrame = now;
 
         if (downKeys[71]) elapsed *= 0.1;
