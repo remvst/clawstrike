@@ -11,6 +11,8 @@ const JS_FILES = [
 
     'input/keyboard.js',
 
+    'utils/math.js',
+    'utils/easing.js',
     'utils/resizer.js',
 
     'entity/entity.js',
@@ -20,6 +22,7 @@ const JS_FILES = [
     'entity/cat.js',
     'entity/structure.js',
 
+    'world.js',
     'main.js',
 ];
 
