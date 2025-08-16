@@ -15,7 +15,6 @@ prod:
 	npm run zip:prod
 
 install:
-	brew install node || sudo apt-get install -y nodejs
+	brew install nvm || sudo apt-get install -y nodejs
 	brew install advancecomp || sudo apt-get install -y advancecomp
-	brew install cmake || sudo apt-get install -y cmake
 	./install-ect.sh
