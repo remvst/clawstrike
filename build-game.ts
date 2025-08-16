@@ -8,13 +8,18 @@ import yargs from 'yargs/yargs';
 
 const JS_FILES = [
     'globals.js',
-    'keyboard.js',
+
+    'input/keyboard.js',
+
+    'utils/resizer.js',
+
     'entity/entity.js',
     'entity/human.js',
     'entity/bullet.js',
     'entity/claw-effect.js',
     'entity/cat.js',
     'entity/structure.js',
+
     'main.js',
 ];
 
@@ -25,6 +30,9 @@ const CONSTANTS = {
     "null": 0,
 
     "CELL_SIZE": 50,
+
+    "INPUT_MODE_KEYBOARD": 0,
+    "INPUT_MODE_TOUCH": 1,
 };
 
 const MANGLE_PARAMS = {

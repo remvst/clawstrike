@@ -55,11 +55,13 @@ function interpolate(a, b, t) {
 
 
 onload = () => {
-    canvas = document.querySelector('canvas');
-    canvas.width = 1600;
-    canvas.height = 900;
+    can = document.querySelector('canvas');
+    can.width = 1600;
+    can.height = 900;
 
-    ctx = canvas.getContext('2d');
+    ctx = can.getContext('2d');
+
+    onresize();
 
     const world = new World();
 
@@ -67,18 +69,18 @@ onload = () => {
     world.addEntity(structure);
 
     const human = new Human();
-    human.x = canvas.width / 2 + 200;
-    human.y = canvas.height / 2 - 50;
+    human.x = can.width / 2 + 200;
+    human.y = can.height / 2 - 50;
     world.addEntity(human);
 
     const human2 = new Human();
-    human2.x = canvas.width / 2 - 400;
-    human2.y = canvas.height / 2 - 50;
+    human2.x = can.width / 2 - 400;
+    human2.y = can.height / 2 - 50;
     world.addEntity(human2);
 
     const cat = new Cat();
-    cat.x = canvas.width / 2;
-    cat.y = canvas.height / 2;
+    cat.x = can.width / 2;
+    cat.y = can.height / 2;
     world.addEntity(cat);
 
     let lastFrame = performance.now();
@@ -112,7 +114,7 @@ class World {
 
     render() {
         ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, can.width, can.height);
 
         for (const entity of this.entities) {
             ctx.save();
