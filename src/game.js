@@ -4,7 +4,7 @@ class Game {
 
         if (DEBUG) {
             this.lastFrameIndex = 0;
-            this.frameTimes = [0, 0, 0, 0, 0, 0, 0, 0];
+            this.frameTimes = Array(60).fill(0);
         }
 
         this.frame();
@@ -42,16 +42,16 @@ class Game {
             this.frameTimes[this.lastFrameIndex] = now;
             const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
             const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);
-
-            // console.log(now, this.frameTimes[nextIndex], this.frameTimes.length);
             this.lastFrameIndex = nextIndex;
 
             ctx.translate(10, 10);
-            ctx.font = '20pt Courier';
+            ctx.font = '20px Courier';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = '#fff';
-            ctx.fillText(fps + 'fps', 0, 0);
+            ctx.shadowColor = '#000';
+            ctx.shadowOffsetY = 2;
+            ctx.fillText('FPS: ' + fps.toFixed(1), 0, 0);
         });
 
         requestAnimationFrame(() => this.frame());
