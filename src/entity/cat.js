@@ -381,7 +381,7 @@ class Cat extends Entity {
             ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 
             // Eyes
-            ctx.wrap(() => {
+            if (this.age % 3 > 0.1) ctx.wrap(() => {
                 ctx.fillStyle = '#fff';
                 ctx.fillRect(0, -3, 4, -4);
                 ctx.fillRect(0, 3, 4, 4);
