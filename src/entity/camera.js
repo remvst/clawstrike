@@ -2,7 +2,7 @@ class Camera extends Entity {
     constructor() {
         super();
         this.categories.push('camera');
-        this.zoom = 1.5;
+        this.zoom = 1.2;
         this.affectedBySpeedRatio = false;
     }
 
@@ -19,7 +19,7 @@ class Camera extends Entity {
         for (const player of this.world.category('cat')) {
             const dist = distance(this, player);
             const angle = angleBetween(this, player);
-            const appliedDist = min(dist, dist * elapsed * 5);
+            const appliedDist = min(dist, dist * elapsed * 4);
             this.x += appliedDist * cos(angle);
             this.y += appliedDist * sin(angle) * 0.5;
         }
