@@ -58,6 +58,7 @@ const CONSTANTS = {
 
     "DEBUG_HITBOXES": 1,
     "DEBUG_JUMP": 1,
+    "DEBUG_VISION": 1,
 };
 
 const MANGLE_PARAMS = {
