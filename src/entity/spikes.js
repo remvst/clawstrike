@@ -14,6 +14,19 @@ class Spikes extends Entity {
         return hitbox;
     }
 
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        for (const target of this.targets()) {
+            if (target.hitbox.intersects(this.hitbox)) target.damage();
+        }
+    }
+
+    * targets() {
+        yield* this.world.category('cat');
+        yield* this.world.category('human');
+    }
+
     render() {
         ctx.fillStyle = '#000';
         ctx.translate(this.x, this.y);

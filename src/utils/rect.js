@@ -8,11 +8,9 @@ class Rect {
         this.cachedCenter = {};
     }
 
-    intersect(other) {
-        const thisCenter = this.center;
-        const otherCenter = other.center;
-        return abs(thisCenter.x - otherCenter.x) < (this.width + other.width) / 2 &&
-            abs(thisCenter.y - otherCenter.y) < (this.height + other.height) / 2;
+    intersects(other) {
+        return abs(this.x - other.x) < (this.width + other.width) / 2 &&
+            abs(this.y - other.y) < (this.height + other.height) / 2;
     }
 
     render() {

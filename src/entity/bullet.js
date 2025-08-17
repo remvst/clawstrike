@@ -2,6 +2,8 @@ class Bullet extends Entity {
     constructor(angle) {
         super();
         this.angle = angle;
+        this.hitbox.width = 2;
+        this.hitbox.height = 2;
     }
 
     cycle(elapsed) {
@@ -18,13 +20,18 @@ class Bullet extends Entity {
         }
 
         // Cat hits
-        for (const cat of this.world.category('cat')) {
-            if (Math.abs(cat.x - this.x) < cat.radiusX && Math.abs(cat.y - this.y) < cat.radiusY) {
+        for (const target of this.targets()) {
+            if (this.hitbox.intersects(target.hitbox)) {
                 this.world.removeEntity(this);
-                cat.damage();
+                target.damage();
                 return;
             }
         }
+    }
+
+    * targets() {
+        yield* this.world.category('cat');
+        yield* this.world.category('human');
     }
 
     render() {
