@@ -71,7 +71,7 @@ class Structure extends Entity {
                     const top = this.y + row * CELL_SIZE;
                     const bottom = top + CELL_SIZE;
 
-                    if (!this.matrix[row + 1]?.[col]) {
+                    if (this.matrix[row + 1]?.[col] !== 1) {
                         ctx.wrap(() => {
                             ctx.translate(left, bottom);
 
@@ -86,7 +86,7 @@ class Structure extends Entity {
                         });
                     }
 
-                    if (!this.matrix[row][col + 1]) {
+                    if (this.matrix[row][col + 1] !== 1) {
                         ctx.wrap(() => {
                             ctx.translate(right, top);
 

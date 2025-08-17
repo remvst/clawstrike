@@ -16,6 +16,7 @@ const JS_FILES = [
     'utils/resizer.js',
     'utils/raycasting.js',
     'utils/rect.js',
+    'utils/first-item.js',
 
     'graphics/wrap.js',
     'graphics/create-canvas.js',
@@ -28,6 +29,7 @@ const JS_FILES = [
     'entity/cat.js',
     'entity/structure.js',
     'entity/physical-particle.js',
+    'entity/camera.js',
     'entity/hud.js',
     'entity/spikes.js',
 

@@ -15,6 +15,13 @@ class World {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, can.width, can.height);
 
+            const camera = firstItem(this.category('camera'));
+            ctx.scale(camera.appliedZoom, camera.appliedZoom);
+            ctx.translate(
+                CANVAS_WIDTH / 2 / camera.zoom - camera.x,
+                CANVAS_HEIGHT / 2 / camera.zoom - camera.y,
+            );
+
             for (const entity of this.entities) {
                 ctx.wrap(() => entity.render());
             }

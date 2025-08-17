@@ -24,6 +24,22 @@ class Entity {
 
     }
 
+    cancelCamera() {
+        const camera = firstItem(this.world.category('camera'));
+        ctx.translate(
+            camera.x - (1 / camera.appliedZoom) * CANVAS_WIDTH / 2,
+            camera.y - (1 / camera.appliedZoom) * CANVAS_HEIGHT / 2,
+        );
+        ctx.scale(1 / camera.appliedZoom, 1 / camera.appliedZoom);
+
+        const cornerRadius = 10;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(-cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+        ctx.fillRect(CANVAS_WIDTH -cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+        ctx.fillRect(CANVAS_WIDTH -cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+        ctx.fillRect(-cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+    }
+
     renderDebug() {
         if (DEBUG && DEBUG_HITBOXES) this.hitbox.render();
     }

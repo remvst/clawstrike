@@ -5,6 +5,8 @@ class HUD extends Entity {
     }
 
     render() {
+        this.cancelCamera();
+
         ctx.fillStyle = '#fff';
         for (const [desc, x, y, scaleX, down] of [
             ['↻', 0, 0, 1, downKeys[40]],
