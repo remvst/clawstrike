@@ -44,7 +44,7 @@ class Cat extends Entity {
         this.lastLanded = -9;
 
         if (this.stickingToWall) {
-            this.vX = this.wallStickDirection * 200;
+            this.vX = this.wallStickDirection * 400;
             this.facing = this.wallStickDirection;
         }
 
@@ -209,7 +209,7 @@ class Cat extends Entity {
 
         const { x, y } = this;
         for (const structure of this.world.category('structure')) {
-            structure.reposition(this, this.radiusX, this.radiusY);
+            structure.reposition(this, this.radiusX, this.radiusY, this.vY < 0);
         }
 
         if (this.y > y) {
