@@ -272,7 +272,6 @@ class Cat extends Entity {
 
         const riseDuration = 0.1 + jumpPower * 0.1;
         const riseProgress = between(0, (this.age - this.jumpStartAge) / riseDuration, 1);
-        // console.log(riseProgress);
 
         const isRising = riseProgress < 1;
 
@@ -282,13 +281,6 @@ class Cat extends Entity {
     }
 
     render() {
-
-        // const { peakY, jumpAge } = this.jumpData();
-
-        // ctx.fillStyle = '#f00';
-        // ctx.fillRect(0, peakY, 800, 2);
-        // ctx.fillRect(0, this.jumpStartY, 800, 2);
-
         ctx.translate(this.x, this.y);
 
         ctx.scale(this.facing, 1);
@@ -423,6 +415,19 @@ class Cat extends Entity {
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
             ctx.fill();
+        });
+    }
+
+    renderDebug() {
+        if (!DEBUG) return;
+
+        super.renderDebug();
+
+        if (DEBUG_JUMP) ctx.wrap(() => {
+            const { peakY } = this.jumpData();
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(this.x - 100, peakY, 200, 2);
+            ctx.fillRect(this.x - 100, this.jumpStartY, 200, 2);
         });
     }
 }

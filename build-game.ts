@@ -57,6 +57,7 @@ const CONSTANTS = {
     "INPUT_MODE_TOUCH": 1,
 
     "DEBUG_HITBOXES": 1,
+    "DEBUG_JUMP": 1,
 };
 
 const MANGLE_PARAMS = {
