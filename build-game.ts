@@ -27,6 +27,7 @@ const JS_FILES = [
     'entity/cat.js',
     'entity/structure.js',
     'entity/physical-particle.js',
+    'entity/hud.js',
 
     'screen/screen.js',
     'screen/gameplay-screen.js',

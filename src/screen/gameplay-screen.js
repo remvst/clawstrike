@@ -27,6 +27,8 @@ class GameplayScreen extends Screen {
         cat.x = can.width / 2;
         cat.y = can.height / 2;
         this.world.addEntity(cat);
+
+        this.world.addEntity(new HUD(cat));
     }
 
     cycle(elapsed) {
