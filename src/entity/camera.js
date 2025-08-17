@@ -21,7 +21,7 @@ class Camera extends Entity {
             const angle = angleBetween(this, player);
             const appliedDist = min(dist, dist * elapsed * 5);
             this.x += appliedDist * cos(angle);
-            this.y += appliedDist * sin(angle);
+            this.y += appliedDist * sin(angle) * 0.5;
         }
     }
 
