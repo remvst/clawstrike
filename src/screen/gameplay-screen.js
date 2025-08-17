@@ -28,6 +28,17 @@ class GameplayScreen extends Screen {
         cat.y = can.height / 2;
         this.world.addEntity(cat);
 
+        const spikes = new Spikes();
+        spikes.x = CELL_SIZE * 4;
+        spikes.y = CELL_SIZE * 10;
+        this.world.addEntity(spikes);
+
+        const spikes2 = new Spikes();
+        spikes2.angle = Math.PI / 2;
+        spikes2.x = CELL_SIZE * 4;
+        spikes2.y = CELL_SIZE * 7.5;
+        this.world.addEntity(spikes2);
+
         this.world.addEntity(new HUD(cat));
     }
 

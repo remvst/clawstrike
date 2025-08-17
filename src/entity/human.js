@@ -15,6 +15,9 @@ class Human extends Entity {
         this.radiusX = 10;
         this.radiusY = 40;
 
+        this.hitbox.width = this.radiusX * 2;
+        this.hitbox.height = this.radiusY * 2;
+
         this.nextShot = 0;
         this.lastSeenCat = -9;
         this.lastCatCheck = 0;
@@ -241,12 +244,6 @@ class Human extends Entity {
             ctx.textBaseline = 'middle';
 
             ctx.fillText(this.seesCat ? '!' : '?', 0, 0);
-        });
-
-        if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
-            ctx.strokeStyle = '#fff';
-            // ctx.globalAlpha = 0.5;
-            ctx.strokeRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
         });
     }
 }

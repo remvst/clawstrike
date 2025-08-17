@@ -27,6 +27,8 @@ class Cat extends Entity {
 
         this.radiusX = 20;
         this.radiusY = 20;
+        this.hitbox.width = this.radiusX * 2;
+        this.hitbox.height = this.radiusY * 2;
 
         this.wallStickX = 0;
         this.wallStickDirection = 0;
@@ -421,14 +423,6 @@ class Cat extends Entity {
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
             ctx.fill();
-
         });
-
-        // ctx.fillStyle = '#ff0';
-        // ctx.fillRect( -4,  -4, 8, 8);
-
-        // ctx.fillStyle = '#f00';
-        // ctx.globalAlpha = 0.5;
-        // ctx.fillRect(-this.radiusX, -this.radiusY, this.radiusX * 2, this.radiusY * 2);
     }
 }

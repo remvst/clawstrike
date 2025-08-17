@@ -18,6 +18,12 @@ class World {
             for (const entity of this.entities) {
                 ctx.wrap(() => entity.render());
             }
+
+            if (DEBUG) {
+                for (const entity of this.entities) {
+                    ctx.wrap(() => entity.renderDebug());
+                }
+            }
         });
     }
 

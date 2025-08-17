@@ -3,6 +3,14 @@ class Entity {
         this.x = this.y = this.previousX = this.previousY = this.age = 0;
         this.categories = [];
         this.seed = Math.random();
+
+        this.cachedHitbox = new Rect();
+    }
+
+    get hitbox() {
+        this.cachedHitbox.x = this.x;
+        this.cachedHitbox.y = this.y;
+        return this.cachedHitbox;
     }
 
     cycle(elapsed) {
@@ -14,5 +22,9 @@ class Entity {
 
     render() {
 
+    }
+
+    renderDebug() {
+        if (DEBUG && DEBUG_HITBOXES) this.hitbox.render();
     }
 }

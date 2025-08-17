@@ -15,6 +15,7 @@ const JS_FILES = [
     'utils/easing.js',
     'utils/resizer.js',
     'utils/raycasting.js',
+    'utils/rect.js',
 
     'graphics/wrap.js',
     'graphics/create-canvas.js',
@@ -28,6 +29,7 @@ const JS_FILES = [
     'entity/structure.js',
     'entity/physical-particle.js',
     'entity/hud.js',
+    'entity/spikes.js',
 
     'screen/screen.js',
     'screen/gameplay-screen.js',
@@ -52,7 +54,7 @@ const CONSTANTS = {
     "INPUT_MODE_KEYBOARD": 0,
     "INPUT_MODE_TOUCH": 1,
 
-    "DEBUG_HITBOXES": 0,
+    "DEBUG_HITBOXES": 1,
 };
 
 const MANGLE_PARAMS = {
