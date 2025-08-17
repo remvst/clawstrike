@@ -23,6 +23,7 @@ const JS_FILES = [
     'entity/human.js',
     'entity/bullet.js',
     'entity/claw-effect.js',
+    'entity/flash.js',
     'entity/cat.js',
     'entity/structure.js',
     'entity/physical-particle.js',

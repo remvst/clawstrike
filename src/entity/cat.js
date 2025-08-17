@@ -256,6 +256,9 @@ class Cat extends Entity {
             part.y = this.y + rnd(-this.radiusY, this.radiusY);
             this.world.addEntity(part);
         }
+
+        const flash = new Flash('#fff');
+        this.world.addEntity(flash);
     }
 
     jumpData() {
