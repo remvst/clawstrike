@@ -6,15 +6,22 @@ class LevelEditor extends Entity {
 
         this.cursorPosition = {x: 0, y: 0};
 
-        // TODO mouse controls
-        onclick = onmousemove = (e) => {
+        onmousemove = (e) => {
             getEventPosition(e, can, this.cursorPosition);
 
             const camera = firstItem(this.world.category('camera'));
             this.cursorPosition.x += (camera.x - CANVAS_WIDTH / 2) / camera.zoom;
             this.cursorPosition.y += (camera.y - CANVAS_HEIGHT / 2) / camera.zoom;
+        };
 
-            // console.log(this.cursorPosition);
+        onclick = () => {
+            for (const structure of this.world.category('structure')) {
+                const row = floor(this.cursorPosition.y / CELL_SIZE);
+                const col = floor(this.cursorPosition.x / CELL_SIZE);
+
+                structure.matrix[row][col] = (structure.matrix[row][col] + 1) % 3;
+                structure.prerendered = null;
+            }
         };
     }
 
