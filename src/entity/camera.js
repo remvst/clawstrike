@@ -7,9 +7,7 @@ class Camera extends Entity {
     }
 
     get appliedZoom() {
-        // I'm a lazy butt and refuse to update the entire game to have a bit more zoom.
-        // So instead I do dis ¯\_(ツ)_/¯
-        return interpolate(1.2, 3, (this.zoom - 1) / 3);
+        return this.zoom;
     }
 
     cycle(elapsed) {
