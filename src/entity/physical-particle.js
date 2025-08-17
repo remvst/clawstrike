@@ -1,6 +1,8 @@
 class PhysicalParticle extends Entity {
-    constructor() {
+    constructor(color = '#fff') {
         super();
+
+        this.color = color;
 
         this.speed = rnd(200, 400);
         this.angle = rnd(-Math.PI, 0);
@@ -39,7 +41,7 @@ class PhysicalParticle extends Entity {
         ctx.translate(this.x, this.y);
         ctx.rotate(atan2(this.vY, this.vX));
         ctx.scale(speed / 50, 2);
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = this.color;
         ctx.fillRect(-1, -1, 2, 2);
     }
 }

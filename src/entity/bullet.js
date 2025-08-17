@@ -15,6 +15,13 @@ class Bullet extends Entity {
         for (const structure of this.world.category('structure')) {
             if (structure.cellAt(this.x, this.y)) {
                 this.world.removeEntity(this);
+
+                for (let i = 0; i < 5; i++) {
+                    const part = new PhysicalParticle('#fff');
+                    part.x = this.x;
+                    part.y = this.y;
+                    this.world.addEntity(part);
+                }
                 return;
             }
         }
