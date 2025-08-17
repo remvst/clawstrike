@@ -18,6 +18,8 @@ const JS_FILES = [
     'utils/raycasting.js',
     'utils/rect.js',
     'utils/first-item.js',
+    'utils/pick.js',
+    'utils/shuffle.js',
 
     'graphics/wrap.js',
     'graphics/create-canvas.js',
@@ -37,6 +39,12 @@ const JS_FILES = [
     'screen/screen.js',
     'screen/gameplay-screen.js',
     'screen/game-over-screen.js',
+
+    'level/direction.js',
+    'level/chunk.js',
+    'level/chunks.js',
+    'level/build-level.js',
+    'level/matrix.js',
 
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
