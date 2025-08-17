@@ -3,7 +3,7 @@ class PhysicalParticle extends Entity {
         super();
 
         this.speed = rnd(200, 400);
-        this.angle = rnd(-Math.PI / 6, -Math.PI * 5 / 6);
+        this.angle = rnd(-Math.PI, 0);
 
         this.vX = Math.cos(this.angle) * this.speed;
         this.vY = Math.sin(this.angle) * this.speed;

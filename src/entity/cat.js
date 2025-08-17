@@ -252,8 +252,8 @@ class Cat extends Entity {
 
         for (let i = 0; i < 100; i++) {
             const part = new PhysicalParticle();
-            part.x = this.x;
-            part.y = this.y;
+            part.x = this.x + rnd(-this.radiusX, this.radiusX);
+            part.y = this.y + rnd(-this.radiusY, this.radiusY);
             this.world.addEntity(part);
         }
     }
