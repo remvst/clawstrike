@@ -16,6 +16,7 @@ class Structure extends Entity {
             ctx.fillStyle = '#f00';
             ctx.fillRect(0, 0, this.width, this.height);
 
+            // Background stripes
             ctx.fillStyle = 'rgba(0,0,0,0.05)';
             for (let x = 0 ; x < cols * CELL_SIZE; x += CELL_SIZE * 20) {
                 ctx.beginPath();
@@ -24,15 +25,15 @@ class Structure extends Entity {
                 ctx.lineTo(x + CELL_SIZE * 10 - 200, rows * CELL_SIZE);
                 ctx.lineTo(x - 200, rows * CELL_SIZE);
                 ctx.fill();
-                // break;
             }
 
+            // Cells
             ctx.fillStyle = '#000';
             ctx.wrap(() => {
                 for (const row of this.matrix) {
                     ctx.wrap(() => {
                         for (const cell of row) {
-                            if (cell) ctx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
+                            if (cell) ctx.fillRect(0, 0, CELL_SIZE, cell === 1 ? CELL_SIZE : CELL_SIZE / 4);
                             ctx.translate(CELL_SIZE, 0);
                         }
                     });
@@ -62,7 +63,7 @@ class Structure extends Entity {
 
             for (let row = 0 ; row < rows; row++) {
                 for (let col = 0 ; col < cols; col++) {
-                    if (!this.matrix[row][col])  continue;
+                    if (this.matrix[row][col] !== 1)  continue;
 
                     const left = this.x + col * CELL_SIZE;
                     const right = left + CELL_SIZE;
@@ -106,7 +107,7 @@ class Structure extends Entity {
         ctx.drawImage(this.prerendered, this.x, this.y);
     }
 
-    reposition(entity, radiusX, radiusY) {
+    reposition(entity, radiusX, radiusY, previousX, previousY) {
         let remainingIterations = 2;
         while (remainingIterations-- > 0) {
             const { x, y } = entity;
@@ -115,15 +116,25 @@ class Structure extends Entity {
             const topY = entity.y - radiusY;
             const bottomY = entity.y + radiusY;
 
-            const top = this.cellAt(x, topY);
-            const right = this.cellAt(rightX, y);
-            const left = this.cellAt(leftX, y);
-            const bottom = this.cellAt(x, bottomY);
+            let top = this.collidingCellAt(x, topY);
+            let right = this.collidingCellAt(rightX, y) === 1;
+            let left = this.collidingCellAt(leftX, y) === 1;
+            let bottom = this.collidingCellAt(x, bottomY);
 
-            const topLeft = this.cellAt(leftX, topY);
-            const topRight = this.cellAt(rightX, topY);
-            const bottomLeft = this.cellAt(leftX, bottomY);
-            const bottomRight = this.cellAt(rightX, bottomY);
+            let topLeft = this.collidingCellAt(leftX, topY) === 1;
+            let topRight = this.collidingCellAt(rightX, topY) === 1;
+            let bottomLeft =  this.collidingCellAt(leftX, bottomY) === 1;
+            let bottomRight =  this.collidingCellAt(rightX, bottomY) === 1;
+
+            const directionY = Math.sign(y - previousY);
+            if (directionY < 0) {
+                // top = top === 1 ? top : 0;
+                // topLeft = topLeft === 1 ? topLeft : 0;
+                // topRight = topRight === 1 ? topRight : 0;
+                // bottom = bottom === 1 ? bottom : 0;
+                // bottomLeft = bottomLeft === 1 ? bottomLeft : 0;
+                // bottomRight = bottomRight === 1 ? bottomRight : 0;
+            }
 
             const verticalCollisionCount = !!top + !!topLeft + !!topRight + !!bottom + !!bottomLeft + !!bottomRight;
             const horizontalCollisionCount = !!left + !!topLeft + !!bottomLeft + !!right + !!topRight + !!bottomRight;
@@ -133,8 +144,8 @@ class Structure extends Entity {
             }
 
             const resolveVertical = () => {
-                if (top) entity.y = ceilToNearest(topY, CELL_SIZE) + radiusY;
-                if (bottom) entity.y = floorToNearest(bottomY, CELL_SIZE) - radiusY;
+                if (top && top === 1) entity.y = ceilToNearest(topY, CELL_SIZE) + radiusY;
+                if (bottom && (bottom === 1 || directionY > 0)) entity.y = floorToNearest(bottomY, CELL_SIZE) - radiusY;
             };
 
             const resolveHorizontal = () => {
@@ -158,5 +169,29 @@ class Structure extends Entity {
         if (!isBetween(this.y, y, this.y + this.matrix.length * CELL_SIZE)) return null;
 
         return this.matrix[Math.floor((y - this.y) / CELL_SIZE)][Math.floor((x - this.x) / CELL_SIZE)] || 0;
+    }
+
+    collidingCellAt(x, y) {
+        const topStartY = floorToNearest(y, CELL_SIZE);
+        const cell = this.cellAt(x, y);
+        return cell;
+        if (!cell) return 0;
+
+        const cellBottomY = this.cellBottomY(x, y);
+        return isBetween(topStartY, y, cellBottomY) ? cell : 0;
+    }
+
+    cellTopY(x, y) {
+        const cell = this.cellAt(x, y);
+        if (!cell) return Number.MAX_SAFE_INTEGER;
+        return floorToNearest(y, CELL_SIZE);
+    }
+
+    cellBottomY(x, y) {
+        const cell = this.cellAt(x, y);
+        if (!cell) return Number.MIN_SAFE_INTEGER;
+        const topStartY = floorToNearest(y, CELL_SIZE);
+        return topStartY + CELL_SIZE;
+        return topStartY + 2;
     }
 }

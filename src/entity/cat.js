@@ -72,6 +72,7 @@ class Cat extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
+        // Roll behavior
         this.rolling = downKeys[40] && this.landed;
         if (this.rolling) {
             this.rollingAge += elapsed;
@@ -209,7 +210,7 @@ class Cat extends Entity {
 
         const { x, y } = this;
         for (const structure of this.world.category('structure')) {
-            structure.reposition(this, this.radiusX, this.radiusY, this.vY < 0);
+            structure.reposition(this, this.radiusX, this.radiusY, this.previousX, this.previousY);
         }
 
         if (this.y > y) {
@@ -230,7 +231,6 @@ class Cat extends Entity {
             if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
                 this.wallStickX = this.x;
                 this.wallStickDirection = readjustmentDirection;
-                console.log('go stick wall!');
             }
         }
 
@@ -270,6 +270,7 @@ class Cat extends Entity {
 
         const riseDuration = 0.1 + jumpPower * 0.1;
         const riseProgress = between(0, (this.age - this.jumpStartAge) / riseDuration, 1);
+        // console.log(riseProgress);
 
         const isRising = riseProgress < 1;
 
