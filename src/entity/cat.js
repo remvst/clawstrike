@@ -248,6 +248,8 @@ class Cat extends Entity {
     damage() {
         if (--this.health <= 0) {
             this.world.removeEntity(this);
+
+            G.screens.push(new GameOverScreen());
         }
 
         for (let i = 0; i < 100; i++) {

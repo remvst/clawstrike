@@ -28,6 +28,10 @@ const JS_FILES = [
     'entity/structure.js',
     'entity/physical-particle.js',
 
+    'screen/screen.js',
+    'screen/gameplay-screen.js',
+    'screen/game-over-screen.js',
+
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
 

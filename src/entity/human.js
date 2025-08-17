@@ -125,7 +125,7 @@ class Human extends Entity {
             this.world.removeEntity(this);
         }
 
-        for (let i = 0; i < (this.health ? 0 : 50); i++) {
+        for (let i = 0; i < (this.health ? 10 : 50); i++) {
             const part = new PhysicalParticle();
             part.x = this.x + rnd(-this.radiusX, this.radiusX);
             part.y = this.y + rnd(-this.radiusY, this.radiusY);
