@@ -10,6 +10,7 @@ const JS_FILES = [
     'globals.js',
 
     'input/keyboard.js',
+    'input/touch.js',
 
     'utils/math.js',
     'utils/easing.js',
@@ -55,6 +56,8 @@ const CONSTANTS = {
 
     "INPUT_MODE_KEYBOARD": 0,
     "INPUT_MODE_TOUCH": 1,
+
+    "MOBILE_BUTTON_SIZE": 50,
 
     "DEBUG_HITBOXES": 1,
     "DEBUG_JUMP": 1,

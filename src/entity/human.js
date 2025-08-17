@@ -234,10 +234,11 @@ class Human extends Entity {
         super.renderDebug();
 
         if (DEBUG_VISION) ctx.wrap(() => {
+            ctx.beginPath();
+
             for (const cat of this.world.category('cat')) {
                 ctx.strokeStyle = '#fff';
                 ctx.lineWidth = 2;
-                ctx.beginPath();
                 ctx.moveTo(this.x, this.y);
                 ctx.lineTo(cat.x, cat.y);
                 ctx.stroke();
