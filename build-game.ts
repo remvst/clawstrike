@@ -162,17 +162,25 @@ const argv = yargs(process.argv.slice(2)).options({
 }).parse();
 
 (async () => {
+    const constants = {
+        DEBUG: argv.debug,
+        ...CONSTANTS,
+    };
+
     let html = await fs.readFile('src/index.html', 'utf-8');
     let css = await fs.readFile('src/style.css', 'utf-8');
 
-    let js = (await Promise.all(
-        JS_FILES.map(path => fs.readFile('src/' + path, 'utf-8')))
-    ).join('\n');
+    const jsFiles = [...JS_FILES];
 
-    js = hardcodeConstants(js, {
-        DEBUG: argv.debug,
-        ...CONSTANTS,
-    });
+    // Add the level editor if needed
+    if (constants.DEBUG) {
+        jsFiles.push('entity/dev/level-editor.js');
+    }
+
+    let js = (await Promise.all(
+        jsFiles.map(path => fs.readFile('src/' + path, 'utf-8')))
+    ).join('\n');
+    js = hardcodeConstants(js, constants);
     js = macro(js, NOMANGLE);
     js = macro(js, EVALUATE);
 

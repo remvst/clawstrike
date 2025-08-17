@@ -4,7 +4,14 @@ class GameplayScreen extends Screen {
 
         if (DEBUG) {
             this.debugValues = () => {
-                return [`Entities: ${this.world.entities.length}`]
+                const vals = [`Entities: ${this.world.entities.length}`];
+                for (const camera of this.world.category('camera')) {
+                    vals.push([`Camera: ${camera.x.toFixed(0)},${camera.y.toFixed(0)}`]);
+                }
+                for (const cat of this.world.category('cat')) {
+                    vals.push([`Cat: ${cat.x.toFixed(0)},${cat.y.toFixed(0)}`]);
+                }
+                return vals;
             };
         }
 
@@ -16,12 +23,12 @@ class GameplayScreen extends Screen {
         const human = new Human();
         human.x = can.width / 2 + 200;
         human.y = can.height / 2 - 50;
-        this.world.addEntity(human);
+        // this.world.addEntity(human);
 
         const human2 = new Human();
         human2.x = can.width / 2 - 400;
         human2.y = can.height / 2 - 50;
-        this.world.addEntity(human2);
+        // this.world.addEntity(human2);
 
         const cat = new Cat();
         cat.x = can.width / 2;
@@ -44,6 +51,8 @@ class GameplayScreen extends Screen {
         this.world.addEntity(spikes2);
 
         this.world.addEntity(new HUD(cat));
+
+        if (DEBUG) this.world.addEntity(new LevelEditor());
     }
 
     cycle(elapsed) {
