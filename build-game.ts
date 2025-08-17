@@ -17,6 +17,7 @@ const JS_FILES = [
     'utils/raycasting.js',
 
     'graphics/wrap.js',
+    'graphics/create-canvas.js',
 
     'entity/entity.js',
     'entity/human.js',
