@@ -19,6 +19,6 @@ class GameOverScreen extends Screen {
         ctx.shadowColor = '#000';
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
-        ctx.fillText('Press [R] to try again'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+        ctx.fillText('Press [R] to try again'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
     }
 }
