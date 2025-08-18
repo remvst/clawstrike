@@ -11,8 +11,8 @@ class Spikes extends Entity {
 
     get hitbox() {
         const hitbox = super.hitbox;
-        hitbox.width = max(20, cos(this.angle) * this.length);
-        hitbox.height = max(20, sin(this.angle) * this.length);
+        hitbox.width = max(20, abs(cos(this.angle)) * this.length);
+        hitbox.height = max(20, abs(sin(this.angle)) * this.length);
         return hitbox;
     }
 
