@@ -291,6 +291,7 @@ class LevelEditorScreen extends GameplayScreen {
         }
 
         actions.push(...[
+            ['Load', () => this.load()],
             ['Save', () => this.save()],
             ['Test', () => this.test()],
         ]);
@@ -308,6 +309,15 @@ class LevelEditorScreen extends GameplayScreen {
 
         navigator.clipboard.writeText(JSON.stringify(serialized));
         console.log(JSON.stringify(serialized));
+    }
+
+    load() {
+        const serialized = prompt('Paste the serialized world here:');
+        if (!serialized) return;
+
+        const json = JSON.parse(serialized);
+        G.screens.pop();
+        G.screens.push(new LevelEditorScreen(json));
     }
 
     test() {
