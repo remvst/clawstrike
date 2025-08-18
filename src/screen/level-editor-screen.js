@@ -305,6 +305,8 @@ class LevelEditorScreen extends GameplayScreen {
 
     save() {
         const serialized = serializeWorld(this.world);
+
+        navigator.clipboard.writeText(JSON.stringify(serialized));
         console.log(JSON.stringify(serialized));
     }
 
