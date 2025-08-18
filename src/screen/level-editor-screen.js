@@ -69,6 +69,21 @@ class LevelEditorScreen extends GameplayScreen {
                         this.selected = entity;
                     }
                 }
+            } else if (this.editMode === 'structure') {
+
+                for (const structure of this.world.category('structure')) {
+                    const cell = structure.cellAt(this.cursorPosition.x, this.cursorPosition.y);
+                    if (cell) {
+                        // Clicked on a filled cell, let's start deleting
+                        this.currentMatrixValue = 0;
+                    } else {
+                        // Clicked on an empty cell, add based on modifier keys
+                        if (downKeys[224] || downKeys[17]) this.currentMatrixValue = 2;
+                        else this.currentMatrixValue = 1;
+                    }
+                }
+
+                this.applyStructureChange();
             }
 
             this.mouseIsDown = true;
@@ -114,65 +129,17 @@ class LevelEditorScreen extends GameplayScreen {
                     this.selected.x = roundToNearest(this.cursorPosition.x, CELL_SIZE / 2);
                     this.selected.y = roundToNearest(this.cursorPosition.y, CELL_SIZE / 2);
                 }
+            } else if (this.editMode === 'structure') {
+                if (this.mouseIsDown) {
+                    this.applyStructureChange();
+                }
             }
         };
 
         can.onclick = () => {
             if (this.editMode !== 'structure') return;
             if (contextMenu.style.display === 'block') return;
-
-            for (const structure of this.world.category('structure')) {
-                const row = floor(this.cursorPosition.y / CELL_SIZE);
-                const col = floor(this.cursorPosition.x / CELL_SIZE);
-
-                let { matrix } = structure;
-
-                let prefixRows = 0;
-                if (row < 0) {
-                    prefixRows = -row;
-                    row = 0;
-                }
-
-                let prefixCols = 0;
-                if (col < 0) {
-                    prefixCols = -col;
-                    col = 0;
-                }
-
-                let suffixRows = 0;
-                if (row > matrix.length - 1) {
-                    suffixRows = row - (matrix.length - 1);
-                }
-
-                let suffixCols = 0;
-                if (col > matrix[0].length - 1) {
-                    suffixCols = col - (matrix[0].length - 1);
-                }
-
-                matrix = applyMatrix(
-                    createMatrix(
-                        matrix.length + prefixRows + suffixRows,
-                        matrix[0].length + prefixCols + suffixCols,
-                        () => 1,
-                    ),
-                    matrix,
-                    prefixRows,
-                    prefixCols,
-                );
-
-                matrix[row][col] = (matrix[row][col] + 1) % 3;
-
-                structure.matrix = matrix;
-                structure.width = matrix[0].length * CELL_SIZE;
-                structure.height = matrix.length * CELL_SIZE;
-                structure.prerendered = null;
-
-                for (const otherEntity of this.world.entities) {
-                    if (otherEntity === structure) continue;
-                    otherEntity.x += prefixCols * CELL_SIZE;
-                    otherEntity.y += prefixRows * CELL_SIZE;
-                }
-            }
+            // this.applyStructureChange();
         };
 
         this.selected = null;
@@ -254,6 +221,61 @@ class LevelEditorScreen extends GameplayScreen {
             ctx.shadowOffsetY = 2;
             ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
         });
+    }
+
+    applyStructureChange() {
+        for (const structure of this.world.category('structure')) {
+            const row = floor(this.cursorPosition.y / CELL_SIZE);
+            const col = floor(this.cursorPosition.x / CELL_SIZE);
+
+            let { matrix } = structure;
+
+            let prefixRows = 0;
+            if (row < 0) {
+                prefixRows = -row;
+                row = 0;
+            }
+
+            let prefixCols = 0;
+            if (col < 0) {
+                prefixCols = -col;
+                col = 0;
+            }
+
+            let suffixRows = 0;
+            if (row > matrix.length - 1) {
+                suffixRows = row - (matrix.length - 1);
+            }
+
+            let suffixCols = 0;
+            if (col > matrix[0].length - 1) {
+                suffixCols = col - (matrix[0].length - 1);
+            }
+
+            matrix = applyMatrix(
+                createMatrix(
+                    matrix.length + prefixRows + suffixRows,
+                    matrix[0].length + prefixCols + suffixCols,
+                    () => 1,
+                ),
+                matrix,
+                prefixRows,
+                prefixCols,
+            );
+
+            matrix[row][col] = this.currentMatrixValue;
+
+            structure.matrix = matrix;
+            structure.width = matrix[0].length * CELL_SIZE;
+            structure.height = matrix.length * CELL_SIZE;
+            structure.prerendered = null;
+
+            for (const otherEntity of this.world.entities) {
+                if (otherEntity === structure) continue;
+                otherEntity.x += prefixCols * CELL_SIZE;
+                otherEntity.y += prefixRows * CELL_SIZE;
+            }
+        }
     }
 
     insertEntity(entity) {
