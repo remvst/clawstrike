@@ -9,7 +9,7 @@
     "build:prod": "tsx build-game.ts --mangle --minify --roadroll-level=2 --html=build/index.html",
     "zip:preprod": "tsx build-zip.ts --html=build/preprod.html --zip=build/preprod.zip",
     "zip:prod": "tsx build-zip.ts --html=build/index.html --zip=build/game.zip --optimize",
-    "watch": "nodemon --watch 'src/**' --watch 'build-game.ts' -x \"npm run build:debug\" && npm run build:debug:mangled",
+    "watch": "nodemon --watch 'src/**' --watch 'build-game.ts' -x \"npm run build:debug\"",
     "http": "http-server build",
     "start": "concurrently --kill-others \"npm run watch\" \"npm run http\""
   },
