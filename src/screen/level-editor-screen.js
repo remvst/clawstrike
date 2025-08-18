@@ -1,6 +1,6 @@
 class LevelEditorScreen extends GameplayScreen {
-    constructor() {
-        super();
+    constructor(serializedWorld) {
+        super(serializedWorld);
 
         can.style.cursor = 'default';
 
@@ -214,7 +214,7 @@ class LevelEditorScreen extends GameplayScreen {
             });
 
             // Cursor
-            ctx.wrap(() => {
+            if (this.editMode === 'structure') ctx.wrap(() => {
                 ctx.fillStyle = '#fff';
                 ctx.globalAlpha = 0.4;
                 ctx.fillRect(

@@ -190,6 +190,19 @@ const argv = yargs(process.argv.slice(2)).options({
     let js = (await Promise.all(
         jsFiles.map(path => fs.readFile('src/' + path, 'utf-8')))
     ).join('\n');
+
+    js += 'ALL_LEVELS = [';
+
+    for (const path of [
+        'level/levels/tutorial.js',
+        'level/levels/first-level.js',
+        'level/levels/second-level.js',
+    ]) {
+        js += await fs.readFile('src/' + path, 'utf-8') + ',';
+    }
+
+    js += '];';
+
     js = hardcodeConstants(js, constants);
     js = macro(js, NOMANGLE);
     js = macro(js, EVALUATE);

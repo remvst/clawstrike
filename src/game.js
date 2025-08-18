@@ -5,8 +5,8 @@ class Game {
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.screens = [new GameplayScreen()];
-        this.screens = [new LevelEditorScreen()];
+        this.screens = [new GameplayScreen(ALL_LEVELS[0])];
+        this.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
 
         this.frame();
     }
