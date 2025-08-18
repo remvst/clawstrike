@@ -227,7 +227,7 @@ class LevelEditorScreen extends GameplayScreen {
             });
 
             // Selection
-            if (this.editMode === 'structure' && this.selected) {
+            if (this.editMode === 'entity' && this.selected) {
                 ctx.wrap(() => {
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 3;
