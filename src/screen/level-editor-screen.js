@@ -19,12 +19,14 @@ class LevelEditorScreen extends GameplayScreen {
         onmousedown = (e) => {
             this.selected = null;
 
-            for (const entity of this.world.entities) {
-                if (entity.categories.includes('structure')) continue;
-                if (entity.categories.includes('camera')) continue;
+            if (this.editMode === 'entity') {
+                for (const entity of this.world.entities) {
+                    if (entity.categories.includes('structure')) continue;
+                    if (entity.categories.includes('camera')) continue;
 
-                if (entity.hitbox.contains(this.cursorPosition) && this.editMode === 'entity') {
-                    this.selected = entity;
+                    if (entity.hitbox.contains(this.cursorPosition) && this.editMode === 'entity') {
+                        this.selected = entity;
+                    }
                 }
             }
 
@@ -121,7 +123,7 @@ class LevelEditorScreen extends GameplayScreen {
         if (downKeys[49]) this.editMode = 'structure';
         if (downKeys[50]) this.editMode = 'entity';
 
-        if (this.editMode === 'structure') {
+        if (this.editMode === 'entity') {
             if (downKeys[8]) {
                 this.selected?.world?.removeEntity(this.selected);
             }
@@ -168,6 +170,22 @@ class LevelEditorScreen extends GameplayScreen {
                     CELL_SIZE,
                 );
             });
+
+            // Selection
+            if (this.selected) {
+                ctx.wrap(() => {
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 3;
+
+                    ctx.translate(this.selected.hitbox.x, this.selected.hitbox.y);
+                    ctx.strokeRect(
+                        -this.selected.hitbox.width / 2,
+                        -this.selected.hitbox.height / 2,
+                        this.selected.hitbox.width,
+                        this.selected.hitbox.height,
+                    );
+                });
+            }
         });
 
         // HUD
