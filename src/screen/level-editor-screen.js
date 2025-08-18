@@ -269,6 +269,7 @@ class LevelEditorScreen extends GameplayScreen {
             ['Add Cat', () => this.insertEntity(new Cat())],
             ['Add Human', () => this.insertEntity(new Human())],
             ['Add Spike', () => this.insertEntity(new Spikes())],
+            ['Save', () => this.save()],
         ];
 
         if (this.selected) {
@@ -296,6 +297,24 @@ class LevelEditorScreen extends GameplayScreen {
     deleteSelection() {
         this.selected?.world?.removeEntity(this.selected);
         this.selected = null;
+    }
+
+    save() {
+        const serialized = serializeWorld(this.world);
+        console.log(JSON.stringify(serialized));
+    }
+
+    serialize() {
+        const out = [];
+
+        for (const entity of this.world.entities) {
+            const serializedEntity = serializeEntity(entity);
+            if (!serializedEntity) continue;
+
+            out.push(serializedEntity);
+        }
+
+        return out;
     }
 }
 

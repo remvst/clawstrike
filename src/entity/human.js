@@ -2,6 +2,9 @@ class Human extends Entity {
 
     constructor() {
         super();
+
+        this.type = 'human';
+
         this.categories.push('human');
         this.aim = 0;
         this.facing = 1;

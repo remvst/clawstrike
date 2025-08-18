@@ -1,6 +1,9 @@
 class Cat extends Entity {
     constructor() {
         super();
+
+        this.type = 'cat';
+
         this.categories.push('cat');
         this.facing = 1;
         this.attackCooldown = 0;

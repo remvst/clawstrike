@@ -1,14 +1,23 @@
 class Structure extends Entity {
-    constructor(matrix) {
+    constructor() {
         super();
+        this.type = nomangle('structure');
         this.categories.push('structure');
-        this.matrix = matrix;
-        this.width = matrix[0].length * CELL_SIZE;
-        this.height = matrix.length * CELL_SIZE;
         this.raycaster = new Raycaster(this);
     }
 
+    cycle(elapsed) {
+        super.cycle(elapsed);
+        this.width = matrix[0].length * CELL_SIZE;
+        this.height = matrix.length * CELL_SIZE;
+    }
+
     render() {
+        if (!this.matrix) return;
+
+        this.width = this.matrix[0].length * CELL_SIZE;
+        this.height = this.matrix.length * CELL_SIZE;
+
         const rows = this.matrix.length;
         const cols = this.matrix[0].length;
 
@@ -116,25 +125,17 @@ class Structure extends Entity {
             const topY = entity.y - radiusY;
             const bottomY = entity.y + radiusY;
 
-            let top = this.collidingCellAt(x, topY);
-            let right = this.collidingCellAt(rightX, y) === 1;
-            let left = this.collidingCellAt(leftX, y) === 1;
-            let bottom = this.collidingCellAt(x, bottomY);
+            let top = this.cellAt(x, topY);
+            let right = this.cellAt(rightX, y) === 1;
+            let left = this.cellAt(leftX, y) === 1;
+            let bottom = this.cellAt(x, bottomY);
 
-            let topLeft = this.collidingCellAt(leftX, topY) === 1;
-            let topRight = this.collidingCellAt(rightX, topY) === 1;
-            let bottomLeft =  this.collidingCellAt(leftX, bottomY) === 1;
-            let bottomRight =  this.collidingCellAt(rightX, bottomY) === 1;
+            let topLeft = this.cellAt(leftX, topY) === 1;
+            let topRight = this.cellAt(rightX, topY) === 1;
+            let bottomLeft =  this.cellAt(leftX, bottomY) === 1;
+            let bottomRight =  this.cellAt(rightX, bottomY) === 1;
 
             const directionY = Math.sign(y - previousY);
-            if (directionY < 0) {
-                // top = top === 1 ? top : 0;
-                // topLeft = topLeft === 1 ? topLeft : 0;
-                // topRight = topRight === 1 ? topRight : 0;
-                // bottom = bottom === 1 ? bottom : 0;
-                // bottomLeft = bottomLeft === 1 ? bottomLeft : 0;
-                // bottomRight = bottomRight === 1 ? bottomRight : 0;
-            }
 
             const verticalCollisionCount = !!top + !!topLeft + !!topRight + !!bottom + !!bottomLeft + !!bottomRight;
             const horizontalCollisionCount = !!left + !!topLeft + !!bottomLeft + !!right + !!topRight + !!bottomRight;
@@ -169,29 +170,5 @@ class Structure extends Entity {
         if (!isBetween(this.y, y, this.y + this.matrix.length * CELL_SIZE)) return null;
 
         return this.matrix[Math.floor((y - this.y) / CELL_SIZE)][Math.floor((x - this.x) / CELL_SIZE)] || 0;
-    }
-
-    collidingCellAt(x, y) {
-        const topStartY = floorToNearest(y, CELL_SIZE);
-        const cell = this.cellAt(x, y);
-        return cell;
-        if (!cell) return 0;
-
-        const cellBottomY = this.cellBottomY(x, y);
-        return isBetween(topStartY, y, cellBottomY) ? cell : 0;
-    }
-
-    cellTopY(x, y) {
-        const cell = this.cellAt(x, y);
-        if (!cell) return Number.MAX_SAFE_INTEGER;
-        return floorToNearest(y, CELL_SIZE);
-    }
-
-    cellBottomY(x, y) {
-        const cell = this.cellAt(x, y);
-        if (!cell) return Number.MIN_SAFE_INTEGER;
-        const topStartY = floorToNearest(y, CELL_SIZE);
-        return topStartY + CELL_SIZE;
-        return topStartY + 2;
     }
 }

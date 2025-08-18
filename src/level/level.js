@@ -1,5 +1,6 @@
 makeLevel = (world, matrix) => {
-    const structure = new Structure(matrix.map(row => row.map(cell => cell <= 2 ? cell : 0)));
+    const structure = new Structure();
+    structure.matrix = matrix.map(row => row.map(cell => cell <= 2 ? cell : 0))
     world.addEntity(structure);
 
     for (let row = 0; row < matrix.length; row++) {

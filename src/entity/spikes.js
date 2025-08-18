@@ -3,6 +3,8 @@ class Spikes extends Entity {
     constructor() {
         super();
 
+        this.type = 'spikes';
+
         this.angle = 0;
         this.length = CELL_SIZE;
     }

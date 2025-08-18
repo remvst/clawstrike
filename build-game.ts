@@ -46,6 +46,7 @@ const JS_FILES = [
     'level/build-level.js',
     'level/matrix.js',
     'level/level.js',
+    'level/serialization.js',
 
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
