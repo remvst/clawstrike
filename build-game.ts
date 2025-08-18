@@ -68,7 +68,7 @@ const CONSTANTS = {
 
     "MOBILE_BUTTON_SIZE": 50,
 
-    "DEBUG_HITBOXES": 0,
+    "DEBUG_HITBOXES": 1,
     "DEBUG_JUMP": 0,
     "DEBUG_VISION": 0,
 };
@@ -184,6 +184,7 @@ const argv = yargs(process.argv.slice(2)).options({
     // Add the level editor if needed
     if (constants.DEBUG) {
         jsFiles.push('entity/dev/level-editor.js');
+        jsFiles.push('screen/level-editor-screen.js');
     }
 
     let js = (await Promise.all(

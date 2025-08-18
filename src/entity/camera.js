@@ -16,13 +16,11 @@ class Camera extends Entity {
         this.hitbox.width = CANVAS_WIDTH / this.appliedZoom;
         this.hitbox.height = CANVAS_HEIGHT / this.appliedZoom;
 
-        for (const player of this.world.category('cat')) {
-            const dist = distance(this, player);
-            const angle = angleBetween(this, player);
-            const appliedDist = min(dist, dist * elapsed * 4);
-            this.x += appliedDist * cos(angle);
-            this.y += appliedDist * sin(angle) * 0.5;
-        }
+        const dist = distance(this, this.target)
+        const angle = angleBetween(this, this.target);
+        const appliedDist = min(dist, dist * elapsed * 4);
+        this.x += appliedDist * cos(angle);
+        this.y += appliedDist * sin(angle) * 0.5;
     }
 
     // zoomTo(toValue) {

@@ -1,4 +1,4 @@
-class LevelEditor extends Entity {
+class LevelEditorScreen extends GameplayScreen {
     constructor() {
         super();
 
@@ -8,6 +8,9 @@ class LevelEditor extends Entity {
 
         const cameraTarget = new CameraTarget();
         this.world.addEntity(cameraTarget);
+
+        const camera = firstItem(this.world.category('camera'));
+        camera.target = cameraTarget;
 
         onmousedown = (e) => {
             for (const entity of this.world.entities) {
@@ -47,8 +50,8 @@ class LevelEditor extends Entity {
                 const row = floor(this.cursorPosition.y / CELL_SIZE);
                 const col = floor(this.cursorPosition.x / CELL_SIZE);
 
-                // structure.matrix[row][col] = (structure.matrix[row][col] + 1) % 3;
-                // structure.prerendered = null;
+                structure.matrix[row][col] = (structure.matrix[row][col] + 1) % 3;
+                structure.prerendered = null;
             }
         };
 
@@ -56,9 +59,14 @@ class LevelEditor extends Entity {
     }
 
     render() {
-        ctx.globalAlpha = 0.2;
+        super.render();
 
         const camera = firstItem(this.world.category('camera'));
+        ctx.scale(camera.appliedZoom, camera.appliedZoom);
+        ctx.translate(
+            CANVAS_WIDTH / 2 / camera.zoom - camera.x,
+            CANVAS_HEIGHT / 2 / camera.zoom - camera.y,
+        );
 
         const minX = floorToNearest(camera.x - CANVAS_WIDTH / 2, CELL_SIZE);
         const maxX = ceilToNearest(minX + CANVAS_WIDTH,CELL_SIZE) + CELL_SIZE;
@@ -66,13 +74,13 @@ class LevelEditor extends Entity {
         const minY = floorToNearest(camera.y - CANVAS_HEIGHT / 2, CELL_SIZE);
         const maxY = ceilToNearest(minY + CANVAS_HEIGHT,CELL_SIZE) + CELL_SIZE;
 
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#888';
         for (let x = minX ; x <= maxX ; x += CELL_SIZE) {
-            ctx.fillRect(x, minY, 2, maxY - minY);
+            ctx.fillRect(x, minY, 0.5, maxY - minY);
         }
 
         for (let y = minY ; y <= maxY ; y += CELL_SIZE) {
-            ctx.fillRect(minX, y, maxX - minX, 2);
+            ctx.fillRect(minX, y, maxX - minX, 0.5);
         }
 
         ctx.wrap(() => {
@@ -85,5 +93,20 @@ class LevelEditor extends Entity {
                 CELL_SIZE,
             );
         });
+    }
+}
+
+class CameraTarget extends Entity {
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        let x = 0, y = 0;
+        if (downKeys[37]) x = -1;
+        if (downKeys[39]) x = 1;
+        if (downKeys[38]) y = -1;
+        if (downKeys[40]) y = 1;
+
+        this.x += x * elapsed * 400;
+        this.y += y * elapsed * 400;
     }
 }

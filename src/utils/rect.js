@@ -13,6 +13,11 @@ class Rect {
             abs(this.y - other.y) < (this.height + other.height) / 2;
     }
 
+    contains(point) {
+        return abs(this.x - point.x) < this.width / 2 &&
+            abs(this.y - point.y) < this.height / 2;
+    }
+
     render() {
         if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
             ctx.translate(this.x, this.y);

@@ -6,6 +6,13 @@ class World {
 
     cycle(elapsed) {
         for (const entity of this.entities) {
+            if (DEBUG) {
+                if (
+                    !(entity instanceof CameraTarget) &&
+                    !(entity instanceof Camera)
+                ) continue;
+            }
+
             entity.cycle(elapsed);
         }
     }
