@@ -14,12 +14,12 @@ class LevelEditorScreen extends GameplayScreen {
 
         this.world.editorMode = true;
 
-        this.editMode = 'structure';
+        this.editMode = 'entity';
 
         const contextMenu = document.createElement('div');
         contextMenu.classList.add('context-menu');
         document.body.appendChild(contextMenu);
-        document.body.addEventListener('click', () => contextMenu.style.visibility = 'hidden', false);
+        document.body.addEventListener('click', () => contextMenu.style.display = 'none', false);
         contextMenu.addEventListener('click', (e) => e.stopPropagation(), false);
 
         const styleTag = document.createElement('style');
@@ -29,7 +29,7 @@ class LevelEditorScreen extends GameplayScreen {
             background-color: #222;
             border: 1px solid white;
             min-width: 200px;
-            visibility: hidden;
+            display: none;
             width: auto;
             height: auto;
         }
@@ -76,14 +76,14 @@ class LevelEditorScreen extends GameplayScreen {
             if (e.which === 3) {
                 contextMenu.style.left = e.pageX + 'px';
                 contextMenu.style.top = e.pageY + 'px';
-                contextMenu.style.visibility = 'visible';
+                contextMenu.style.display = 'block';
 
                 contextMenu.innerHTML = '';
                 for (const [label, handler] of this.contextualActions()) {
                     const button = document.createElement('button');
                     button.innerText = label;
                     button.addEventListener('click', () => {
-                        contextMenu.style.visibility = 'hidden';
+                        contextMenu.style.display = 'none';
                         handler();
                     }, false);
                     contextMenu.appendChild(button);
@@ -180,8 +180,8 @@ class LevelEditorScreen extends GameplayScreen {
     cycle(elapsed) {
         super.cycle(elapsed);
 
-        if (downKeys[49]) this.editMode = 'structure';
-        if (downKeys[50]) this.editMode = 'entity';
+        if (downKeys[49]) this.editMode = 'entity';
+        if (downKeys[50]) this.editMode = 'structure';
     }
 
     render() {
@@ -269,7 +269,6 @@ class LevelEditorScreen extends GameplayScreen {
             ['Add Cat', () => this.insertEntity(new Cat())],
             ['Add Human', () => this.insertEntity(new Human())],
             ['Add Spike', () => this.insertEntity(new Spikes())],
-            ['Save', () => this.save()],
         ];
 
         if (this.selected) {
@@ -291,6 +290,11 @@ class LevelEditorScreen extends GameplayScreen {
             }
         }
 
+        actions.push(...[
+            ['Save', () => this.save()],
+            ['Test', () => this.test()],
+        ]);
+
         return actions;
     }
 
@@ -304,17 +308,9 @@ class LevelEditorScreen extends GameplayScreen {
         console.log(JSON.stringify(serialized));
     }
 
-    serialize() {
-        const out = [];
-
-        for (const entity of this.world.entities) {
-            const serializedEntity = serializeEntity(entity);
-            if (!serializedEntity) continue;
-
-            out.push(serializedEntity);
-        }
-
-        return out;
+    test() {
+        const serialized = serializeWorld(this.world);
+        G.screens.push(new TestScreen(serialized));
     }
 }
 
@@ -330,5 +326,28 @@ class CameraTarget extends Entity {
 
         this.x += x * elapsed * 400;
         this.y += y * elapsed * 400;
+    }
+}
+
+class TestScreen extends GameplayScreen {
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        if (downKeys[27]) {
+            G.screens.pop();
+        }
+    }
+
+    render() {
+        ctx.wrap(() => super.render());
+
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = 'bold 40px Impact';
+        ctx.shadowColor = '#000';
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.fillText('[ESC] to go back to editor'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 4);
     }
 }

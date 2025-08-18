@@ -12,4 +12,8 @@ class Screen {
     render() {
 
     }
+
+    absorb() {
+        return false;
+    }
 }

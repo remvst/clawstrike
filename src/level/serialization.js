@@ -39,7 +39,7 @@ if (DEBUG) {
         const out = [];
         for (const entity of world.entities) {
             const serializedEntity = serializeEntity(entity);
-            if (!serializedEntity) out.push(serializedEntity);
+            if (serializedEntity) out.push(serializedEntity);
         }
         return out;
     }

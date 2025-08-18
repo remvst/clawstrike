@@ -7,7 +7,8 @@ class GameOverScreen extends Screen {
         super.cycle(elapsed);
 
         if (downKeys[82]) {
-            G.screens = [new GameplayScreen()];
+            const gameplayScreen = G.screens[G.screens.length - 2];
+            G.screens = [new GameplayScreen(gameplayScreen.serializedWorld)];
         }
     }
 

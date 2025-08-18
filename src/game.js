@@ -19,9 +19,14 @@ class Game {
         if (!DEBUG || document.hasFocus()) {
             if (downKeys[71]) elapsed *= 0.1;
 
-            for (const screen of this.screens) {
+            let i = this.screens.length;
+            while (this.screens[--i]) {
+                const screen = this.screens[i];
                 screen.cycle(elapsed);
+                if (screen.absorb()) break;
+            }
 
+            for (const screen of this.screens) {
                 ctx.wrap(() => screen.render());
             }
 

@@ -8,8 +8,8 @@ class Structure extends Entity {
 
     cycle(elapsed) {
         super.cycle(elapsed);
-        this.width = matrix[0].length * CELL_SIZE;
-        this.height = matrix.length * CELL_SIZE;
+        this.width = this.matrix[0].length * CELL_SIZE;
+        this.height = this.matrix.length * CELL_SIZE;
     }
 
     render() {
