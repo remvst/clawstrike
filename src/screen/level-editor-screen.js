@@ -17,18 +17,22 @@ class LevelEditorScreen extends GameplayScreen {
         this.editMode = 'structure';
 
         onmousedown = (e) => {
+            this.selected = null;
+
             for (const entity of this.world.entities) {
                 if (entity.categories.includes('structure')) continue;
                 if (entity.categories.includes('camera')) continue;
 
                 if (entity.hitbox.contains(this.cursorPosition) && this.editMode === 'entity') {
-                    this.dragged = entity;
+                    this.selected = entity;
                 }
             }
+
+            this.mouseIsDown = true;
         };
 
         onmouseup = (e) => {
-            this.dragged = null;
+            this.mouseIsDown = null;
         };
 
         onmousemove = (e) => {
@@ -44,9 +48,9 @@ class LevelEditorScreen extends GameplayScreen {
             this.cursorPosition.y = camera.y + dYFromCenter / camera.zoom;
 
             if (this.editMode === 'entity') {
-                if (this.dragged) {
-                    this.dragged.x = roundToNearest(this.cursorPosition.x, CELL_SIZE / 2);
-                    this.dragged.y = roundToNearest(this.cursorPosition.y, CELL_SIZE / 2);
+                if (this.selected && this.mouseIsDown) {
+                    this.selected.x = roundToNearest(this.cursorPosition.x, CELL_SIZE / 2);
+                    this.selected.y = roundToNearest(this.cursorPosition.y, CELL_SIZE / 2);
                 }
             }
         };
@@ -108,7 +112,7 @@ class LevelEditorScreen extends GameplayScreen {
             }
         };
 
-        this.dragged = null;
+        this.selected = null;
     }
 
     cycle(elapsed) {
@@ -116,6 +120,12 @@ class LevelEditorScreen extends GameplayScreen {
 
         if (downKeys[49]) this.editMode = 'structure';
         if (downKeys[50]) this.editMode = 'entity';
+
+        if (this.editMode === 'structure') {
+            if (downKeys[8]) {
+                this.selected?.world?.removeEntity(this.selected);
+            }
+        }
     }
 
     render() {
