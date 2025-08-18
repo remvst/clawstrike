@@ -40,12 +40,7 @@ const JS_FILES = [
     'screen/gameplay-screen.js',
     'screen/game-over-screen.js',
 
-    'level/direction.js',
-    'level/chunk.js',
-    'level/chunks.js',
-    'level/build-level.js',
     'level/matrix.js',
-    'level/level.js',
     'level/serialization.js',
 
     'sound/sonantx.js',
