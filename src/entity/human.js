@@ -45,7 +45,7 @@ class Human extends Entity {
         const { x, y } = this;
 
         for (const structure of this.world.category('structure')) {
-            structure.reposition(this, this.radiusX, this.radiusY);
+            structure.reposition(this, this.radiusX, this.radiusY, this.x, this.y - 1);
 
             if (
                 !structure.cellAt(this.x - this.radiusX, this.y + this.radiusY + 1) ||
