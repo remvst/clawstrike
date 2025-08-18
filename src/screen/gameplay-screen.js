@@ -17,50 +17,47 @@ class GameplayScreen extends Screen {
 
         this.world = new World();
 
-        // const structure = new Structure([[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1],[1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1],[1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,1,2,0,0,1,1,0,0,1,2,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],[1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,1],[1,0,0,1,0,0,0,0,0,0,1,1,1,1,2,2,1,1,0,0,1,1,1,1,1,0,1],[1,0,0,0,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]);
+        makeLevel(this.world, [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,3,0,0,0,0,0,0,1],[1,1,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1],[1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1],[1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,1,2,0,0,1,1,0,0,1,2,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],[1,0,0,1,1,1,1,0,0,0,0,0,4,0,0,0,0,0,0,0,1,1,1,1,1,2,1],[1,0,0,1,0,0,0,0,0,0,1,1,1,1,2,2,1,1,0,0,1,1,1,1,1,0,1],[1,0,0,0,0,1,1,0,3,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]);
+
+        // const structure = new Structure([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,3,0,0,0,0,0,0,1],[1,1,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1],[1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1],[1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,1,2,0,0,1,1,0,0,1,2,1],[1,1,1,1,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],[1,0,0,1,1,1,1,0,0,0,0,0,4,0,0,0,0,0,0,0,1,1,1,1,1,2,1],[1,0,0,1,0,0,0,0,0,0,1,1,1,1,2,2,1,1,0,0,1,1,1,1,1,0,1],[1,0,0,0,0,1,1,0,3,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]);
         // this.world.addEntity(structure);
 
+        // const structure = new Structure(buildWorld());
+        // this.world.addEntity(structure);
 
+        // const human = new Human();
+        // human.x = can.width / 2 + 200;
+        // human.y = can.height / 2 - 50;
+        // // this.world.addEntity(human);
 
-        const matrix = buildWorld();
-        console.log(matrix);
+        // const human2 = new Human();
+        // human2.x = can.width / 2 - 400;
+        // human2.y = can.height / 2 - 50;
+        // // this.world.addEntity(human2);
 
-        const structure = new Structure(matrix);
-        this.world.addEntity(structure);
+        // const cat = new Cat();
+        // cat.x = can.width / 2;
+        // cat.y = can.height / 2;
+        // this.world.addEntity(cat);
 
-        const human = new Human();
-        human.x = can.width / 2 + 200;
-        human.y = can.height / 2 - 50;
-        // this.world.addEntity(human);
+        // const camera = new Camera();
+        // camera.target = cat;
+        // this.world.addEntity(camera);
 
-        const human2 = new Human();
-        human2.x = can.width / 2 - 400;
-        human2.y = can.height / 2 - 50;
-        // this.world.addEntity(human2);
+        // const spikes = new Spikes();
+        // spikes.x = CELL_SIZE * 4;
+        // spikes.y = CELL_SIZE * 10;
+        // this.world.addEntity(spikes);
 
-        const cat = new Cat();
-        cat.x = can.width / 2;
-        cat.y = can.height / 2;
-        this.world.addEntity(cat);
+        // const spikes2 = new Spikes();
+        // spikes2.angle = Math.PI / 2;
+        // spikes2.x = CELL_SIZE * 4;
+        // spikes2.y = CELL_SIZE * 7.5;
+        // this.world.addEntity(spikes2);
 
-        const camera = new Camera();
-        camera.target = cat;
-        this.world.addEntity(camera);
+        // this.world.addEntity(new HUD(cat));
 
-        const spikes = new Spikes();
-        spikes.x = CELL_SIZE * 4;
-        spikes.y = CELL_SIZE * 10;
-        this.world.addEntity(spikes);
-
-        const spikes2 = new Spikes();
-        spikes2.angle = Math.PI / 2;
-        spikes2.x = CELL_SIZE * 4;
-        spikes2.y = CELL_SIZE * 7.5;
-        this.world.addEntity(spikes2);
-
-        this.world.addEntity(new HUD(cat));
-
-        if (DEBUG) this.world.addEntity(new LevelEditor());
+        // if (DEBUG) this.world.addEntity(new LevelEditor());
     }
 
     cycle(elapsed) {

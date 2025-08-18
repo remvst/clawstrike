@@ -1,5 +1,5 @@
 buildWorld = (
-    chunkRows = 3,
+    chunkRows = 2,
     chunkCols = 3,
 ) => {
     const requiredConnections = createMatrix(chunkRows, chunkCols, () => null);
@@ -46,7 +46,8 @@ buildWorld = (
         return true;
     }
 
-    explore(requiredConnections, 0, 0, null);
+    explore(requiredConnections, 1, 1, null);
+    console.log(requiredConnections);
 
     const chunkMap = requiredConnections.map((row, rowIndex) => {
         return row.map((requiredConnections, colIndex) => {

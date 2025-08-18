@@ -45,6 +45,7 @@ const JS_FILES = [
     'level/chunks.js',
     'level/build-level.js',
     'level/matrix.js',
+    'level/level.js',
 
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
@@ -67,9 +68,9 @@ const CONSTANTS = {
 
     "MOBILE_BUTTON_SIZE": 50,
 
-    "DEBUG_HITBOXES": 1,
-    "DEBUG_JUMP": 1,
-    "DEBUG_VISION": 1,
+    "DEBUG_HITBOXES": 0,
+    "DEBUG_JUMP": 0,
+    "DEBUG_VISION": 0,
 };
 
 const MANGLE_PARAMS = {
