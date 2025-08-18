@@ -1,7 +1,7 @@
 class Structure extends Entity {
     constructor() {
         super();
-        this.type = nomangle('structure');
+        this.type = 'structure';
         this.categories.push('structure');
         this.raycaster = new Raycaster(this);
     }
