@@ -119,6 +119,7 @@ class LevelEditorScreen extends GameplayScreen {
 
         can.onclick = () => {
             if (this.editMode !== 'structure') return;
+            if (contextMenu.style.display === 'block') return;
 
             for (const structure of this.world.category('structure')) {
                 const row = floor(this.cursorPosition.y / CELL_SIZE);
@@ -226,7 +227,7 @@ class LevelEditorScreen extends GameplayScreen {
             });
 
             // Selection
-            if (this.selected) {
+            if (this.editMode === 'structure' && this.selected) {
                 ctx.wrap(() => {
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 3;
@@ -247,11 +248,11 @@ class LevelEditorScreen extends GameplayScreen {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = 'bold 40px Impact';
+            ctx.font = 'bold 20px Impact';
             ctx.shadowColor = '#000';
             ctx.shadowOffsetX = 2;
             ctx.shadowOffsetY = 2;
-            ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 4);
+            ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
         });
     }
 
@@ -356,10 +357,10 @@ class TestScreen extends GameplayScreen {
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'bold 40px Impact';
+        ctx.font = 'bold 20px Impact';
         ctx.shadowColor = '#000';
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
-        ctx.fillText('[ESC] to go back to editor'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 4);
+        ctx.fillText('[ESC] to go back to editor'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
     }
 }
