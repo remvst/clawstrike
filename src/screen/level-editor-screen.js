@@ -88,6 +88,8 @@ class LevelEditorScreen extends GameplayScreen {
                     }, false);
                     contextMenu.appendChild(button);
                 }
+
+                this.mouseIsDown = false;
             }
         };
 
@@ -264,9 +266,9 @@ class LevelEditorScreen extends GameplayScreen {
 
     contextualActions() {
         const actions = [
-            ['Cat', () => this.insertEntity(new Cat())],
-            ['Human', () => this.insertEntity(new Human())],
-            ['Spike', () => this.insertEntity(new Spikes())],
+            ['Add Cat', () => this.insertEntity(new Cat())],
+            ['Add Human', () => this.insertEntity(new Human())],
+            ['Add Spike', () => this.insertEntity(new Spikes())],
         ];
 
         if (this.selected) {
