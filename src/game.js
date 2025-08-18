@@ -6,7 +6,7 @@ class Game {
         }
 
         this.screens = [new GameplayScreen(ALL_LEVELS[0])];
-        this.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
+        if (DEBUG) this.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
 
         this.frame();
     }

@@ -211,7 +211,7 @@ const argv = yargs(process.argv.slice(2)).options({
         console.log('Minifying...');
         js = (await terser.minify(js, {
             mangle: {
-                properties: true,
+                properties: false,
                 toplevel: true,
             }
         })).code!;
