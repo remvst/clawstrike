@@ -1,12 +1,7 @@
-buildWorld = () => {
-    const startChunk = chunk1;
-
-    let final = createMatrix(10, 10);
-    final = applyMatrix(final, startChunk.matrix, 0, 0);
-
-    const chunkRows = 3;
-    const chunkCols = 3;
-
+buildWorld = (
+    chunkRows = 3,
+    chunkCols = 3,
+) => {
     const requiredConnections = createMatrix(chunkRows, chunkCols, () => null);
 
     function explore(matrix, row, col, fromDirection = null) {
@@ -57,7 +52,7 @@ buildWorld = () => {
         return row.map((requiredConnections, colIndex) => {
             if (!requiredConnections) return null;
 
-            const compatibleChunks = allChunks.filter((chunk) => {
+            const compatibleChunks = ALL_CHUNKS.filter((chunk) => {
                 for (const connection of requiredConnections) {
                     if (!chunk.connections.includes(connection)) return false;
                 }
@@ -79,6 +74,14 @@ buildWorld = () => {
 
     // Remove the 3s
     inflated = inflated.map(row => row.map(cell => cell <= 2 ? cell : 0));
+
+    // Add a border
+    inflated = applyMatrix(
+        createMatrix(inflated.length + 2, inflated[0].length + 2, () => 1),
+        inflated,
+        1,
+        1,
+    );
 
     return inflated;
 }
