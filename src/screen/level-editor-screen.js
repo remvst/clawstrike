@@ -16,7 +16,48 @@ class LevelEditorScreen extends GameplayScreen {
 
         this.editMode = 'structure';
 
-        onmousedown = (e) => {
+        const contextMenu = document.createElement('div');
+        contextMenu.classList.add('context-menu');
+        document.body.appendChild(contextMenu);
+        document.body.addEventListener('click', () => contextMenu.style.visibility = 'hidden', false);
+        contextMenu.addEventListener('click', (e) => e.stopPropagation(), false);
+
+        const styleTag = document.createElement('style');
+        styleTag.innerHTML = `
+        .context-menu {
+            position: absolute;
+            background-color: #222;
+            border: 1px solid white;
+            min-width: 200px;
+            visibility: hidden;
+            width: auto;
+            height: auto;
+        }
+
+        .context-menu > button {
+            display: block;
+            border: none;
+            border-bottom: 1px solid #222;
+            background-color: #000;
+            padding: 12px;
+            color: white;
+            text-align: left;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .context-menu > button:hover {
+            background-color: #444;
+        }
+        `;
+        document.head.appendChild(styleTag);
+
+        oncontextmenu = (e) => {
+            e.preventDefault();
+            return false;
+        }
+
+        can.onmousedown = (e) => {
             this.selected = null;
 
             if (this.editMode === 'entity') {
@@ -31,13 +72,30 @@ class LevelEditorScreen extends GameplayScreen {
             }
 
             this.mouseIsDown = true;
+
+            if (e.which === 3) {
+                contextMenu.style.left = e.pageX + 'px';
+                contextMenu.style.top = e.pageY + 'px';
+                contextMenu.style.visibility = 'visible';
+
+                contextMenu.innerHTML = '';
+                for (const [label, handler] of this.contextualActions()) {
+                    const button = document.createElement('button');
+                    button.innerText = label;
+                    button.addEventListener('click', () => {
+                        contextMenu.style.visibility = 'hidden';
+                        handler();
+                    }, false);
+                    contextMenu.appendChild(button);
+                }
+            }
         };
 
-        onmouseup = (e) => {
+        can.onmouseup = (e) => {
             this.mouseIsDown = null;
         };
 
-        onmousemove = (e) => {
+        can.onmousemove = (e) => {
             const out = {};
             getEventPosition(e, can, out);
 
@@ -57,7 +115,7 @@ class LevelEditorScreen extends GameplayScreen {
             }
         };
 
-        onclick = () => {
+        can.onclick = () => {
             if (this.editMode !== 'structure') return;
 
             for (const structure of this.world.category('structure')) {
@@ -122,12 +180,6 @@ class LevelEditorScreen extends GameplayScreen {
 
         if (downKeys[49]) this.editMode = 'structure';
         if (downKeys[50]) this.editMode = 'entity';
-
-        if (this.editMode === 'entity') {
-            if (downKeys[8]) {
-                this.selected?.world?.removeEntity(this.selected);
-            }
-        }
     }
 
     render() {
@@ -197,8 +249,51 @@ class LevelEditorScreen extends GameplayScreen {
             ctx.shadowColor = '#000';
             ctx.shadowOffsetX = 2;
             ctx.shadowOffsetY = 2;
-            ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+            ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 4);
         });
+    }
+
+    insertEntity(entity) {
+        entity.x = roundToNearest(this.cursorPosition.x, CELL_SIZE / 2);
+        entity.y = roundToNearest(this.cursorPosition.y, CELL_SIZE / 2);
+        this.selected = entity;
+        this.world.addEntity(entity);
+
+        this.editMode = 'entity';
+    }
+
+    contextualActions() {
+        const actions = [
+            ['Cat', () => this.insertEntity(new Cat())],
+            ['Human', () => this.insertEntity(new Human())],
+            ['Spike', () => this.insertEntity(new Spikes())],
+        ];
+
+        if (this.selected) {
+            actions.push(
+                ['Delete selected', () => {
+                    this.selected?.world?.removeEntity(this.selected);
+                    this.selected = null;
+                }],
+            );
+
+            if (this.selected instanceof Spikes) {
+                actions.push(
+                    ['Set angle', () => {
+                        const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / Math.PI));
+                        const adjusted = roundToNearest(angle, 90);
+                        this.selected.angle = adjusted * Math.PI / 180;
+                    }],
+                );
+            }
+        }
+
+        return actions;
+    }
+
+    deleteSelection() {
+        this.selected?.world?.removeEntity(this.selected);
+        this.selected = null;
     }
 }
 
