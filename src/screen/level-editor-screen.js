@@ -12,6 +12,8 @@ class LevelEditorScreen extends GameplayScreen {
         const camera = firstItem(this.world.category('camera'));
         camera.target = cameraTarget;
 
+        this.world.editorMode = true;
+
         onmousedown = (e) => {
             for (const entity of this.world.entities) {
                 if (entity.categories.includes('structure')) continue;
@@ -50,8 +52,55 @@ class LevelEditorScreen extends GameplayScreen {
                 const row = floor(this.cursorPosition.y / CELL_SIZE);
                 const col = floor(this.cursorPosition.x / CELL_SIZE);
 
-                structure.matrix[row][col] = (structure.matrix[row][col] + 1) % 3;
+                let { matrix } = structure;
+
+                let prefixRows = 0;
+                if (row < 0) {
+                    prefixRows = -row;
+                    row = 0;
+                }
+
+                let prefixCols = 0;
+                if (col < 0) {
+                    prefixCols = -col;
+                    col = 0;
+                }
+
+                let suffixRows = 0;
+                if (row > matrix.length - 1) {
+                    suffixRows = row - (matrix.length - 1);
+                }
+
+                let suffixCols = 0;
+                if (col > matrix[0].length - 1) {
+                    suffixCols = col - (matrix[0].length - 1);
+                }
+
+                console.log({ prefixRows, prefixCols, suffixRows, suffixCols });
+
+                matrix = applyMatrix(
+                    createMatrix(
+                        matrix.length + prefixRows + suffixRows,
+                        matrix[0].length + prefixCols + suffixCols,
+                        () => 1,
+                    ),
+                    matrix,
+                    prefixRows,
+                    prefixCols,
+                );
+
+                matrix[row][col] = (matrix[row][col] + 1) % 3;
+
+                structure.matrix = matrix;
+                structure.width = matrix[0].length * CELL_SIZE;
+                structure.height = matrix.length * CELL_SIZE;
                 structure.prerendered = null;
+
+                for (const otherEntity of this.world.entities) {
+                    if (otherEntity === structure) continue;
+                    otherEntity.x += prefixCols * CELL_SIZE;
+                    otherEntity.y += prefixRows * CELL_SIZE;
+                }
             }
         };
 

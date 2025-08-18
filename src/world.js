@@ -6,7 +6,7 @@ class World {
 
     cycle(elapsed) {
         for (const entity of this.entities) {
-            if (DEBUG) {
+            if (DEBUG && this.editorMode) {
                 if (
                     !(entity instanceof CameraTarget) &&
                     !(entity instanceof Camera)
