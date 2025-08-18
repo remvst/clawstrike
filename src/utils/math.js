@@ -15,12 +15,16 @@ isBetween = (a, b, c) => {
     return (a <= b && b <= c) || (a >= b && b >= c);
 }
 
+roundToNearest = (x, precision) => {
+    return round(x / precision) * precision;
+}
+
 floorToNearest = (x, precision) => {
-    return Math.floor(x / precision) * precision;
+    return floor(x / precision) * precision;
 }
 
 ceilToNearest = (x, precision) => {
-    return Math.ceil(x / precision) * precision;
+    return ceil(x / precision) * precision;
 }
 
 interpolate = (a, b, t) => {

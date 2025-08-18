@@ -183,7 +183,6 @@ const argv = yargs(process.argv.slice(2)).options({
 
     // Add the level editor if needed
     if (constants.DEBUG) {
-        jsFiles.push('entity/dev/level-editor.js');
         jsFiles.push('screen/level-editor-screen.js');
     }
 
