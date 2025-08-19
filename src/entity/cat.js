@@ -137,9 +137,9 @@ class Cat extends Entity {
                     targetVX = 600 * x;
                 }
 
-                if (pushing) {
-                    targetVX = x * Math.max(Math.abs(targetVX), Math.abs(this.vX));
-                }
+                // if (pushing) {
+                //     targetVX = x * Math.max(Math.abs(targetVX), Math.abs(this.vX));
+                // }
 
                 this.vX += between(-elapsed * acceleration, targetVX - this.vX, elapsed * acceleration);
             }
