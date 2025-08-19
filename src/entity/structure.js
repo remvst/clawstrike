@@ -3,6 +3,7 @@ class Structure extends Entity {
         super();
         this.type = 'structure';
         this.categories.push('structure');
+        this.color = '#f00';
         this.raycaster = new Raycaster(this);
     }
 
@@ -21,32 +22,53 @@ class Structure extends Entity {
         const rows = this.matrix.length;
         const cols = this.matrix[0].length;
 
-        this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx) => {
-            ctx.fillStyle = '#f00';
+        this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx, can) => {
+            ctx.fillStyle = this.color;
             ctx.fillRect(0, 0, this.width, this.height);
 
             // Background stripes
-            ctx.fillStyle = 'rgba(0,0,0,0.05)';
-            for (let x = 0 ; x < cols * CELL_SIZE; x += CELL_SIZE * 20) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x + CELL_SIZE * 10, 0);
-                ctx.lineTo(x + CELL_SIZE * 10 - 200, rows * CELL_SIZE);
-                ctx.lineTo(x - 200, rows * CELL_SIZE);
-                ctx.fill();
-            }
+            ctx.wrap(() => {
+                ctx.fillStyle = '#000';
+                ctx.globalAlpha = 0.1;
+
+                for (let refX = 0 ; refX < cols * CELL_SIZE; refX += CELL_SIZE * 15) {
+                    ctx.beginPath();
+
+                    for (let y = 0 ; y < CANVAS_HEIGHT; y += 10) {
+                        const relY = y / CANVAS_HEIGHT;
+                        ctx.lineTo(
+                            refX + relY * 400 + sin(relY * TWO_PI * 5) * 20,
+                            relY * CANVAS_HEIGHT,
+                        );
+                    }
+
+                    for (let y = CANVAS_HEIGHT ; y >= 0; y -= 10) {
+                        const relY = y / CANVAS_HEIGHT;
+                        ctx.lineTo(
+                            refX + 300 + relY * 400 + sin(relY * TWO_PI * 5) * 20,
+                            relY * CANVAS_HEIGHT,
+                        );
+                    }
+                    ctx.fill();
+                }
+            });
 
             // Cells
-            ctx.fillStyle = '#000';
             ctx.wrap(() => {
-                for (const row of this.matrix) {
-                    ctx.wrap(() => {
-                        for (const cell of row) {
-                            if (cell) ctx.fillRect(0, 0, CELL_SIZE, cell === 1 ? CELL_SIZE : CELL_SIZE / 4);
-                            ctx.translate(CELL_SIZE, 0);
+                ctx.fillStyle = '#000';
+
+                for (let row = rows - 1 ; row >= 0 ; row--) {
+                    for (let col = 0 ; col < cols ; col++) {
+                        const cell = this.matrix[row][col];
+                        if (cell) {
+                            ctx.fillRect(
+                                col * CELL_SIZE,
+                                row * CELL_SIZE,
+                                CELL_SIZE,
+                                cell === 1 ? CELL_SIZE : CELL_SIZE / 4
+                            );
                         }
-                    });
-                    ctx.translate(0, CELL_SIZE);
+                    }
                 }
             });
 

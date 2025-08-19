@@ -24,6 +24,8 @@ class GameplayScreen extends Screen {
 
             const camera = new Camera();
             camera.target = cat;
+            camera.x = cat.x;
+            camera.y = cat.y - 200;
             this.world.addEntity(camera);
         }
     }
