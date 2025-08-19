@@ -284,6 +284,57 @@ class Cat extends Entity {
     }
 
     render() {
+        ctx.wrap(() => this.renderBody());
+        this.renderShadow();
+    }
+
+    renderShadow() {
+        ctx.translate(this.x, this.y);
+
+        // ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.globalAlpha = 0.2;
+        ctx.lineWidth = 10;
+
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 800);
+        grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        grad.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
+
+        for (const structure of this.world.category('structure')) {
+            const origin = {
+                x: this.x,
+                y: this.y,
+            };
+            structure.reposition(origin, 2, 2, origin.x, origin.y + 1);
+
+            ctx.beginPath();
+
+            for (let a = 0 ; a < TWO_PI ; a += Math.PI / 128) {
+                const ray = G && structure.raycaster.castRay(
+                    origin.x,
+                    origin.y,
+                    a,
+                    800,
+                );
+                const dist = (ray ? distance(origin, ray) : 800);
+
+                ctx.strokeStyle = '#0f0';
+                ctx.lineTo(cos(a) * dist, sin(a) * dist);
+            }
+
+            ctx.lineTo(800, 0);
+            ctx.lineTo(800, -800);
+            ctx.lineTo(-800, -800);
+            ctx.lineTo(-800, 800);
+            ctx.lineTo(800, 800);
+            ctx.lineTo(800, 0);
+
+            // ctx.stroke();
+            ctx.fill();
+        }
+    }
+
+    renderBody() {
         ctx.translate(this.x, this.y);
 
         ctx.scale(this.facing, 1);
