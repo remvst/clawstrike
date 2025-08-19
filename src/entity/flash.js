@@ -15,6 +15,7 @@ class Flash extends Entity {
     }
 
     render() {
+        this.cancelCamera();
         ctx.globalAlpha = interpolate(0.5, 0, this.age / FLASH_DURATION);
         ctx.fillStyle = this.color;
         ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
