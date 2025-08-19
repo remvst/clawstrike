@@ -3,6 +3,7 @@ const serializableTypes = [
     Cat,
     Human,
     Spikes,
+    Label,
 ];
 
 const deserializeMap = {};
@@ -11,7 +12,7 @@ for (const type of serializableTypes) {
     deserializeMap[dummy.type] = type;
 }
 
-const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length'];
+const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length', 'text'];
 
 if (DEBUG) {
     serializeEntity = (entity) => {

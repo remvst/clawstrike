@@ -35,6 +35,7 @@ const JS_FILES = [
     'entity/camera.js',
     'entity/hud.js',
     'entity/spikes.js',
+    'entity/label.js',
 
     'screen/screen.js',
     'screen/gameplay-screen.js',

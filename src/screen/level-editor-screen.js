@@ -292,6 +292,7 @@ class LevelEditorScreen extends GameplayScreen {
             ['Add Cat', () => this.insertEntity(new Cat())],
             ['Add Human', () => this.insertEntity(new Human())],
             ['Add Spike', () => this.insertEntity(new Spikes())],
+            ['Add Label', () => this.insertEntity(new Label('Hello world!'))],
         ];
 
         if (this.selected) {
@@ -308,6 +309,14 @@ class LevelEditorScreen extends GameplayScreen {
                         const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / Math.PI));
                         const adjusted = roundToNearest(angle, 90);
                         this.selected.angle = adjusted * Math.PI / 180;
+                    }],
+                );
+            }
+
+            if (this.selected instanceof Label) {
+                actions.push(
+                    ['Set text', () => {
+                        this.selected.text = prompt('Text?', this.selected.text) || '';
                     }],
                 );
             }
