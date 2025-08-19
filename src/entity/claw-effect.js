@@ -1,5 +1,11 @@
 class ClawEffect extends Entity {
 
+    constructor() {
+        super();
+        this.angle = this.seed * TWO_PI;
+        this.scale = 1 + this.seed * 0.5;
+    }
+
     cycle(elapsed) {
         super.cycle(elapsed);
 
@@ -13,12 +19,10 @@ class ClawEffect extends Entity {
 
         const fadeDuration = 0.25;
         const fadeProgress = (this.age - (1 - fadeDuration)) / fadeDuration;
-        ctx.globalAlpha = 1 - Math.min(1, Math.max(0, fadeProgress));
+        ctx.globalAlpha *= 1 - Math.min(1, Math.max(0, fadeProgress));
 
-        ctx.rotate(this.seed * Math.PI * 2);
-
-        const s = 1 + this.seed * 0.5;
-        ctx.scale(s, s);
+        ctx.rotate(this.angle);
+        ctx.scale(this.scale, this.scale);
         ctx.scale(1 + this.seed * 0.5, 1);
 
         for (const [y, s] of [[0, 1], [-5, 0.8], [5, 0.8]]) {

@@ -94,6 +94,18 @@ class HUD extends Entity {
                 ctx.rotate(-Math.PI / 2);
                 renderArrow();
             });
+
+            ctx.wrap(() => {
+                ctx.globalAlpha = downKeys[32] ? 1 : 0.5;
+
+                this.claw ||= new ClawEffect();
+                this.claw.age = 0.5;
+                this.claw.scale = 3;
+                this.claw.angle = PI / 4;
+                this.claw.x = CANVAS_WIDTH * 7 / 8;
+                this.claw.y = CANVAS_HEIGHT - 400;
+                this.claw.render();
+            });
         });
     }
 }
