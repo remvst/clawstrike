@@ -36,7 +36,7 @@ class Human extends Entity {
         super.cycle(elapsed);
 
         // Left/right movement
-        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2 && this.landed;
+        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2 && this.landed && this.age - this.lastDamage > 0.5;
         if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
         }
