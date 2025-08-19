@@ -29,6 +29,7 @@ class Bullet extends Entity {
         // Cat hits
         for (const target of this.targets()) {
             if (target === this.owner) continue; // Don't hit the owner
+            if (target.rolling) continue; // Don't hit rolling cats
             if (this.hitbox.intersects(target.hitbox)) {
                 this.world.removeEntity(this);
                 target.damage();

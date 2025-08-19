@@ -86,10 +86,16 @@ class Cat extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
-        // Roll behavior
-        this.rolling = downKeys[40] && this.landed;
+        // Roll behavior)
+        this.rolling = downKeys[40] && (this.rolling || this.landed && this.rollingReleased);
+
+        if (!downKeys[40]) {
+            this.rollingReleased = true;
+        }
+
         if (this.rolling) {
             this.rollingAge += elapsed;
+            this.rollingReleased = false;
         } else {
             this.rollingAge = 0;
         }
@@ -99,7 +105,7 @@ class Cat extends Entity {
             let x = 0;
             if (downKeys[37]) x = -1;
             if (downKeys[39]) x = 1;
-            if (this.rolling) x = this.facing;
+            if (this.rolling) x = x || this.facing;
 
             const resisting = x && Math.sign(x) !== Math.sign(this.vX);
             const pushing = x && !resisting;
@@ -246,6 +252,13 @@ class Cat extends Entity {
                 this.wallStickX = this.x;
                 this.wallStickDirection = readjustmentDirection;
             }
+
+            if (this.rolling && sign(this.x - x) !== this.facing) {
+                this.rolling = false;
+
+                this.vX = sign(this.x - x) * 400;
+                // this.x += sign(this.x - x) * 25;
+            }
         }
 
         if (!this.stickingToWall) {
@@ -301,9 +314,10 @@ class Cat extends Entity {
 
         if (this.stickingToWall) ctx.translate(0, 10);
 
-        ctx.rotate(this.rollingAge * Math.PI * 6);
-
-        if (this.rolling) ctx.scale(0.8, 0.8);
+        if (this.rolling) {
+            ctx.rotate(this.rollingAge * Math.PI * 6);
+            ctx.scale(0.8, 0.8);
+        }
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
