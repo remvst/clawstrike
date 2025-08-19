@@ -37,6 +37,15 @@ class Cat extends Entity {
         this.wallStickDirection = 0;
     }
 
+    get attackHitbox() {
+        this.cachedAttackHitbox ||= new Rect();
+        this.cachedAttackHitbox.x = this.x;
+        this.cachedAttackHitbox.y = this.y;
+        this.cachedAttackHitbox.width = 100;
+        this.cachedAttackHitbox.height = 100;
+        return this.cachedAttackHitbox;
+    }
+
     jump() {
         if (this.age < this.jumpEndAge) return;
         if (!this.releasedJump) return;
@@ -178,11 +187,6 @@ class Cat extends Entity {
 
             this.lastAttack = this.age;
 
-            const attack = new ClawEffect();
-            attack.x = this.x + this.facing * 30;
-            attack.y = this.y;
-            this.world.addEntity(attack);
-
             this.nextHeatReset = 0.5;
             this.heat++;
             if (this.heat >= 5) {
@@ -192,13 +196,18 @@ class Cat extends Entity {
             }
 
             for (const human of this.world.category('human')) {
-                const dx = Math.abs(human.x - attack.x);
-                const dy = Math.abs(human.y - attack.y);
-                if (dx < 50 && dy < 80) {
+                if (this.attackHitbox.intersects(human.hitbox)) {
                     human.damage();
                     human.x += Math.sign(human.x - this.x) * 10;
+
+                    this.facing = Math.sign(human.x - this.x);
                 }
             }
+
+            const attack = new ClawEffect();
+            attack.x = this.x + this.facing * 30;
+            attack.y = this.y;
+            this.world.addEntity(attack);
 
             attack.x += Math.random() * 30 - 15;
             attack.y += Math.random() * 50 - 25;
@@ -423,6 +432,10 @@ class Cat extends Entity {
 
     renderDebug() {
         if (!DEBUG) return;
+
+        if (DEBUG_HITBOXES) {
+            ctx.wrap(() => this.attackHitbox.render());
+        }
 
         super.renderDebug();
 
