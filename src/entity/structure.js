@@ -4,6 +4,7 @@ class Structure extends Entity {
         this.type = 'structure';
         this.categories.push('structure');
         this.color = '#f00';
+        this.cellColor = '#000';
         this.raycaster = new Raycaster(this);
     }
 
@@ -55,7 +56,7 @@ class Structure extends Entity {
 
             // Cells
             ctx.wrap(() => {
-                ctx.fillStyle = '#000';
+                ctx.fillStyle = this.cellColor;
 
                 for (let row = rows - 1 ; row >= 0 ; row--) {
                     for (let col = 0 ; col < cols ; col++) {

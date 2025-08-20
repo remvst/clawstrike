@@ -36,9 +36,11 @@ const JS_FILES = [
     'entity/hud.js',
     'entity/spikes.js',
     'entity/label.js',
+    'entity/interpolator.js',
 
     'screen/screen.js',
     'screen/gameplay-screen.js',
+    'screen/main-menu-screen.js',
     'screen/game-over-screen.js',
 
     'level/matrix.js',
@@ -190,7 +192,7 @@ const argv = yargs(process.argv.slice(2)).options({
     js += 'ALL_LEVELS = [';
 
     for (const path of [
-        'level/levels/blank.js',
+        // 'level/levels/blank.js',
         'level/levels/tutorial-v2.js',
         'level/levels/tutorial-wall-jump.js',
         'level/levels/tutorial-roll.js',

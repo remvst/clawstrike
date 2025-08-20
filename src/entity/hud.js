@@ -14,6 +14,7 @@ charForWidthCalculation = x => isNaN(x) ? x : '0';
 class HUD extends Entity {
     constructor(cat) {
         super();
+        this.categories.push('hud');
         this.cat = cat;
     }
 

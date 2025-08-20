@@ -3,10 +3,11 @@ class Screen {
         if (DEBUG) {
             this.debugValues = () => ([]);
         }
+        this.age = 0;
     }
 
     cycle(elapsed) {
-
+        this.age += elapsed;
     }
 
     render() {
@@ -15,5 +16,9 @@ class Screen {
 
     absorb() {
         return false;
+    }
+
+    isForeground() {
+        return G.screens[G.screens.length - 1] === this;
     }
 }
