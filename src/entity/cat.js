@@ -288,6 +288,8 @@ class Cat extends Entity {
 
         const flash = new Flash('#fff');
         this.world.addEntity(flash);
+        this.world.addEntity(new Interpolator(flash, 'alpha', 0.5, 0, 0.2));
+        // TODO maybe should clean up the flash? eh not much of a perf hit
     }
 
     jumpData() {

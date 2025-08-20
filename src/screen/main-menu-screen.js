@@ -4,6 +4,8 @@ class MainMenuScreen extends Screen {
 
         this.worldScreen = worldScreen;
 
+        const { world } = worldScreen;
+
         const cat = firstItem(worldScreen.world.category('cat'));
         const camera = firstItem(worldScreen.world.category('camera'));
         camera.zoom = 4;
@@ -11,11 +13,28 @@ class MainMenuScreen extends Screen {
         camera.x = camera.target.x = cat.x;
         camera.y = camera.target.y = cat.y - 5;
 
-        for (const hud of worldScreen.world.category('hud')) {
-            worldScreen.world.removeEntity(hud);
+        for (const hud of world.category('hud')) {
+            world.removeEntity(hud);
         }
 
         worldScreen.cycle(2);
+
+        (async () => {
+            const flash = world.addEntity(new Flash('#000'));
+
+            for (const angle of [PI / 8, PI * 3 / 4, PI / 4]) {
+                const claw = world.addEntity(new ClawEffect());
+                claw.x = cat.x;
+                claw.y = cat.y;
+                claw.angle = angle;
+                claw.scale = 5;
+
+                await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.3)).await();
+            }
+
+            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.5)).await();
+            await world.addEntity(new Interpolator(flash, 'alpha', 1, 0, 1)).await();
+        })();
     }
 
     cycle(elapsed) {
@@ -49,6 +68,8 @@ class MainMenuScreen extends Screen {
     }
 
     render() {
+        ctx.globalAlpha = interpolate(0, 1, min(this.age - 1.5) / 0.3);
+
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';

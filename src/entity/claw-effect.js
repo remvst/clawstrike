@@ -10,7 +10,7 @@ class ClawEffect extends Entity {
         super.cycle(elapsed);
 
         if (this.age > 1) {
-            this.world.removeEntity(this);
+            this.world?.removeEntity(this);
         }
     }
 

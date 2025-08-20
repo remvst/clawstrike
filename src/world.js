@@ -47,6 +47,8 @@ class World {
                 category.add(entity);
             }
         }
+
+        return entity;
     }
 
     removeEntity(entity) {
