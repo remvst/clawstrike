@@ -70,10 +70,9 @@ class LevelEditorScreen extends GameplayScreen {
                     }
                 }
             } else if (this.editMode === 'structure') {
-
                 for (const structure of this.world.category('structure')) {
                     const cell = structure.cellAt(this.cursorPosition.x, this.cursorPosition.y);
-                    if (cell) {
+                    if (cell || !isBetween(0, this.cursorPosition.x, structure.width) || !isBetween(0, this.cursorPosition.y, structure.height)) {
                         // Clicked on a filled cell, let's start deleting
                         this.currentMatrixValue = 0;
                     } else {
@@ -275,7 +274,12 @@ class LevelEditorScreen extends GameplayScreen {
                 otherEntity.x += prefixCols * CELL_SIZE;
                 otherEntity.y += prefixRows * CELL_SIZE;
             }
+
+            this.cursorPosition.x += prefixCols * CELL_SIZE;
+            this.cursorPosition.y += prefixRows * CELL_SIZE;
         }
+
+        this.optimize();
     }
 
     insertEntity(entity) {
@@ -355,6 +359,65 @@ class LevelEditorScreen extends GameplayScreen {
     test() {
         const serialized = serializeWorld(this.world);
         G.screens.push(new TestScreen(serialized));
+    }
+
+    optimize() {
+        for (const structure of this.world.category('structure')) {
+            const { matrix } = structure;
+
+            const rows = matrix.length;
+            const cols = matrix[0].length;
+
+            let firstRow = Number.MAX_SAFE_INTEGER;
+            let firstCol = Number.MAX_SAFE_INTEGER;
+
+            let lastRow = Number.MIN_SAFE_INTEGER;
+            let lastCol = Number.MIN_SAFE_INTEGER;
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const cell = matrix[row][col];
+                    if (cell) continue;
+
+                    firstRow = min(firstRow, row);
+                    firstCol = min(firstCol, col);
+
+                    lastRow = max(lastRow, row);
+                    lastCol = max(lastCol, col);
+                }
+            }
+
+            const packedRows = lastRow - firstRow + 1;
+            const packedCols = lastCol - firstCol + 1;
+
+            let shiftRows = -firstRow;
+            let shiftCols = -firstCol;
+
+            const packed = applyMatrix(
+                createMatrix(packedRows, packedCols, () => 1),
+                matrix,
+                -firstRow,
+                -firstCol,
+            );
+
+            const paddedRows = packedRows + 2;
+            const paddedCols = packedCols + 2;
+
+            let padded = createMatrix(paddedRows, paddedCols, () => 1);
+            padded = applyMatrix(padded, packed, 1, 1);
+
+            shiftRows += 1;
+            shiftCols += 1;
+
+            structure.matrix = padded;
+            structure.prerendered = null;
+
+            for (const entity of this.world.entities) {
+                if (entity === structure) continue;
+                entity.x += (shiftCols) * CELL_SIZE;
+                entity.y += (shiftRows) * CELL_SIZE;
+            }
+        }
     }
 }
 

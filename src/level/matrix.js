@@ -22,6 +22,14 @@ applyMatrix = (target, source, atRow, atCol) => {
         for (let col = 0 ; col < source[row].length ; col++) {
             const finalRow = row + atRow;
             const finalCol = col + atCol;
+
+            if (
+                !isBetween(0, finalRow, rows - 1) ||
+                !isBetween(0, finalCol, cols - 1)
+            ) {
+                continue;
+            }
+
             res[finalRow][finalCol] = source[row][col];
         }
     }
