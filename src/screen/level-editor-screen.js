@@ -346,12 +346,13 @@ class LevelEditorScreen extends GameplayScreen {
             this.contextMenuButton('Add Spike', () => this.insertEntity(new Spikes())),
             this.contextMenuButton('Add Label', () => this.insertEntity(new Label('Hello world!'))),
             this.contextMenuSwatchSet([
-                this.colorSwatch('#f00'),
-                this.colorSwatch('#0f0'),
+                this.colorSwatch('#f44'),
+                this.colorSwatch('#0c0'),
                 this.colorSwatch('#08f'),
                 this.colorSwatch('#f80'),
                 this.colorSwatch('#f08'),
-                this.colorSwatch('#f0f'),
+                this.colorSwatch('#b4f'),
+                this.colorSwatch('#4cb'),
             ]),
         ];
 
