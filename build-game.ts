@@ -190,6 +190,7 @@ const argv = yargs(process.argv.slice(2)).options({
     js += 'ALL_LEVELS = [';
 
     for (const path of [
+        'level/levels/tutorial-v2.js',
         'level/levels/tutorial.js',
         'level/levels/first-level.js',
         'level/levels/second-level.js',
