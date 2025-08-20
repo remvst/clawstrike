@@ -191,7 +191,9 @@ const argv = yargs(process.argv.slice(2)).options({
 
     for (const path of [
         'level/levels/blank.js',
-        'level/levels/tutorial.js',
+        'level/levels/tutorial-v2.js',
+        'level/levels/tutorial-wall-jump.js',
+        'level/levels/tutorial-roll.js',
         'level/levels/first-level.js',
         'level/levels/second-level.js',
         'level/levels/green.js',
