@@ -39,6 +39,10 @@ class GameplayScreen extends Screen {
             remaining -= advance;
             this.world.cycle(advance);
         }
+
+        if (this.isForeground() && downKeys[27]) {
+            G.screens.push(new PauseScreen(this));
+        }
     }
 
     render() {

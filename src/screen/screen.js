@@ -19,6 +19,6 @@ class Screen {
     }
 
     isForeground() {
-        return G.screens[G.screens.length - 1] === this;
+        return G?.screens?.[G.screens.length - 1] === this;
     }
 }
