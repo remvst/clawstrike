@@ -22,6 +22,8 @@ class MainMenuScreen extends Screen {
         (async () => {
             const flash = world.addEntity(new Flash('#000'));
 
+            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.3)).await();
+
             for (const angle of [PI / 8, PI * 3 / 4, PI / 4]) {
                 camera.shake(0.1, 5);
 
@@ -70,7 +72,7 @@ class MainMenuScreen extends Screen {
     }
 
     render() {
-        ctx.globalAlpha = interpolate(0, 1, min(this.age - 1.5) / 0.3);
+        ctx.globalAlpha = interpolate(0, 1, min(this.age - 2.1) / 0.3);
 
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
