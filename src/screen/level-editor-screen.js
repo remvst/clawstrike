@@ -16,11 +16,11 @@ class LevelEditorScreen extends GameplayScreen {
 
         this.editMode = 'entity';
 
-        const contextMenu = document.createElement('div');
-        contextMenu.classList.add('context-menu');
-        document.body.appendChild(contextMenu);
-        document.body.addEventListener('click', () => contextMenu.style.display = 'none', false);
-        contextMenu.addEventListener('click', (e) => e.stopPropagation(), false);
+        this.contextMenu = document.createElement('div');
+        this.contextMenu.classList.add('context-menu');
+        document.body.appendChild(this.contextMenu);
+        document.body.addEventListener('click', () => this.contextMenu.style.display = 'none', false);
+        this.contextMenu.addEventListener('click', (e) => e.stopPropagation(), false);
 
         const styleTag = document.createElement('style');
         styleTag.innerHTML = `
@@ -34,20 +34,42 @@ class LevelEditorScreen extends GameplayScreen {
             height: auto;
         }
 
-        .context-menu > button {
+        .context-menu > * {
             display: block;
             border: none;
             border-bottom: 1px solid #222;
             background-color: #000;
-            padding: 12px;
             color: white;
-            text-align: left;
             outline: none;
+        }
+
+        .context-menu > button {
+            text-align: left;
+            padding: 12px;
             cursor: pointer;
         }
 
         .context-menu > button:hover {
             background-color: #444;
+        }
+
+        .context-menu .color-swatch-set {
+            display: flex;
+            flex-direction: row;
+            justify-content: start;
+        }
+
+        .context-menu .color-swatch {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #444;
+            display: inline-block;
+            margin: 8px;
+            cursor: pointer;
+        }
+
+        .context-menu .color-swatch:hover {
+            border-color: #fff;
         }
         `;
         document.head.appendChild(styleTag);
@@ -88,19 +110,13 @@ class LevelEditorScreen extends GameplayScreen {
             this.mouseIsDown = true;
 
             if (e.which === 3) {
-                contextMenu.style.left = e.pageX + 'px';
-                contextMenu.style.top = e.pageY + 'px';
-                contextMenu.style.display = 'block';
+                this.contextMenu.style.left = e.pageX + 'px';
+                this.contextMenu.style.top = e.pageY + 'px';
+                this.contextMenu.style.display = 'block';
 
-                contextMenu.innerHTML = '';
-                for (const [label, handler] of this.contextualActions()) {
-                    const button = document.createElement('button');
-                    button.innerText = label;
-                    button.addEventListener('click', () => {
-                        contextMenu.style.display = 'none';
-                        handler();
-                    }, false);
-                    contextMenu.appendChild(button);
+                this.contextMenu.innerHTML = '';
+                for (const contextMenuButton of this.contextualActions()) {
+                    this.contextMenu.appendChild(contextMenuButton);
                 }
 
                 this.mouseIsDown = false;
@@ -137,7 +153,7 @@ class LevelEditorScreen extends GameplayScreen {
 
         can.onclick = () => {
             if (this.editMode !== 'structure') return;
-            if (contextMenu.style.display === 'block') return;
+            if (this.contextMenu.style.display === 'block') return;
             // this.applyStructureChange();
         };
 
@@ -291,48 +307,88 @@ class LevelEditorScreen extends GameplayScreen {
         this.editMode = 'entity';
     }
 
+    contextMenuButton(label, action) {
+        const contextMenuButton = document.createElement('button');
+        contextMenuButton.innerText = label;
+        contextMenuButton.addEventListener('click', () => {
+            this.contextMenu.style.display = 'none';
+            action();
+        }, false);
+        return contextMenuButton;
+    }
+
+    colorSwatch(color) {
+        const swatch = document.createElement('div');
+        swatch.classList.add('color-swatch');
+        swatch.style.backgroundColor = color;
+        swatch.addEventListener('click', () => {
+            this.contextMenu.style.display = 'none';
+            this.setBackgroundColor(color);
+        }, false);
+        return swatch;
+    }
+
+    contextMenuSwatchSet(children) {
+        const buttonSet = document.createElement('div');
+        buttonSet.classList.add('color-swatch-set');
+        children.forEach(child => buttonSet.appendChild(child));
+        return buttonSet;
+    }
+
     contextualActions() {
         const actions = [
-            ['Add Cat', () => this.insertEntity(new Cat())],
-            ['Add Human', () => this.insertEntity(new Human())],
-            ['Add Spike', () => this.insertEntity(new Spikes())],
-            ['Add Label', () => this.insertEntity(new Label('Hello world!'))],
+            this.contextMenuButton('Add Cat', () => this.insertEntity(new Cat())),
+            this.contextMenuButton('Add Human', () => this.insertEntity(new Human())),
+            this.contextMenuButton('Add Spike', () => this.insertEntity(new Spikes())),
+            this.contextMenuButton('Add Label', () => this.insertEntity(new Label('Hello world!'))),
+            this.contextMenuSwatchSet([
+                this.colorSwatch('#f00'),
+                this.colorSwatch('#0f0'),
+                this.colorSwatch('#08f'),
+            ]),
         ];
 
         if (this.selected) {
             actions.push(
-                ['Delete selected', () => {
+                this.contextMenuButton('Delete selected', () => {
                     this.selected?.world?.removeEntity(this.selected);
                     this.selected = null;
-                }],
+                }),
             );
 
             if (this.selected instanceof Spikes) {
                 actions.push(
-                    ['Set angle', () => {
+                    this.contextMenuButton('Set angle', () => {
                         const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / Math.PI));
                         const adjusted = roundToNearest(angle, 90);
                         this.selected.angle = adjusted * Math.PI / 180;
-                    }],
+                    }),
                 );
             }
 
             if (this.selected instanceof Label) {
                 actions.push(
-                    ['Set text', () => {
+                    this.contextMenuButton('Set text', () => {
                         this.selected.text = prompt('Text?', this.selected.text) || '';
-                    }],
+                    }),
                 );
             }
         }
 
         actions.push(...[
-            ['Load', () => this.load()],
-            ['Save', () => this.save()],
-            ['Test', () => this.test()],
+            this.contextMenuButton('Load', () => this.load()),
+            this.contextMenuButton('Save', () => this.save()),
+            this.contextMenuButton('Test', () => this.test()),
         ]);
 
         return actions;
+    }
+
+    setBackgroundColor(color) {
+        for (const structure of this.world.category('structure')) {
+            structure.color = color;
+            structure.prerendered = null;
+        }
     }
 
     deleteSelection() {
