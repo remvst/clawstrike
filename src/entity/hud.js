@@ -6,6 +6,12 @@ const renderArrow = () => {
     ctx.fill();
 }
 
+formatTime = x => {
+    const mins = ~~(x / 60);
+    return mins.toString().padStart(2, '0') + ':' + (x % 60).toFixed(2).padStart(5, '0');
+};
+charForWidthCalculation = x => isNaN(x) ? x : '0';
+
 class HUD extends Entity {
     constructor(cat) {
         super();
@@ -17,6 +23,26 @@ class HUD extends Entity {
 
         ctx.fillStyle = ctx.strokeStyle = '#fff';
         ctx.lineWidth = 10;
+
+        ctx.wrap(() => {
+            ctx.translate(CANVAS_WIDTH / 2, 50);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 80px Impact';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.shadowColor = '#000';
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+
+            const formatted = formatTime(this.age).split('');
+            const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
+
+            ctx.translate(-totalWidth / 2, 0);
+            for (const char of formatted) {
+                ctx.fillText(char, 0, 0);
+                ctx.translate(ctx.measureText(charForWidthCalculation(char)).width, 0);
+            }
+        });
 
         if (inputMode == INPUT_MODE_KEYBOARD) {
             for (const [desc, x, y, scaleX, down] of [
