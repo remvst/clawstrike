@@ -21,6 +21,10 @@ class MainMenuScreen extends Screen {
     cycle(elapsed) {
         super.cycle(elapsed);
 
+        if (DEBUG && downKeys[69]) {
+            G.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
+        }
+
         if (downKeys[32]) {
             // TODO fade out instead
             G.screens.pop();
@@ -41,10 +45,6 @@ class MainMenuScreen extends Screen {
             })();
         } else {
             downKeys = {};
-        }
-
-        if (DEBUG && downKeys[69]) {
-            G.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
         }
     }
 
