@@ -401,6 +401,7 @@ class Cat extends Entity {
             }
 
             ctx.strokeStyle = '#000';
+            ctx.lineCap = 'round';
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
             ctx.moveTo(-10, 0);
