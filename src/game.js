@@ -18,6 +18,7 @@ class Game {
 
         if (!DEBUG || document.hasFocus()) {
             if (downKeys[71]) elapsed *= 0.1;
+            if (downKeys[70]) elapsed *= 4;
 
             let i = this.screens.length;
             while (this.screens[--i]) {
