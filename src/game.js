@@ -36,7 +36,7 @@ class Game {
                 ctx.wrap(() => screen.render());
             }
 
-            if (DEBUG) ctx.wrap(() => {
+            if (DEBUG && DEBUG_INFO) ctx.wrap(() => {
                 this.frameTimes[this.lastFrameIndex] = now;
                 const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
                 const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);

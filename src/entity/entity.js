@@ -36,7 +36,7 @@ class Entity {
     renderDebug() {
         if (DEBUG && DEBUG_HITBOXES) this.hitbox.render();
 
-        if (DEBUG) ctx.wrap(() => {
+        if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
             this.cancelCamera();
 
             const cornerRadius = 10;

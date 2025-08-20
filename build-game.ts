@@ -71,7 +71,8 @@ const CONSTANTS = {
 
     "SONG_VOLUME": 0.5,
 
-    "DEBUG_HITBOXES": 1,
+    "DEBUG_INFO": 0,
+    "DEBUG_HITBOXES": 0,
     "DEBUG_JUMP": 0,
     "DEBUG_VISION": 0,
 };
