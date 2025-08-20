@@ -367,8 +367,14 @@ class LevelEditorScreen extends GameplayScreen {
                 actions.push(
                     this.contextMenuButton('Set angle', () => {
                         const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / Math.PI));
-                        const adjusted = roundToNearest(angle, 90);
+                        const adjusted = roundToNearest(angle, 90) || 0;
                         this.selected.angle = adjusted * Math.PI / 180;
+                    }),
+                );
+                actions.push(
+                    this.contextMenuButton('Set length', () => {
+                        const length = parseInt(prompt('Length?', this.selected.length));
+                        this.selected.length = roundToNearest(length, CELL_SIZE) || this.selected.length;
                     }),
                 );
             }
@@ -376,7 +382,7 @@ class LevelEditorScreen extends GameplayScreen {
             if (this.selected instanceof Label) {
                 actions.push(
                     this.contextMenuButton('Set text', () => {
-                        this.selected.text = prompt('Text?', this.selected.text) || '';
+                        this.selected.text = prompt('Text?', this.selected.text) || this.selected.text;
                     }),
                 );
             }

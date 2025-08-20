@@ -12,7 +12,7 @@ for (const type of serializableTypes) {
     deserializeMap[dummy.type] = type;
 }
 
-const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length', 'text', 'color'];
+const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length', 'text', 'color', 'length'];
 
 if (DEBUG) {
     serializeEntity = (entity) => {
@@ -29,7 +29,7 @@ if (DEBUG) {
 deserializeEntity = (data) => {
     const type = deserializeMap[data.type];
     const entity = new type();
-    for (const key of serializedProperties) {
+    for (const key in data) {
         entity[key] = data[key];
     }
     return entity;

@@ -29,7 +29,7 @@ class Structure extends Entity {
             // Background stripes
             ctx.wrap(() => {
                 ctx.fillStyle = '#000';
-                ctx.globalAlpha = 0.1;
+                ctx.globalAlpha = 0.05;
 
                 for (let refX = 0 ; refX < cols * CELL_SIZE; refX += CELL_SIZE * 15) {
                     ctx.beginPath();
@@ -73,10 +73,10 @@ class Structure extends Entity {
             });
 
             ctx.strokeStyle = '#fff';
-            ctx.globalAlpha = 0.1;
+            ctx.globalAlpha = 0.2;
             ctx.lineWidth = 2;
 
-            const shadowLength = CELL_SIZE * 2;
+            const shadowLength = CELL_SIZE;
 
             const verticalGradient = ctx.createLinearGradient(
                 0, 0,
