@@ -48,6 +48,7 @@ const JS_FILES = [
 
     'sound/sonantx.js',
     'sound/ZzFXMicro.js',
+    'sound/song.js',
 
     'world.js',
     'game.js',
@@ -66,6 +67,8 @@ const CONSTANTS = {
     "INPUT_MODE_TOUCH": 1,
 
     "MOBILE_BUTTON_SIZE": 50,
+
+    "SONG_VOLUME": 0.5,
 
     "DEBUG_HITBOXES": 1,
     "DEBUG_JUMP": 0,

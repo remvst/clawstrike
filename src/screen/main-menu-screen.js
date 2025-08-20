@@ -25,6 +25,8 @@ class MainMenuScreen extends Screen {
             // TODO fade out instead
             G.screens.pop();
 
+            playSong();
+
             const { world } = this.worldScreen;
             const cat = firstItem(world.category('cat'));
             const camera = firstItem(world.category('camera'));
