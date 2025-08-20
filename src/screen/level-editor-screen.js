@@ -29,6 +29,7 @@ class LevelEditorScreen extends GameplayScreen {
             background-color: #222;
             border: 1px solid white;
             min-width: 200px;
+            max-width: 300px;
             display: none;
             width: auto;
             height: auto;
@@ -57,6 +58,10 @@ class LevelEditorScreen extends GameplayScreen {
             display: flex;
             flex-direction: row;
             justify-content: start;
+            gap: 12px;
+            padding: 12px;
+            box-sizing: border-box;
+            flex-wrap: wrap;
         }
 
         .context-menu .color-swatch {
@@ -64,7 +69,6 @@ class LevelEditorScreen extends GameplayScreen {
             height: 20px;
             border: 1px solid #444;
             display: inline-block;
-            margin: 8px;
             cursor: pointer;
         }
 
@@ -345,6 +349,9 @@ class LevelEditorScreen extends GameplayScreen {
                 this.colorSwatch('#f00'),
                 this.colorSwatch('#0f0'),
                 this.colorSwatch('#08f'),
+                this.colorSwatch('#f80'),
+                this.colorSwatch('#f08'),
+                this.colorSwatch('#f0f'),
             ]),
         ];
 
