@@ -193,6 +193,8 @@ class Cat extends Entity {
 
             this.lastAttack = this.age;
 
+            firstItem(this.world.category('camera')).shake(0.05, 5);
+
             this.nextHeatReset = 0.5;
             this.heat++;
             if (this.heat >= 5) {

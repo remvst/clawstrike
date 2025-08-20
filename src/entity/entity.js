@@ -27,8 +27,8 @@ class Entity {
     cancelCamera() {
         const camera = firstItem(this.world.category('camera'));
         ctx.translate(
-            camera.x - (1 / camera.appliedZoom) * CANVAS_WIDTH / 2,
-            camera.y - (1 / camera.appliedZoom) * CANVAS_HEIGHT / 2,
+            camera.actual.x - (1 / camera.appliedZoom) * CANVAS_WIDTH / 2,
+            camera.actual.y - (1 / camera.appliedZoom) * CANVAS_HEIGHT / 2,
         );
         ctx.scale(1 / camera.appliedZoom, 1 / camera.appliedZoom);
     }

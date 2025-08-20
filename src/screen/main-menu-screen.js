@@ -23,6 +23,8 @@ class MainMenuScreen extends Screen {
             const flash = world.addEntity(new Flash('#000'));
 
             for (const angle of [PI / 8, PI * 3 / 4, PI / 4]) {
+                camera.shake(0.1, 5);
+
                 const claw = world.addEntity(new ClawEffect());
                 claw.x = cat.x;
                 claw.y = cat.y;

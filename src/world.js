@@ -19,8 +19,8 @@ class World {
             const camera = firstItem(this.category('camera'));
             ctx.scale(camera.appliedZoom, camera.appliedZoom);
             ctx.translate(
-                CANVAS_WIDTH / 2 / camera.zoom - camera.x,
-                CANVAS_HEIGHT / 2 / camera.zoom - camera.y,
+                CANVAS_WIDTH / 2 / camera.zoom - camera.actual.x,
+                CANVAS_HEIGHT / 2 / camera.zoom - camera.actual.y,
             );
 
             for (const entity of this.entities) {

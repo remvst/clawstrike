@@ -3,7 +3,14 @@ class Camera extends Entity {
         super();
         this.categories.push('camera');
         this.zoom = 1.3;
-        this.affectedBySpeedRatio = false;
+        this.cachedActual = {};
+    }
+
+    get actual() {
+        const factor = (this.age < this.shakeEndAge) * (this.shakePower || 0);
+        this.cachedActual.x = this.x + sin(this.age * TWO_PI * 10) * factor;
+        this.cachedActual.y = this.y + cos(this.age * TWO_PI * 15) * factor;
+        return this.cachedActual;
     }
 
     get appliedZoom() {
@@ -23,10 +30,8 @@ class Camera extends Entity {
         this.y += appliedDist * sin(angle) * 0.5;
     }
 
-    // zoomTo(toValue) {
-    //     if (this.previousInterpolator) {
-    //         this.previousInterpolator.remove();
-    //     }
-    //     return this.scene.add(new Interpolator(this, 'zoom', this.zoom, toValue, 1)).await();
-    // }
+    shake(duration, shakePower) {
+        this.shakeEndAge = this.age + duration;
+        this.shakePower = shakePower;
+    }
 }
