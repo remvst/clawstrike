@@ -86,6 +86,10 @@ class Cat extends Entity {
     cycle(elapsed) {
         super.cycle(elapsed);
 
+        if (this.age - this.lastAttack < 0.1) {
+            elapsed *= 0.2;
+        }
+
         // Roll behavior)
         this.rolling = downKeys[40] && (this.rolling || this.landed && this.rollingReleased);
 
@@ -145,7 +149,7 @@ class Cat extends Entity {
             }
 
             // const speed = (this.rolling ? 600 : 400) * x;
-            this.x += this.vX * elapsed * (this.age - this.lastAttack > 0.2 ? 1 : 0.5);
+            this.x += this.vX * elapsed;
             this.walking = !!x;
 
             if (!this.stickingToWall) this.facing = x || this.facing;
