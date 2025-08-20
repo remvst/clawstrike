@@ -357,7 +357,7 @@ class LevelEditorScreen extends GameplayScreen {
 
         if (this.selected) {
             actions.push(
-                this.contextMenuButton('Delete selected', () => {
+                this.contextMenuButton('Delete', () => {
                     this.selected?.world?.removeEntity(this.selected);
                     this.selected = null;
                 }),
