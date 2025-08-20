@@ -193,6 +193,7 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/tutorial.js',
         'level/levels/first-level.js',
         'level/levels/second-level.js',
+        'level/levels/green.js',
     ]) {
         js += await fs.readFile('src/' + path, 'utf-8') + ',';
     }
