@@ -7,8 +7,7 @@ const renderArrow = () => {
 }
 
 formatTime = x => {
-    const mins = ~~(x / 60);
-    return mins.toString().padStart(2, '0') + ':' + (x % 60).toFixed(2).padStart(5, '0');
+    return (~~(x / 60)).toString().padStart(2, '0') + ':' + (x % 60).toFixed(2).padStart(5, '0');
 };
 charForWidthCalculation = x => isNaN(x) ? x : '0';
 
@@ -38,9 +37,11 @@ class HUD extends Entity {
             const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
 
             ctx.translate(-totalWidth / 2, 0);
+            ctx.textAlign = 'center';
             for (const char of formatted) {
-                ctx.fillText(char, 0, 0);
-                ctx.translate(ctx.measureText(charForWidthCalculation(char)).width, 0);
+                const { width } = ctx.measureText(charForWidthCalculation(char));
+                ctx.fillText(char, width / 2, 0);
+                ctx.translate(width, 0);
             }
         });
 
