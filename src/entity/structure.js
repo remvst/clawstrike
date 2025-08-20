@@ -37,7 +37,7 @@ class Structure extends Entity {
                     for (let y = 0 ; y < CANVAS_HEIGHT; y += 10) {
                         const relY = y / CANVAS_HEIGHT;
                         ctx.lineTo(
-                            refX + relY * 400 + sin(relY * TWO_PI * 5) * 20,
+                            refX + relY * 400 + sin(relY * TWO_PI * 20) * 10,
                             relY * CANVAS_HEIGHT,
                         );
                     }
@@ -45,7 +45,7 @@ class Structure extends Entity {
                     for (let y = CANVAS_HEIGHT ; y >= 0; y -= 10) {
                         const relY = y / CANVAS_HEIGHT;
                         ctx.lineTo(
-                            refX + 300 + relY * 400 + sin(relY * TWO_PI * 5) * 20,
+                            refX + 300 + relY * 400 + sin(relY * TWO_PI * 20) * 10,
                             relY * CANVAS_HEIGHT,
                         );
                     }
