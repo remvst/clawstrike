@@ -51,7 +51,7 @@ class Cat extends Entity {
         if (!this.releasedJump) return;
         if (!this.landed && !this.stickingToWall) return;
 
-        zzfx(...[.5,,292,.03,.02,.07,1,.4,,131,,,,,,,,.57,.01]);
+        zzfx(...[.2,,292,.03,.02,.07,1,.4,,131,,,,,,,,.57,.01]);
 
         this.jumpStartAge = this.age;
         this.releasedJump = false;
@@ -252,10 +252,7 @@ class Cat extends Entity {
         }
 
         if (this.landed && !landed) {
-            // zzfx(...[.1,.15,557,.02,.04,.14,4,.2,-97,-22,44,.24,,,,,,.64,.03]); // Blip 400
-            // zzfx(...[0.1,,669,.02,.02,.03,,3.7,-46,-0.1,,,-0.01,.1,73,,.01,.89,,,-502]); // Blip 396 - Mutation 9
-            // zzfx(...[.1,,11,.01,.02,.02,4,.8,47,,,,,,,,,.86,.02,,-863]); // Blip 424
-            zzfx(...[.1,,339,.01,.01,,4,4.4,11,-6,-486,.09,,,,,,.64,.03,.2]); // Blip 426
+            zzfx(...[.05,,339,.01,.01,,4,4.4,11,-6,-486,.09,,,,,,.64,.03,.2]); // Blip 426
         }
 
         if (x !== this.x) {
