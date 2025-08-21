@@ -19,7 +19,7 @@
 // @language_out ECMASCRIPT_2019
 // ==/ClosureCompiler==
 
-const zzfx = (...z)=> zzfxP(zzfxG(...z)); // generate and play sound
+// const zzfx = (...z)=> zzfxP(zzfxG(...z)); // generate and play sound
 const zzfxV = .3;    // volume
 const zzfxR = 44100; // sample rate
 const zzfxX = new AudioContext; // audio context
@@ -156,4 +156,4 @@ const zzfxG = // generate samples
     return b;
 }
 
-sound = (...def) => new FunZZfx(zzfxG(...def)).start();
+zzfx = (...def) => new FunZZfx(zzfxG(...def)).start();

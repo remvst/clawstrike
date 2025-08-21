@@ -4,6 +4,8 @@ class Bullet extends Entity {
         this.owner = owner;
         this.angle = owner.aim;
         this.hitbox.width = this.hitbox.height = 2;
+
+        zzfx(...[0.8,,221,.01,.03,.19,4,2.5,,,,,,1.1,,.2,,.61,.09]); // Shoot 93
     }
 
     cycle(elapsed) {

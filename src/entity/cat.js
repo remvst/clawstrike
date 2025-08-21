@@ -51,6 +51,8 @@ class Cat extends Entity {
         if (!this.releasedJump) return;
         if (!this.landed && !this.stickingToWall) return;
 
+        zzfx(...[.5,,292,.03,.02,.07,1,.4,,131,,,,,,,,.57,.01]);
+
         this.jumpStartAge = this.age;
         this.releasedJump = false;
         this.jumpStartY = this.y;
@@ -221,6 +223,8 @@ class Cat extends Entity {
             attack.y = this.y;
             this.world.addEntity(attack);
 
+            zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
+
             attack.x += Math.random() * 30 - 15;
             attack.y += Math.random() * 50 - 25;
 
@@ -234,7 +238,7 @@ class Cat extends Entity {
 
         this.attackCooldown -= elapsed;
 
-        const { x, y } = this;
+        const { x, y, landed } = this;
         for (const structure of this.world.category('structure')) {
             structure.reposition(this, this.radiusX, this.radiusY, this.previousX, this.previousY);
         }
@@ -245,6 +249,13 @@ class Cat extends Entity {
             this.vY = 0;
             this.lastLanded = this.age;
             this.viewAngle = 0;
+        }
+
+        if (this.landed && !landed) {
+            // zzfx(...[.1,.15,557,.02,.04,.14,4,.2,-97,-22,44,.24,,,,,,.64,.03]); // Blip 400
+            // zzfx(...[0.1,,669,.02,.02,.03,,3.7,-46,-0.1,,,-0.01,.1,73,,.01,.89,,,-502]); // Blip 396 - Mutation 9
+            // zzfx(...[.1,,11,.01,.02,.02,4,.8,47,,,,,,,,,.86,.02,,-863]); // Blip 424
+            zzfx(...[.1,,339,.01,.01,,4,4.4,11,-6,-486,.09,,,,,,.64,.03,.2]); // Blip 426
         }
 
         if (x !== this.x) {
@@ -281,6 +292,8 @@ class Cat extends Entity {
     damage() {
         if (--this.health <= 0) {
             this.world.removeEntity(this);
+
+            zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
 
             G.screens.push(new GameOverScreen());
         }
