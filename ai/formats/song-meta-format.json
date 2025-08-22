@@ -1,0 +1,7 @@
+{
+    "title": "Title of the song",
+    "description": "Description of the song, and why it fits the game. 50 words max.",
+    "bpm": "BPM of the song",
+    "instruments_description": "Describe what instruments will be needed for the song",
+    "instrument_count": 2
+}

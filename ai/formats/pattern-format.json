@@ -1,0 +1,15 @@
+{
+    "instrument": "Name of the instrument for these patterns",
+    "patterns": [
+        {
+            "description": "Description of the pattern and where it may fit in the song",
+            "notes": [
+                "A1",
+                "",
+                "A1",
+                "",
+                "A2"
+            ]
+        }
+    ]
+}

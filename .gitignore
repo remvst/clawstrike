@@ -4,3 +4,5 @@ dist/
 build/
 node_modules/
 Efficient-Compression-Tool/
+.env
+ai/out/
