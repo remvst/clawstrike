@@ -204,6 +204,13 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/first-level.js',
         'level/levels/second-level.js',
         'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
+        'level/levels/medium.js',
         'level/levels/stuff.js',
         'level/levels/green.js',
     ]) {
