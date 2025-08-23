@@ -128,7 +128,7 @@ class Human extends Entity {
 
     damage() {
         this.lastDamage = this.age;
-        this.nextShot = Math.max(this.nextShot, 0.5);
+        this.nextShot = max(this.nextShot, 1);
 
         zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
