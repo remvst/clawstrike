@@ -48,7 +48,7 @@ class MainMenuScreen extends Screen {
             G.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
         }
 
-        if (downKeys[32]) {
+        if (downKeys[32] || inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN) {
             // TODO fade out instead
             G.screens.pop();
 
