@@ -309,6 +309,8 @@ class Cat extends Entity {
     }
 
     damage() {
+        firstItem(this.world.category('camera')).shake(0.1, 10);
+
         if (--this.health <= 0) {
             this.world.removeEntity(this);
 
@@ -322,8 +324,7 @@ class Cat extends Entity {
             this.world.addEntity(part);
         }
 
-        const flash = new Flash('#fff');
-        this.world.addEntity(flash);
+        const flash = this.world.addEntity(new Flash('#fff'));
         this.world.addEntity(new Interpolator(flash, 'alpha', 0.5, 0, 0.2));
         // TODO maybe should clean up the flash? eh not much of a perf hit
     }
