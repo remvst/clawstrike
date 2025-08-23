@@ -10,10 +10,16 @@ class GameplayScreen extends WorldScreen {
             G.screens.push(new PauseScreen(this));
         }
 
-        // Level complete check
-        const enemyCountAfter = this.world.category('human').size;
-        if (enemyCountBefore && !enemyCountAfter) {
-            console.log('Level complete!');
+        if (this.isForeground()) {
+            // Level complete check
+            const enemyCountAfter = this.world.category('human').size;
+            if (enemyCountBefore && !enemyCountAfter) {
+                this.resolve?.(true);
+            }
+
+            if (!this.world.category('cat').size) {
+                this.reject?.(new Error());
+            }
         }
     }
 }

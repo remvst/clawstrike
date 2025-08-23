@@ -6,6 +6,13 @@ class Screen {
         this.age = 0;
     }
 
+    await() {
+        return new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+        });
+    }
+
     cycle(elapsed) {
         this.age += elapsed;
     }

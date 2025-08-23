@@ -7,13 +7,32 @@ class Game {
 
         this.runTime = 0;
 
-        const backgroundScreen = new GameplayScreen(ALL_LEVELS[0]);
-        this.screens = [
-            backgroundScreen,
-            new MainMenuScreen(backgroundScreen),
-        ];
+        this.screens = [];
+
+        // const backgroundScreen = new GameplayScreen(ALL_LEVELS[0]);
+        // this.screens = [
+        //     backgroundScreen,
+        //     new MainMenuScreen(backgroundScreen),
+        // ];
 
         this.frame();
+
+        (async () => {
+            outer: for (let level = 0 ; level < ALL_LEVELS.length; level++) {
+                while (true) {
+                    const screen = new GameplayScreen(ALL_LEVELS[level]);
+                    this.screens = [screen];
+                    try {
+                        await screen.await();
+                        continue outer;
+                    } catch (err) {
+                        const screen = new GameOverScreen();
+                        this.screens.push(screen);
+                        await screen.await();
+                    }
+                }
+            }
+        })();
     }
 
     frame() {

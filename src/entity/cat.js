@@ -313,8 +313,6 @@ class Cat extends Entity {
             this.world.removeEntity(this);
 
             zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
-
-            G.screens.push(new GameOverScreen());
         }
 
         for (let i = 0; i < 100; i++) {
