@@ -37,12 +37,6 @@ class ClawEffect extends Entity {
     drawClaw() {
         ctx.fillStyle = this.color;
 
-        if (!this.stroke) {
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-        }
-
         const THICKNESS = 5;
         const LENGTH = 40;
         const l = LENGTH * Math.min(1, this.age / 0.1);
@@ -63,6 +57,6 @@ class ClawEffect extends Entity {
         ctx.closePath();
         ctx.fill();
 
-        if (this.stroke) ctx.stroke();
+        ctx.stroke();
     }
 }

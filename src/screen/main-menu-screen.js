@@ -85,7 +85,6 @@ class MainMenuScreen extends Screen {
                 claw.angle = -PI / 6;
                 claw.scale = 12;
                 claw.color = '#f00';
-                claw.stroke = true;
                 return claw;
             })();
             this.claw.render();
