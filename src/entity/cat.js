@@ -136,6 +136,15 @@ class Cat extends Entity {
                     } else {
                         acceleration = 3000;
                     }
+
+                    // More friction when on edge
+                    for (const structure of this.world.category('structure')) {
+                        if (!structure.cellAt(this.x + this.radiusX, this.y + CELL_SIZE) ||
+                            !structure.cellAt(this.x - this.radiusX, this.y + CELL_SIZE)) {
+                                if (!x) acceleration *= 5;
+                        }
+                    }
+
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
