@@ -35,6 +35,7 @@ class Cat extends Entity {
 
         this.wallStickX = 0;
         this.wallStickDirection = 0;
+        this.lastStickToWall = -9;
     }
 
     get attackHitbox() {
@@ -49,7 +50,7 @@ class Cat extends Entity {
     jump() {
         if (this.age < this.jumpEndAge) return;
         if (!this.releasedJump) return;
-        if (!this.landed && !this.stickingToWall) return;
+        if (!this.landed && this.age - this.lastStickToWall > 0.1) return;
 
         zzfx(...[.2,,292,.03,.02,.07,1,.4,,131,,,,,,,,.57,.01]);
 
@@ -92,8 +93,13 @@ class Cat extends Entity {
             elapsed *= 0.2;
         }
 
-        // Roll behavior)
+        // Roll behavior
+        const { rolling } = this;
         this.rolling = downKeys[40] && (this.rolling || this.landed && this.rollingReleased);
+
+        if (this.rolling && !rolling) {
+            zzfx(...[.2,0,800,.04,.21,.25,,.5,,30,,,,,16,,,.62,.2,,829]);
+        }
 
         if (!downKeys[40]) {
             this.rollingReleased = true;
@@ -228,16 +234,19 @@ class Cat extends Entity {
                 this.vX = 0;
             }
 
-            if (!this.stickingToWall)
-            if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
-                this.wallStickX = this.x;
-                this.wallStickDirection = readjustmentDirection;
+            if (!this.stickingToWall) {
+                if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
+                    this.wallStickX = this.x;
+                    this.wallStickDirection = readjustmentDirection;
+                }
             }
 
             if (this.rolling && sign(this.x - x) !== this.facing) {
                 this.rolling = false;
 
                 this.vX = sign(this.x - x) * 400;
+                zzfx(...[5,,27,.03,.01,.03,3,.8,,,,,.01,,128,.9,.08,.69,.01,.21,110]); // Blip 471
+                // zzfx(...[0.3,,365,.01,.04,.13,3,2.9,,-17,,,,1.3,41,,.08,.54,.03,,923]); // Hit 508
                 // this.x += sign(this.x - x) * 25;
             }
         }
@@ -246,6 +255,7 @@ class Cat extends Entity {
             this.wallStickX = 0;
         } else {
             this.viewAngle = -Math.PI / 2;
+            this.lastStickToWall = this.age;
         }
     }
 
@@ -277,7 +287,7 @@ class Cat extends Entity {
         }
 
         const attack = new ClawEffect();
-        attack.x = this.x + this.facing * 30;
+        attack.x = this.x + this.facing * 60;
         attack.y = this.y;
         this.world.addEntity(attack);
 
