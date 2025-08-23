@@ -27,12 +27,14 @@ class HUD extends Entity {
         ctx.wrap(() => {
             ctx.translate(CANVAS_WIDTH / 2, 50);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 80px Impact';
+            ctx.font = 'bold 60px Impact';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 5;
-            ctx.shadowOffsetY = 5;
+            // ctx.shadowColor = '#000';
+            // ctx.shadowOffsetX = 5;
+            // ctx.shadowOffsetY = 5;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
 
             const formatted = formatTime(this.age).split('');
             const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
@@ -42,6 +44,7 @@ class HUD extends Entity {
             for (const char of formatted) {
                 const { width } = ctx.measureText(charForWidthCalculation(char));
                 ctx.fillText(char, width / 2, 0);
+                ctx.strokeText(char, width / 2, 0);
                 ctx.translate(width, 0);
             }
         });
