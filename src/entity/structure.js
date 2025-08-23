@@ -1,3 +1,36 @@
+BACKGROUND_STRIPES = (() => {
+    const can = createCanvas(CELL_SIZE * 15, CELL_SIZE * 30, (ctx, can) => {
+        ctx.fillStyle = '#000';
+
+        function dewIt() {
+            for (let y = 0 ; y <= can.height; y ++) {
+                const relY = y / can.height;
+                ctx.lineTo(
+                    interpolate(- 200, can.width - 200, relY) + sin(relY * TWO_PI * 30) * 8,
+                    interpolate(0, can.height, relY),
+                );
+            }
+        }
+
+        for (let i = -1 ; i <= 1; i++) {
+            ctx.wrap(() => {
+                ctx.translate(can.width * i, 0);
+                ctx.beginPath();
+                dewIt();
+                ctx.translate(can.width, can.height);
+                ctx.scale(-1, -1);
+                dewIt();
+                ctx.fill();
+            });
+        }
+    });
+
+    const patt = can.getContext('2d').createPattern(can, 'repeat');
+    patt.width = can.width;
+    patt.height = can.height;
+    return patt;
+})();
+
 class Structure extends Entity {
     constructor() {
         super();
@@ -23,37 +56,21 @@ class Structure extends Entity {
         const rows = this.matrix.length;
         const cols = this.matrix[0].length;
 
+        ctx.fillStyle = this.color;
+        ctx.fillRect(0, 0, this.width, this.height);
+
+        ctx.wrap(() => {
+            ctx.globalAlpha = 0.05;
+            ctx.fillStyle = BACKGROUND_STRIPES;
+
+            const offsetY = this.age * 30;
+            const offsetX = offsetY * BACKGROUND_STRIPES.width / BACKGROUND_STRIPES.height;
+
+            ctx.translate(offsetX, offsetY);
+            ctx.fillRect(-offsetX, -offsetY, this.width, this.height);
+        });
+
         this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx, can) => {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(0, 0, this.width, this.height);
-
-            // Background stripes
-            ctx.wrap(() => {
-                ctx.fillStyle = '#000';
-                ctx.globalAlpha = 0.05;
-
-                for (let refX = 0 ; refX < cols * CELL_SIZE; refX += CELL_SIZE * 15) {
-                    ctx.beginPath();
-
-                    for (let y = 0 ; y < this.height; y += 5) {
-                        const relY = y / CANVAS_HEIGHT;
-                        ctx.lineTo(
-                            refX + relY * 400 + sin(relY * TWO_PI * 20) * 10,
-                            relY * CANVAS_HEIGHT,
-                        );
-                    }
-
-                    for (let y = this.height ; y >= 0; y -= 5) {
-                        const relY = y / CANVAS_HEIGHT;
-                        ctx.lineTo(
-                            refX + 300 + relY * 400 + sin(relY * TWO_PI * 20) * 10,
-                            relY * CANVAS_HEIGHT,
-                        );
-                    }
-                    ctx.fill();
-                }
-            });
-
             // Cells
             ctx.wrap(() => {
                 ctx.fillStyle = this.cellColor;
