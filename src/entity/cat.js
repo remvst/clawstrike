@@ -195,40 +195,7 @@ class Cat extends Entity {
         if (!downKeys[32]) {
             this.releasedAttack = true;
         } else if (this.attackCooldown <= 0 && this.releasedAttack && !this.rolling) {
-            this.releasedAttack = false;
-
-            this.lastAttack = this.age;
-
-            firstItem(this.world.category('camera')).shake(0.05, 5);
-
-            this.nextHeatReset = 0.5;
-            this.heat++;
-            if (this.heat >= 5) {
-                this.attackCooldown = 1;
-            } else {
-                this.attackCooldown = 0.1;
-            }
-
-            for (const human of this.world.category('human')) {
-                if (this.attackHitbox.intersects(human.hitbox)) {
-                    human.damage();
-                    human.x += Math.sign(human.x - this.x) * 10;
-
-                    this.facing = Math.sign(human.x - this.x);
-                }
-            }
-
-            const attack = new ClawEffect();
-            attack.x = this.x + this.facing * 30;
-            attack.y = this.y;
-            this.world.addEntity(attack);
-
-            zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
-
-            attack.x += Math.random() * 30 - 15;
-            attack.y += Math.random() * 50 - 25;
-
-            this.x += this.facing * 10;
+            this.attack();
         }
 
         this.nextHeatReset -= elapsed;
@@ -284,6 +251,42 @@ class Cat extends Entity {
 
     get landed() {
         return this.age - this.lastLanded < 0.1;
+    }
+
+    attack() {
+        this.releasedAttack = false;
+        this.lastAttack = this.age;
+
+        firstItem(this.world.category('camera')).shake(0.05, 5);
+
+        this.nextHeatReset = 0.5;
+        this.heat++;
+        if (this.heat >= 5) {
+            this.attackCooldown = 1;
+        } else {
+            this.attackCooldown = 0.1;
+        }
+
+        for (const human of this.world.category('human')) {
+            if (this.attackHitbox.intersects(human.hitbox)) {
+                human.damage();
+                human.x += Math.sign(human.x - this.x) * 10;
+
+                this.facing = Math.sign(human.x - this.x);
+            }
+        }
+
+        const attack = new ClawEffect();
+        attack.x = this.x + this.facing * 30;
+        attack.y = this.y;
+        this.world.addEntity(attack);
+
+        zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
+
+        attack.x += Math.random() * 30 - 15;
+        attack.y += Math.random() * 50 - 25;
+
+        this.x += this.facing * 20;
     }
 
     damage() {
