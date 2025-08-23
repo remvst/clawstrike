@@ -25,8 +25,6 @@ class Game {
             if (downKeys[71]) elapsed *= 0.1;
             if (downKeys[70]) elapsed *= 4;
 
-            this.runTime += elapsed;
-
             let i = this.screens.length;
             while (this.screens[--i]) {
                 const screen = this.screens[i];

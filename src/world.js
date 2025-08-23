@@ -59,6 +59,6 @@ class World {
     }
 
     category(categoryId) {
-        return this.categories[categoryId] || [];
+        return this.categories[categoryId] || new Set();
     }
 }

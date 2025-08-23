@@ -39,6 +39,7 @@ const JS_FILES = [
     'entity/interpolator.js',
 
     'screen/screen.js',
+    'screen/world-screen.js',
     'screen/gameplay-screen.js',
     'screen/main-menu-screen.js',
     'screen/pause-screen.js',
