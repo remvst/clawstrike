@@ -20,10 +20,8 @@ class Game {
         (async () => {
             outer: for (let level = 0 ; level < ALL_LEVELS.length; level++) {
                 while (true) {
-                    const screen = new GameplayScreen(ALL_LEVELS[level]);
-                    this.screens = [screen];
                     try {
-                        await screen.await();
+                        await this.navigate(new GameplayScreen(ALL_LEVELS[level]), true).await();
                         continue outer;
                     } catch (err) {
                         const screen = new GameOverScreen();
@@ -85,5 +83,11 @@ class Game {
         }
 
         requestAnimationFrame(() => this.frame());
+    }
+
+    navigate(screen, reset) {
+        if (reset) this.screens = [];
+        this.screens.push(screen);
+        return screen;
     }
 }

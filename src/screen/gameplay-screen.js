@@ -6,19 +6,21 @@ class GameplayScreen extends WorldScreen {
 
         if (G) G.runTime += elapsed;
 
-        if (this.isForeground() && downKeys[27]) {
-            G.screens.push(new PauseScreen(this));
+        this.released ||= !downKeys[27];
+        if (this.isForeground() && this.released && downKeys[27]) {
+            this.released = false;
+            G.navigate(new PauseScreen());
         }
 
         if (this.isForeground()) {
             // Level complete check
             const enemyCountAfter = this.world.category('human').size;
             if (enemyCountBefore && !enemyCountAfter) {
-                this.resolve?.(true);
+                this.resolve();
             }
 
             if (!this.world.category('cat').size) {
-                this.reject?.(new Error());
+                this.reject(false);
             }
         }
     }
