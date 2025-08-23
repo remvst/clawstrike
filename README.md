@@ -7,6 +7,8 @@
 **CLAWSTRIKE** is my entry for 2024's [JS13K](https://js13kgames.com/).
 The theme for the competition was **Black Cat**.
 
+You can play the game at https://meow.tap2play.io/
+
 ## Build
 
 - Install depencies: `make install`
