@@ -8,10 +8,10 @@ class MainMenuScreen extends Screen {
 
         const cat = firstItem(worldScreen.world.category('cat'));
         const camera = firstItem(worldScreen.world.category('camera'));
-        camera.zoom = 4;
+        camera.zoom = 3;
         camera.target = new Entity();
         camera.x = camera.target.x = cat.x;
-        camera.y = camera.target.y = cat.y - 5;
+        camera.y = camera.target.y = cat.y - 20;
 
         for (const hud of world.category('hud')) {
             world.removeEntity(hud);
@@ -28,8 +28,8 @@ class MainMenuScreen extends Screen {
                 camera.shake(0.1, 5);
 
                 const claw = world.addEntity(new ClawEffect());
-                claw.x = cat.x;
-                claw.y = cat.y;
+                claw.x = camera.target.x;
+                claw.y = camera.target.y;
                 claw.angle = angle;
                 claw.scale = 5;
 
@@ -74,15 +74,30 @@ class MainMenuScreen extends Screen {
     render() {
         ctx.globalAlpha = interpolate(0, 1, min(this.age - 2.1) / 0.3);
 
+        ctx.wrap(() => {
+            this.claw ||= (() => {
+                const claw = new ClawEffect();
+                claw.x = CANVAS_WIDTH / 2;
+                claw.y = CANVAS_HEIGHT / 3 - 20;
+                claw.age = 0.5;
+                claw.angle = -PI / 6;
+                claw.scale = 12;
+                claw.color = '#f00';
+                claw.stroke = true;
+                return claw;
+            })();
+            this.claw.render();
+        });
+
         // TODO reuse for pause/death/game complete screens
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.font = 'bold 160px Impact';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 10;
-            ctx.shadowOffsetY = 10;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 20;
+            ctx.strokeText(document.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
             ctx.fillText(document.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
         });
 
@@ -93,7 +108,7 @@ class MainMenuScreen extends Screen {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.font = 'bold 40px Impact';
-            ctx.fillText('[SPACE] to start'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 3 / 4);
+            ctx.fillText('[SPACE] to start'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 2 / 3 + 50);
         });
     }
 }

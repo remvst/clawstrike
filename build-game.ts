@@ -77,7 +77,7 @@ const CONSTANTS = {
     "DEBUG_INFO": 0,
     "DEBUG_HITBOXES": 0,
     "DEBUG_JUMP": 0,
-    "DEBUG_VISION": 1,
+    "DEBUG_VISION": 0,
 };
 
 const MANGLE_PARAMS = {
