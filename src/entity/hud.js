@@ -36,7 +36,7 @@ class HUD extends Entity {
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 2;
 
-            const formatted = formatTime(this.age).split('');
+            const formatted = formatTime(G.runTime).split('');
             const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
 
             ctx.translate(-totalWidth / 2, 0);

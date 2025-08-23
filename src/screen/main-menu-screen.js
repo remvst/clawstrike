@@ -66,6 +66,8 @@ class MainMenuScreen extends Screen {
                 await zoomOut.await();
                 world.addEntity(new HUD(cat));
             })();
+
+            G.runTime = 0;
         } else {
             downKeys = {};
         }

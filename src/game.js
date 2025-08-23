@@ -5,7 +5,7 @@ class Game {
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.screens = [new GameplayScreen(ALL_LEVELS[0])];
+        this.runTime = 0;
 
         const backgroundScreen = new GameplayScreen(ALL_LEVELS[0]);
         this.screens = [
@@ -24,6 +24,8 @@ class Game {
         if (!DEBUG || document.hasFocus()) {
             if (downKeys[71]) elapsed *= 0.1;
             if (downKeys[70]) elapsed *= 4;
+
+            this.runTime += elapsed;
 
             let i = this.screens.length;
             while (this.screens[--i]) {
