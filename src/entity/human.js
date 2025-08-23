@@ -119,10 +119,9 @@ class Human extends Entity {
         }
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
-            const bullet = new Bullet(this);
+            const bullet = this.world.addEntity(new Bullet(this));
             bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
             bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
-            // this.world.addEntity(bullet);
             this.nextShot = 0.2;
         }
     }
