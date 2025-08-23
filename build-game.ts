@@ -71,10 +71,13 @@ const CONSTANTS = {
 
     "SONG_VOLUME": 0.5,
 
+    "HUMAN_VISION_DISTANCE": 750,
+    "HUMAN_VISION_DIVIDER": 4,
+
     "DEBUG_INFO": 0,
     "DEBUG_HITBOXES": 0,
     "DEBUG_JUMP": 0,
-    "DEBUG_VISION": 0,
+    "DEBUG_VISION": 1,
 };
 
 const MANGLE_PARAMS = {
@@ -197,7 +200,7 @@ const argv = yargs(process.argv.slice(2)).options({
     js += 'ALL_LEVELS = [';
 
     for (const path of [
-        // 'level/levels/blank.js',
+        'level/levels/blank.js',
         'level/levels/tutorial-v2.js',
         'level/levels/tutorial-wall-jump.js',
         'level/levels/tutorial-roll.js',
