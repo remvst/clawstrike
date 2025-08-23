@@ -12,19 +12,24 @@ class Screen {
     }
 
     resolve() {
+        const { resolvers } = this;
+        if (!resolvers) return;
+        this.resolvers = null;
         this.pop();
-        this.resolvePromise?.();
+        resolvers.resolve();
     }
 
     reject(popScreen) {
+        const { resolvers } = this;
+        if (!resolvers) return;
+        this.resolvers = null;
         if (popScreen) this.pop();
-        this.rejectPromise?.();
+        resolvers.reject();
     }
 
     await() {
-        return new Promise((resolvePromise, rejectPromise) => {
-            this.resolvePromise = resolvePromise;
-            this.rejectPromise = rejectPromise;
+        return new Promise((resolve, reject) => {
+            this.resolvers = { resolve, reject };
         });
     }
 
