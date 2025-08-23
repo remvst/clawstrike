@@ -44,3 +44,36 @@ class Screen {
         return G?.screens?.[G.screens.length - 1] === this;
     }
 }
+
+class TransitionScreen extends Screen {
+
+    constructor(from, to) {
+        super();
+        this.from = from;
+        this.to = to;
+    }
+
+    get progress() {
+        return this.age / 0.2;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+        if (this.progress >= 1) {
+            this.resolve();
+        }
+    }
+
+    render() {
+        ctx.translate(interpolate(this.from, this.to, this.progress) * (CANVAS_WIDTH + 200), 0);
+
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.fillRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 20, 20);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(CANVAS_WIDTH + 200, 0);
+        ctx.lineTo(CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.lineTo(-200, CANVAS_HEIGHT);
+        ctx.fill();
+    }
+}

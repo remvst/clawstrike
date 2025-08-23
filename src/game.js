@@ -18,18 +18,28 @@ class Game {
         this.frame();
 
         (async () => {
-            outer: for (let level = 0 ; level < ALL_LEVELS.length; level++) {
-                for (let attempt = 0; ; attempt++) {
+            for (let level = 0 ; level < ALL_LEVELS.length; level++) {
+                let success;
+                for (let attempt = 0; !success ; attempt++) {
                     try {
                         const gameplay = this.navigate(new GameplayScreen(ALL_LEVELS[level]), true);
                         if (!attempt && !level) this.navigate(new MainMenuScreen(gameplay));
+
+                        // Reveal the level
+                        this.navigate(new TransitionScreen(0, -1));
+
                         await gameplay.await();
-                        continue outer;
+
+                        success = true;
+
                     } catch (err) {
-                        const screen = new GameOverScreen();
-                        this.screens.push(screen);
-                        await screen.await();
+                        await this.navigate(new GameOverScreen()).await();
                     }
+
+                    this.screens = [];
+
+                    // Hide the level
+                    await this.navigate(new TransitionScreen(1, 0)).await();
                 }
             }
 
