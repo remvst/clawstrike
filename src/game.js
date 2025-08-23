@@ -19,9 +19,11 @@ class Game {
 
         (async () => {
             outer: for (let level = 0 ; level < ALL_LEVELS.length; level++) {
-                while (true) {
+                for (let attempt = 0; ; attempt++) {
                     try {
-                        await this.navigate(new GameplayScreen(ALL_LEVELS[level]), true).await();
+                        const gameplay = this.navigate(new GameplayScreen(ALL_LEVELS[level]), true);
+                        if (!attempt && !level) this.navigate(new MainMenuScreen(gameplay));
+                        await gameplay.await();
                         continue outer;
                     } catch (err) {
                         const screen = new GameOverScreen();
@@ -30,6 +32,8 @@ class Game {
                     }
                 }
             }
+
+            // TODO game complete!
         })();
     }
 
