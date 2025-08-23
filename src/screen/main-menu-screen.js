@@ -74,6 +74,7 @@ class MainMenuScreen extends Screen {
     render() {
         ctx.globalAlpha = interpolate(0, 1, min(this.age - 2.1) / 0.3);
 
+        // TODO reuse for pause/death/game complete screens
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
@@ -82,7 +83,7 @@ class MainMenuScreen extends Screen {
             ctx.shadowColor = '#000';
             ctx.shadowOffsetX = 10;
             ctx.shadowOffsetY = 10;
-            ctx.fillText('MEOWSSASSIN'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+            ctx.fillText(document.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
         });
 
         ctx.wrap(() => {
