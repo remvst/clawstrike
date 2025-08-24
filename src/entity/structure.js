@@ -206,9 +206,11 @@ class Structure extends Entity {
     }
 
     cellAt(x, y) {
-        if (!isBetween(this.x, x, this.x + this.matrix[0].length * CELL_SIZE)) return null;
-        if (!isBetween(this.y, y, this.y + this.matrix.length * CELL_SIZE)) return null;
+        const row = Math.floor((y - this.y) / CELL_SIZE);
+        const col = Math.floor((x - this.x) / CELL_SIZE);
+        if (!isBetween(0, row, this.matrix.length)) return null;
+        if (!isBetween(0, col, this.matrix[0].length)) return null
 
-        return this.matrix[Math.floor((y - this.y) / CELL_SIZE)][Math.floor((x - this.x) / CELL_SIZE)] || 0;
+        return this.matrix[row]?.[col] || 0;
     }
 }
