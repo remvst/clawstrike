@@ -7,6 +7,7 @@ class GameplayScreen extends WorldScreen {
 
     cycle(elapsed) {
         const enemyCountBefore = this.world.category('human').size;
+        const catCountBefore = this.world.category('cat').size;
 
         elapsed *= this.timeFactor || 1;
 
@@ -24,7 +25,6 @@ class GameplayScreen extends WorldScreen {
             // Level complete check
             const enemyCountAfter = this.world.category('human').size;
             if (enemyCountBefore && !enemyCountAfter) {
-
                 const camera = firstItem(this.world.category('camera'));
 
                 this.timeFactor = 0.25;
@@ -35,7 +35,7 @@ class GameplayScreen extends WorldScreen {
                 })();
             }
 
-            if (!this.world.category('cat').size) {
+            if (catCountBefore && !this.world.category('cat').size) {
                 this.reject(false);
             }
         }

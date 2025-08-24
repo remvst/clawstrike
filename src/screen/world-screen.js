@@ -19,14 +19,14 @@ class WorldScreen extends Screen {
 
         this.world = deserializeWorld(this.serializedWorld);
 
-        for (const cat of this.world.category('cat')) {
+        const camera = this.world.addEntity(new Camera());
+        const cat = firstItem(this.world.category('cat'));
+        if (cat) {
             this.world.addEntity(new HUD(cat));
 
-            const camera = new Camera();
             camera.target = cat;
             camera.x = cat.x;
             camera.y = cat.y - 200;
-            this.world.addEntity(camera);
         }
     }
 
