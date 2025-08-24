@@ -50,8 +50,6 @@ class Game {
 
             const blankScreen = this.navigate(new WorldScreen([]));
             await this.navigate(new GameCompleteScreen(blankScreen)).await();
-            await this.navigate(new TransitionScreen(1, 0)).await();
-            this.screens = []; // Fix flickering
         }
     }
 

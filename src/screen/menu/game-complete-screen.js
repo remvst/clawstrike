@@ -1,8 +1,15 @@
-class GameCompleteScreen extends Screen {
+class GameCompleteScreen extends MenuScreen {
     constructor(worldScreen) {
         super();
 
         this.worldScreen = worldScreen;
+
+        this.title = nomangle('CONGRATULATIONS');
+        this.addCommand(
+            nomangle('PRESS [SPACE] TO DISMISS'),
+            () => downKeys[32] || (inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN),
+            () => this.resolve(),
+        );
 
         const { world } = worldScreen;
 
@@ -37,21 +44,8 @@ class GameCompleteScreen extends Screen {
         })();
     }
 
-    cycle(elapsed) {
-        super.cycle(elapsed);
-
-        if (this.age > 2 && (downKeys[32] || (inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN))) {
-            this.resolve();
-        }
-    }
-
     render() {
         ctx.globalAlpha = interpolate(0, 1, min(this.age - 1) / 0.3);
-
-        this.renderTitle(nomangle('CONGRATULATIONS'));
-
-        this.renderCommands([
-            nomangle('PRESS [SPACE] TO DISMISS'),
-        ]);
+        super.render();
     }
 }
