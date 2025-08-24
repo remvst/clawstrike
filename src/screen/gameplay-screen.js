@@ -18,7 +18,7 @@ class GameplayScreen extends WorldScreen {
         this.released ||= !downKeys[27];
         if (this.isForeground() && this.released && downKeys[27]) {
             this.released = false;
-            G.navigate(new PauseScreen());
+            G.navigate(new PauseScreen()).await();
         }
 
         if (this.isForeground()) {

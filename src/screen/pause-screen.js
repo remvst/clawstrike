@@ -1,4 +1,4 @@
-class PauseScreen extends Screen {
+class PauseScreen extends MenuScreen {
 
     cycle(elapsed) {
         super.cycle(elapsed);
@@ -7,21 +7,11 @@ class PauseScreen extends Screen {
 
         if (downKeys[27] && this.released && this.isForeground()) {
             this.resolve();
-            downKeys = {};
         }
     }
 
     render() {
-        ctx.wrap(() => {
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 160px Impact';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 10;
-            ctx.shadowOffsetY = 10;
-            ctx.fillText('PAUSED'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-        });
+        this.renderTitle(nomangle('PAUSED'));
 
         ctx.wrap(() => {
             if (this.age % 2 < 0.5) return;

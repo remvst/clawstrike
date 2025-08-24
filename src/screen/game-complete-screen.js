@@ -48,17 +48,7 @@ class GameCompleteScreen extends Screen {
     render() {
         ctx.globalAlpha = interpolate(0, 1, min(this.age - 1) / 0.3);
 
-        // TODO reuse for pause/death/game complete screens
-        ctx.wrap(() => {
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 160px Impact';
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 20;
-            ctx.strokeText(nomangle('CONGRATULATIONS'), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-            ctx.fillText(nomangle('CONGRATULATIONS'), CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-        });
+        this.renderTitle(nomangle('CONGRATULATIONS'));
 
         ctx.wrap(() => {
             if (this.age % 2 < 0.5) return;

@@ -1,4 +1,4 @@
-class MainMenuScreen extends Screen {
+class MainMenuScreen extends MenuScreen {
     constructor(worldScreen) {
         super();
 
@@ -91,18 +91,7 @@ class MainMenuScreen extends Screen {
             this.claw.render();
         });
 
-        // TODO reuse for pause/death/game complete screens
-        ctx.wrap(() => {
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 160px Impact';
-            ctx.strokeStyle = '#000';
-            ctx.miterLimit = 2;
-            ctx.lineWidth = 20;
-            ctx.strokeText(document.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-            ctx.fillText(document.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-        });
+        this.renderTitle(document.title);
 
         ctx.wrap(() => {
             if (this.age % 2 < 0.5) return;
