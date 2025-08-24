@@ -16,6 +16,7 @@ class Game {
         while (true) {
             this.runTime = 0;
             this.runLevelIndex = 0;
+            this.runDeaths = 0;
 
             for (let level = 0 ; level < ALL_LEVELS.length; level++) {
                 this.runLevelIndex = level;
@@ -34,6 +35,7 @@ class Game {
                         success = true;
 
                     } catch (err) {
+                        this.runDeaths++;
                         await this.navigate(new GameOverScreen()).await();
                         this.screens = []; // Fix flickering
                     }
