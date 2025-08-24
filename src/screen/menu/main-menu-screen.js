@@ -4,6 +4,27 @@ class MainMenuScreen extends MenuScreen {
 
         this.worldScreen = worldScreen;
 
+        this.title = document.title;
+        this.addCommand(
+            nomangle('PRESS [SPACE] TO START'),
+            () => downKeys[32] || inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN,
+            () => this.start(),
+            false,
+        );
+        this.addCommand(
+            nomangle('PRESS [K] TO CHANGE DIFFICULTY'),
+            () => downKeys[75],
+            () => console.log('TODO'), // TODO
+        );
+
+        if (DEBUG) {
+            this.addCommand(
+                nomangle('PRESS [E] TO ENTER LEVEL EDITOR'),
+                () => downKeys[69], // nice
+                () => G.navigate(new LevelEditorScreen(ALL_LEVELS[0]), true),
+            );
+        }
+
         const { world } = worldScreen;
 
         const cat = firstItem(worldScreen.world.category('cat'));
@@ -41,42 +62,29 @@ class MainMenuScreen extends MenuScreen {
         })();
     }
 
-    cycle(elapsed) {
-        super.cycle(elapsed);
+    start() {
+        // TODO fade out instead
+        G.screens.pop();
 
-        if (DEBUG && downKeys[69]) {
-            G.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
-            zzfx(...[.8,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
-        }
+        playSong();
 
-        if (downKeys[32] || inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN) {
-            // TODO fade out instead
-            G.screens.pop();
+        const { world } = this.worldScreen;
+        const cat = firstItem(world.category('cat'));
+        const camera = firstItem(world.category('camera'));
+        camera.target = cat;
 
-            playSong();
+        const zoomOut = new Interpolator(camera, 'zoom', camera.zoom, 1.3, 2, easeInQuad);
+        world.addEntity(zoomOut);
 
-            const { world } = this.worldScreen;
-            const cat = firstItem(world.category('cat'));
-            const camera = firstItem(world.category('camera'));
-            camera.target = cat;
+        (async () => {
+            await zoomOut.await();
+            world.addEntity(new HUD(cat));
+        })();
 
-            const zoomOut = new Interpolator(camera, 'zoom', camera.zoom, 1.3, 2, easeInQuad);
-            world.addEntity(zoomOut);
-
-            (async () => {
-                await zoomOut.await();
-                world.addEntity(new HUD(cat));
-            })();
-
-            G.runTime = 0;
-        } else {
-            downKeys = {};
-        }
+        G.runTime = 0;
     }
 
-    render() {
-        ctx.globalAlpha = interpolate(0, 1, min(this.age - 2.1) / 0.3);
-
+    renderTitle() {
         ctx.wrap(() => {
             this.claw ||= (() => {
                 const claw = new ClawEffect();
@@ -90,12 +98,11 @@ class MainMenuScreen extends MenuScreen {
             })();
             this.claw.render();
         });
+        super.renderTitle();
+    }
 
-        this.renderTitle(document.title);
-
-        this.renderCommands([
-            nomangle('PRESS [SPACE] TO START'),
-            nomangle('PRESS [K] TO CHANGE DIFFICULTY'),
-        ]);
+    render() {
+        ctx.globalAlpha = interpolate(0, 1, min(this.age - 2.1) / 0.3);
+        super.render();
     }
 }

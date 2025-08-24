@@ -1,21 +1,13 @@
 class PauseScreen extends MenuScreen {
 
-    cycle(elapsed) {
-        super.cycle(elapsed);
-
-        this.released ||= !downKeys[27];
-
-        if (downKeys[27] && this.released && this.isForeground()) {
-            this.resolve();
-        }
-    }
-
-    render() {
-        this.renderTitle(nomangle('PAUSED'));
-
-        this.renderCommands([
+    constructor() {
+        super();
+        this.title = nomangle('PAUSED');
+        this.addCommand(
             nomangle('PRESS [ESC] TO RESUME'),
-        ]);
+            () => downKeys[27],
+            () => this.resolve(),
+        );
     }
 
     absorb() {

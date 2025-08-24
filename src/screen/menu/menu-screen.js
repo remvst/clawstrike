@@ -1,5 +1,38 @@
 class MenuScreen extends Screen {
-    renderTitle(text) {
+
+    constructor() {
+        super();
+        this.commands = [];
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        if (Object.values(downKeys).filter(x => x).length == 0) {
+            this.released = true;
+        }
+
+        if (this.released) {
+            for (const { detect, action, playSound } of this.commands) {
+                if (detect()) {
+                    if (playSound) zzfx(...[.5,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
+                    this.released = false;
+                    action();
+                }
+            }
+        }
+    }
+
+    addCommand(label, detect, action, playSound = true) {
+        this.commands.push({ label, detect, action, playSound });
+    }
+
+    render() {
+        ctx.wrap(() => this.renderTitle());
+        ctx.wrap(() => this.renderCommands());
+    }
+
+    renderTitle() {
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
@@ -8,22 +41,22 @@ class MenuScreen extends Screen {
             ctx.strokeStyle = '#000';
             ctx.miterLimit = 2;
             ctx.lineWidth = 20;
-            ctx.strokeText(text, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-            ctx.fillText(text, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+            ctx.strokeText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+            ctx.fillText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
         });
     }
 
-    renderCommands(commands) {
-        if (this.age % 2 > 0.5) ctx.wrap(() => {
+    renderCommands() {
+        if (this.age % 2 > 0.5) {
             const spacing = 50;
 
-            ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((commands.length - 1) * spacing) / 2);
+            ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
 
-            for (const line of commands) {
-                this.renderCommandText(line);
+            for (const { label } of this.commands) {
+                this.renderCommandText(label);
                 ctx.translate(0, spacing);
             }
-        });
+        }
     }
 
     renderCommandText(line) {
