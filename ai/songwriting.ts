@@ -53,7 +53,7 @@ import fs from 'fs/promises';
         Assemble the instruments and their patterns you generated into the song.
         Remember that patterns have up to 16 notes, but you'll need arrays of 32 items under the "n" key.
         Include breaks between notes to accomodate.
-        When including a pattern in the sequence, use the pattern index starting at 1 (i.e. the first pattern is 1, second pattern is 2). Do not include "0" as it would be a blank.
+        When including a pattern in the final sequence (in the "p" value of each instrument), use the pattern index starting at 1 (i.e. the first pattern is 1, second pattern is 2). Do not include "0" as it would be a blank.
         Generate a final JSON object that contains everything in the sonantx-live format: ${JSON.stringify(formats.song)}
         `,
     });

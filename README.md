@@ -33,7 +33,7 @@ In order to generate a new song, you'll need an API key, and add it to your `.en
 OPENAI_API_KEY=<YOUR_API_KEY>
 ```
 
-Then run `npm run songwriter`. **THIS WILL COST A SIGNIFICANT AMOUNT OF TOKENS**.
+Then run `npm run songwriter`. **This will cost a significant amount of tokens. Please don't burn the entire rainforest to generate songs.**
 
 Song definition can then be found in `ai/out`, which you can then import in Sonant-X Live.
 
