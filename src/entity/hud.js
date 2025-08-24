@@ -17,6 +17,7 @@ class HUD extends Entity {
         this.categories.push('hud');
         this.cat = cat;
         this.clawAge = 0;
+        this.alpha = 1;
     }
 
     cycle(elapsed) {
@@ -33,6 +34,8 @@ class HUD extends Entity {
 
     render() {
         this.cancelCamera();
+
+        ctx.globalAlpha = this.alpha;
 
         ctx.fillStyle = ctx.strokeStyle = '#fff';
         ctx.lineWidth = 10;

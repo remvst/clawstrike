@@ -13,13 +13,16 @@ class GameplayScreen extends WorldScreen {
 
         super.cycle(elapsed);
 
-        if (G) G.runTime += elapsed;
+        if (G && catCountBefore >= 1) G.runTime += elapsed;
 
         this.released ||= !downKeys[27];
         if (this.isForeground() && this.released && downKeys[27]) {
             this.released = false;
             G.navigate(new PauseScreen()).await();
         }
+
+        const hud = firstItem(this.world.category('hud'));
+        if (hud) hud.alpha = this.isForeground() ? 1 : 0.25;
 
         if (this.isForeground()) {
             // Level complete check
