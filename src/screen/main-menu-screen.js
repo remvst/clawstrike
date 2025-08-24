@@ -46,6 +46,7 @@ class MainMenuScreen extends Screen {
 
         if (DEBUG && downKeys[69]) {
             G.screens = [new LevelEditorScreen(ALL_LEVELS[0])];
+            zzfx(...[.8,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
         }
 
         if (downKeys[32] || inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN) {
