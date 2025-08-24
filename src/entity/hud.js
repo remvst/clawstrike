@@ -38,6 +38,32 @@ class HUD extends Entity {
         ctx.lineWidth = 10;
 
         ctx.wrap(() => {
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+
+            ctx.translate(50, 50);
+
+            for (const [label, value] of [
+                ['Level', (G.runLevelIndex + 1) + '/' + ALL_LEVELS.length],
+                ['Difficulty [K]', 'NORMAL'],
+                ['Best', formatTime(G.bestRunTime)],
+            ]) {
+                ctx.font = 'italic bold 16px Impact';
+                ctx.fillText(label.toUpperCase(), 0, 0);
+                ctx.strokeText(label.toUpperCase(), 0, 0);
+                ctx.translate(0, 20);
+
+                ctx.font = 'italic bold 36px Impact';
+                ctx.fillText(value, 0, 0);
+                ctx.strokeText(value, 0, 0);
+                ctx.translate(0, 50);
+            }
+        });
+
+        ctx.wrap(() => {
             ctx.translate(CANVAS_WIDTH / 2, 50);
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 60px Impact';

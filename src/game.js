@@ -5,7 +5,7 @@ class Game {
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.runTime = 0;
+        this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
         this.screens = [];
 
         this.frame();
@@ -14,7 +14,12 @@ class Game {
 
     async startNavigation() {
         while (true) {
+            this.runTime = 0;
+            this.runLevelIndex = 0;
+
             for (let level = 0 ; level < ALL_LEVELS.length; level++) {
+                this.runLevelIndex = level;
+
                 let success;
                 for (let attempt = 0; !success ; attempt++) {
                     try {
@@ -38,7 +43,10 @@ class Game {
                 }
             }
 
-            const blankScreen = this.navigate(new GameplayScreen([]));
+            this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
+            localStorage[nomangle("bt")] = this.bestRunTime;
+
+            const blankScreen = this.navigate(new WorldScreen([]));
             await this.navigate(new GameCompleteScreen(blankScreen)).await();
             await this.navigate(new TransitionScreen(1, 0)).await();
             this.screens = []; // Fix flickering
