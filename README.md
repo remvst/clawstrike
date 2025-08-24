@@ -1,11 +1,15 @@
 <p align="center">
-<img src="/assets/gameplay-screenshot.png">
+<img src="/assets/mainmenu-screenshot.png">
 </p>
 
-# Meowssassin
+# CLAWSTRIKE
 
-**Meowssassin** is my entry for 2024's [JS13K](https://js13kgames.com/).
+**CLAWSTRIKE** is my entry for 2024's [JS13K](https://js13kgames.com/).
 The theme for the competition was **Black Cat**.
+
+The game is a 2D die and retry platformer. Your goal is to clear all the levels as quickly as possible by triple striking all the humans.
+
+You can play the game at https://meow.tap2play.io/
 
 ## Build
 

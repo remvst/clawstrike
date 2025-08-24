@@ -1,7 +1,7 @@
 class World {
     constructor() {
         this.entities = [];
-        this.categories = new Map();
+        this.categories = {};
     }
 
     cycle(elapsed) {
@@ -40,12 +40,8 @@ class World {
         this.entities.push(entity);
 
         for (const categoryId of entity.categories) {
-            const category = this.categories.get(categoryId);
-            if (!category) {
-                this.categories.set(categoryId, new Set([entity]));
-            } else {
-                category.add(entity);
-            }
+            this.categories[categoryId] ||= new Set();
+            this.categories[categoryId].add(entity);
         }
 
         return entity;
@@ -58,11 +54,11 @@ class World {
         }
 
         for (const category of entity.categories) {
-            this.categories.get(category)?.delete(entity);
+            this.categories[category]?.delete(entity);
         }
     }
 
     category(categoryId) {
-        return this.categories.get(categoryId) || [];
+        return this.categories[categoryId] || new Set();
     }
 }

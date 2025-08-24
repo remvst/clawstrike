@@ -16,6 +16,19 @@ class HUD extends Entity {
         super();
         this.categories.push('hud');
         this.cat = cat;
+        this.clawAge = 0;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+
+        const humanCount = this.world.category('human').size;
+        this.maxHumanCount = max(this.maxHumanCount || 0, humanCount);
+
+        this.clawAge = min(
+            this.clawAge + elapsed,
+            this.maxHumanCount - humanCount, // eliminated count
+        );
     }
 
     render() {
@@ -25,16 +38,41 @@ class HUD extends Entity {
         ctx.lineWidth = 10;
 
         ctx.wrap(() => {
-            ctx.translate(CANVAS_WIDTH / 2, 50);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 80px Impact';
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 5;
-            ctx.shadowOffsetY = 5;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
 
-            const formatted = formatTime(this.age).split('');
+            ctx.translate(50, 50);
+
+            for (const [label, value] of [
+                ['Level', (G.runLevelIndex + 1) + '/' + ALL_LEVELS.length],
+                ['Difficulty [K]', 'NORMAL'],
+                ['Best', formatTime(G.bestRunTime)],
+            ]) {
+                ctx.font = 'italic bold 16px Impact';
+                ctx.fillText(label.toUpperCase(), 0, 0);
+                ctx.strokeText(label.toUpperCase(), 0, 0);
+                ctx.translate(0, 20);
+
+                ctx.font = 'italic bold 36px Impact';
+                ctx.fillText(value, 0, 0);
+                ctx.strokeText(value, 0, 0);
+                ctx.translate(0, 50);
+            }
+        });
+
+        ctx.wrap(() => {
+            ctx.translate(CANVAS_WIDTH / 2, 50);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 60px Impact';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+
+            const formatted = formatTime(G.runTime).split('');
             const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
 
             ctx.translate(-totalWidth / 2, 0);
@@ -42,17 +80,48 @@ class HUD extends Entity {
             for (const char of formatted) {
                 const { width } = ctx.measureText(charForWidthCalculation(char));
                 ctx.fillText(char, width / 2, 0);
+                ctx.strokeText(char, width / 2, 0);
                 ctx.translate(width, 0);
             }
         });
 
+        ctx.wrap(() => {
+            this.claw ||= (() => {
+                const claw = new ClawEffect();
+                claw.angle = PI / 3;
+                claw.scale = 1.2;
+                return claw;
+            })();
+
+            const spacing = 30;
+            const startX = CANVAS_WIDTH / 2 - (this.maxHumanCount - 1) / 2 * spacing;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+
+            let { clawAge } = this;
+            for (let i = 0 ; i < this.maxHumanCount; i++) {
+                this.claw.x = startX + i * spacing;
+                this.claw.y = 140;
+                ctx.wrap(() => {
+                    this.claw.age = 0.5;
+                    ctx.globalAlpha = 0.3;
+                    this.claw.render();
+                });
+                ctx.wrap(() => {
+                    this.claw.age = between(0, clawAge, 0.5);
+                    this.claw.age && this.claw.render();
+                });
+                clawAge -= 1;
+            }
+        });
+
         if (inputMode == INPUT_MODE_KEYBOARD) {
-            for (const [desc, x, y, scaleX, down] of [
-                ['↻', 0, 0, 1, downKeys[40]],
-                ['←', -1, 0, 1, downKeys[37]],
-                ['→', 1, 0, 1, downKeys[39]],
-                ['↑', 0, -1, 1, downKeys[38]],
-                ['ATTACK', 4.5, 0, 4, downKeys[32]],
+            for (const [x, y, scaleX, down] of [
+                [0, 0, 1, downKeys[40]],
+                [-1, 0, 1, downKeys[37]],
+                [1, 0, 1, downKeys[39]],
+                [0, -1, 1, downKeys[38]],
+                [4.5, 0, 4, downKeys[32]],
             ]) {
                 ctx.wrap(() => {
                     ctx.translate(150, CANVAS_HEIGHT - 100);
@@ -63,12 +132,6 @@ class HUD extends Entity {
                         ctx.scale(scaleX, 1);
                         ctx.fillRect(-40 / 2, -40 / 2, 40, 40);
                     });
-
-                    ctx.fillStyle = '#000';
-                    ctx.font = 'bold 20px Impact';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(desc, 0, 0);
                 });
             }
         }

@@ -4,6 +4,7 @@ class ClawEffect extends Entity {
         super();
         this.angle = this.seed * TWO_PI;
         this.scale = 1 + this.seed * 0.5;
+        this.color = '#fff';
     }
 
     cycle(elapsed) {
@@ -23,7 +24,6 @@ class ClawEffect extends Entity {
 
         ctx.rotate(this.angle);
         ctx.scale(this.scale, this.scale);
-        ctx.scale(1 + this.seed * 0.5, 1);
 
         for (const [y, s] of [[0, 1], [-5, 0.8], [5, 0.8]]) {
             ctx.wrap(() => {
@@ -35,10 +35,7 @@ class ClawEffect extends Entity {
     }
 
     drawClaw() {
-        ctx.strokeStyle = ctx.fillStyle = '#fff';
-        ctx.shadowColor = '#000';
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        ctx.fillStyle = this.color;
 
         const THICKNESS = 5;
         const LENGTH = 40;
@@ -57,6 +54,9 @@ class ClawEffect extends Entity {
             l / 2, THICKNESS / 2,
             0, 0
         );
+        ctx.closePath();
         ctx.fill();
+
+        ctx.stroke();
     }
 }

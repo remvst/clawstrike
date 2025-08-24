@@ -84,10 +84,14 @@ class Human extends Entity {
                 // Cat is in our back, don't even look at it
                 if (Math.sign(cat.x - this.x) !== this.facing && !seesCat) continue;
 
-                const angleToCat = angleBetween(this, cat);
                 const distanceToCat = distance(this, cat);
 
-                if (distanceToCat > CELL_SIZE * 15) continue; // Too far away
+                if (distanceToCat > HUMAN_VISION_DISTANCE) continue; // Too far away
+
+                const angleToCat = angleBetween(this, cat);
+                const baseAngle = this.facing > 0 ? 0 : PI;
+                const angleDiff = normalizeAngle(angleToCat - baseAngle);
+                if (abs(angleDiff) > PI / HUMAN_VISION_DIVIDER) continue; // Out of vision cone
 
                 for (const structure of this.world.category('structure')) {
                     const impact = structure.raycaster.castRay(this.x, this.y, angleToCat, distanceToCat);
@@ -99,7 +103,10 @@ class Human extends Entity {
                 this.seesCat = cat;
 
                 // Cat was just spotted, delay the next shot a bit
-                if (!seesCat) this.nextShot = 0.2;
+                if (!seesCat) {
+                    this.nextShot = 0.2;
+                    zzfx(...[2,,400,.02,.02,.25,2,2.5,,114,,,,.3,,.1,.08,.63,.01,,464]); // Pickup 605
+                }
             }
         }
 
@@ -115,17 +122,16 @@ class Human extends Entity {
         }
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
-            const bullet = new Bullet(this);
+            const bullet = this.world.addEntity(new Bullet(this));
             bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
             bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
-            this.world.addEntity(bullet);
             this.nextShot = 0.2;
         }
     }
 
     damage() {
         this.lastDamage = this.age;
-        this.nextShot = Math.max(this.nextShot, 0.5);
+        this.nextShot = max(this.nextShot, 1);
 
         zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
@@ -257,6 +263,20 @@ class Human extends Entity {
                 ctx.lineTo(this.seesCat.x, this.seesCat.y);
                 ctx.stroke();
             }
+        });
+
+        if (DEBUG_VISION) ctx.wrap(() => {
+            const baseAngle = this.facing > 0 ? 0 : PI;
+
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.translate(this.x, this.y);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(cos(baseAngle + PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE, sin(baseAngle + PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(cos(baseAngle - PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE, sin(baseAngle - PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE);
+            ctx.stroke();
         });
     }
 }

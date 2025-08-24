@@ -1,4 +1,4 @@
-class LevelEditorScreen extends GameplayScreen {
+class LevelEditorScreen extends WorldScreen {
     constructor(serializedWorld) {
         super(serializedWorld);
 

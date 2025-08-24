@@ -6,6 +6,33 @@ class Screen {
         this.age = 0;
     }
 
+    pop() {
+        const index = G.screens.indexOf(this);
+        if (index >= 0) G.screens.splice(index, 9);
+    }
+
+    resolve() {
+        const { resolvers } = this;
+        if (!resolvers) return;
+        this.resolvers = null;
+        this.pop();
+        resolvers.resolve();
+    }
+
+    reject(popScreen) {
+        const { resolvers } = this;
+        if (!resolvers) return;
+        this.resolvers = null;
+        if (popScreen) this.pop();
+        resolvers.reject();
+    }
+
+    await() {
+        return new Promise((resolve, reject) => {
+            this.resolvers = { resolve, reject };
+        });
+    }
+
     cycle(elapsed) {
         this.age += elapsed;
     }
@@ -20,5 +47,38 @@ class Screen {
 
     isForeground() {
         return G?.screens?.[G.screens.length - 1] === this;
+    }
+}
+
+class TransitionScreen extends Screen {
+
+    constructor(from, to) {
+        super();
+        this.from = from;
+        this.to = to;
+    }
+
+    get progress() {
+        return this.age / 0.2;
+    }
+
+    cycle(elapsed) {
+        super.cycle(elapsed);
+        if (this.progress >= 1) {
+            this.resolve();
+        }
+    }
+
+    render() {
+        ctx.translate(interpolate(this.from, this.to, this.progress) * (CANVAS_WIDTH + 200), 0);
+
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.fillRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 20, 20);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(CANVAS_WIDTH + 200, 0);
+        ctx.lineTo(CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.lineTo(-200, CANVAS_HEIGHT);
+        ctx.fill();
     }
 }

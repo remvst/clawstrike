@@ -1,56 +1,43 @@
-class GameplayScreen extends Screen {
-    constructor(serializedWorld) {
-        super();
+class GameplayScreen extends WorldScreen {
+    constructor(level) {
+        super(level);
 
-        this.serializedWorld = serializedWorld;
-
-        if (DEBUG) {
-            this.debugValues = () => {
-                const vals = [`Entities: ${this.world.entities.length}`];
-                for (const camera of this.world.category('camera')) {
-                    vals.push([`Camera: ${camera.x.toFixed(0)},${camera.y.toFixed(0)}`]);
-                }
-                for (const cat of this.world.category('cat')) {
-                    vals.push([`Cat: ${cat.x.toFixed(0)},${cat.y.toFixed(0)}`]);
-                }
-                return vals;
-            };
-        }
-
-        this.world = deserializeWorld(this.serializedWorld);
-
-        for (const cat of this.world.category('cat')) {
-            this.world.addEntity(new HUD(cat));
-
-            const camera = new Camera();
-            camera.target = cat;
-            camera.x = cat.x;
-            camera.y = cat.y - 200;
-            this.world.addEntity(camera);
-        }
+        this.world.addEntity(new Interpolator(this, 'transitionProgress', 0, -1, 0.5)).await();
     }
 
     cycle(elapsed) {
+        const enemyCountBefore = this.world.category('human').size;
+        const catCountBefore = this.world.category('cat').size;
+
+        elapsed *= this.timeFactor || 1;
+
         super.cycle(elapsed);
 
-        let remaining = elapsed;
-        while (remaining > 0) {
-            const advance = Math.min(remaining, 1 / 120);
-            remaining -= advance;
-            this.world.cycle(advance);
+        if (G) G.runTime += elapsed;
+
+        this.released ||= !downKeys[27];
+        if (this.isForeground() && this.released && downKeys[27]) {
+            this.released = false;
+            G.navigate(new PauseScreen());
         }
 
-        if (this.isForeground() && downKeys[27]) {
-            G.screens.push(new PauseScreen(this));
+        if (this.isForeground()) {
+            // Level complete check
+            const enemyCountAfter = this.world.category('human').size;
+            if (enemyCountBefore && !enemyCountAfter) {
+                const camera = firstItem(this.world.category('camera'));
+
+                this.timeFactor = 0.25;
+
+                (async () => {
+                    await this.world.addEntity(new Interpolator(camera, 'zoom', camera.zoom, 2, 0.5)).await();
+                    this.resolve();
+                })();
+            }
+
+            if (catCountBefore && !this.world.category('cat').size) {
+                this.reject(false);
+            }
         }
-    }
-
-    render() {
-        super.render();
-        ctx.wrap(() => this.world.render());
-    }
-
-    absorb() {
-        return true;
     }
 }

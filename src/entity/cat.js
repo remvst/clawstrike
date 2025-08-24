@@ -35,6 +35,7 @@ class Cat extends Entity {
 
         this.wallStickX = 0;
         this.wallStickDirection = 0;
+        this.lastStickToWall = -9;
     }
 
     get attackHitbox() {
@@ -49,7 +50,7 @@ class Cat extends Entity {
     jump() {
         if (this.age < this.jumpEndAge) return;
         if (!this.releasedJump) return;
-        if (!this.landed && !this.stickingToWall) return;
+        if (!this.landed && this.age - this.lastStickToWall > 0.1) return;
 
         zzfx(...[.2,,292,.03,.02,.07,1,.4,,131,,,,,,,,.57,.01]);
 
@@ -92,8 +93,13 @@ class Cat extends Entity {
             elapsed *= 0.2;
         }
 
-        // Roll behavior)
+        // Roll behavior
+        const { rolling } = this;
         this.rolling = downKeys[40] && (this.rolling || this.landed && this.rollingReleased);
+
+        if (this.rolling && !rolling) {
+            zzfx(...[.2,0,800,.04,.21,.25,,.5,,30,,,,,16,,,.62,.2,,829]);
+        }
 
         if (!downKeys[40]) {
             this.rollingReleased = true;
@@ -130,6 +136,15 @@ class Cat extends Entity {
                     } else {
                         acceleration = 3000;
                     }
+
+                    // More friction when on edge
+                    for (const structure of this.world.category('structure')) {
+                        if (!structure.cellAt(this.x + this.radiusX, this.y + CELL_SIZE) ||
+                            !structure.cellAt(this.x - this.radiusX, this.y + CELL_SIZE)) {
+                                if (!x) acceleration *= 5;
+                        }
+                    }
+
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
@@ -195,40 +210,7 @@ class Cat extends Entity {
         if (!downKeys[32]) {
             this.releasedAttack = true;
         } else if (this.attackCooldown <= 0 && this.releasedAttack && !this.rolling) {
-            this.releasedAttack = false;
-
-            this.lastAttack = this.age;
-
-            firstItem(this.world.category('camera')).shake(0.05, 5);
-
-            this.nextHeatReset = 0.5;
-            this.heat++;
-            if (this.heat >= 5) {
-                this.attackCooldown = 1;
-            } else {
-                this.attackCooldown = 0.1;
-            }
-
-            for (const human of this.world.category('human')) {
-                if (this.attackHitbox.intersects(human.hitbox)) {
-                    human.damage();
-                    human.x += Math.sign(human.x - this.x) * 10;
-
-                    this.facing = Math.sign(human.x - this.x);
-                }
-            }
-
-            const attack = new ClawEffect();
-            attack.x = this.x + this.facing * 30;
-            attack.y = this.y;
-            this.world.addEntity(attack);
-
-            zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
-
-            attack.x += Math.random() * 30 - 15;
-            attack.y += Math.random() * 50 - 25;
-
-            this.x += this.facing * 10;
+            this.attack();
         }
 
         this.nextHeatReset -= elapsed;
@@ -261,16 +243,19 @@ class Cat extends Entity {
                 this.vX = 0;
             }
 
-            if (!this.stickingToWall)
-            if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
-                this.wallStickX = this.x;
-                this.wallStickDirection = readjustmentDirection;
+            if (!this.stickingToWall) {
+                if (y === this.y && !this.landed && this.facing !== readjustmentDirection) {
+                    this.wallStickX = this.x;
+                    this.wallStickDirection = readjustmentDirection;
+                }
             }
 
             if (this.rolling && sign(this.x - x) !== this.facing) {
                 this.rolling = false;
 
                 this.vX = sign(this.x - x) * 400;
+                zzfx(...[5,,27,.03,.01,.03,3,.8,,,,,.01,,128,.9,.08,.69,.01,.21,110]); // Blip 471
+                // zzfx(...[0.3,,365,.01,.04,.13,3,2.9,,-17,,,,1.3,41,,.08,.54,.03,,923]); // Hit 508
                 // this.x += sign(this.x - x) * 25;
             }
         }
@@ -279,6 +264,7 @@ class Cat extends Entity {
             this.wallStickX = 0;
         } else {
             this.viewAngle = -Math.PI / 2;
+            this.lastStickToWall = this.age;
         }
     }
 
@@ -286,13 +272,49 @@ class Cat extends Entity {
         return this.age - this.lastLanded < 0.1;
     }
 
+    attack() {
+        this.releasedAttack = false;
+        this.lastAttack = this.age;
+
+        firstItem(this.world.category('camera')).shake(0.05, 5);
+
+        this.nextHeatReset = 0.5;
+        this.heat++;
+        if (this.heat >= 5) {
+            this.attackCooldown = 1;
+        } else {
+            this.attackCooldown = 0.1;
+        }
+
+        for (const human of this.world.category('human')) {
+            if (this.attackHitbox.intersects(human.hitbox)) {
+                human.damage();
+                human.x += Math.sign(human.x - this.x) * 10;
+
+                this.facing = Math.sign(human.x - this.x);
+            }
+        }
+
+        const attack = new ClawEffect();
+        attack.x = this.x + this.facing * 60;
+        attack.y = this.y;
+        this.world.addEntity(attack);
+
+        zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
+
+        attack.x += Math.random() * 30 - 15;
+        attack.y += Math.random() * 50 - 25;
+
+        this.x += this.facing * 20;
+    }
+
     damage() {
+        firstItem(this.world.category('camera')).shake(0.1, 10);
+
         if (--this.health <= 0) {
             this.world.removeEntity(this);
 
             zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
-
-            G.screens.push(new GameOverScreen());
         }
 
         for (let i = 0; i < 100; i++) {
@@ -302,8 +324,7 @@ class Cat extends Entity {
             this.world.addEntity(part);
         }
 
-        const flash = new Flash('#fff');
-        this.world.addEntity(flash);
+        const flash = this.world.addEntity(new Flash('#fff'));
         this.world.addEntity(new Interpolator(flash, 'alpha', 0.5, 0, 0.2));
         // TODO maybe should clean up the flash? eh not much of a perf hit
     }

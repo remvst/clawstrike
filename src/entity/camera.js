@@ -23,6 +23,8 @@ class Camera extends Entity {
         this.hitbox.width = CANVAS_WIDTH / this.appliedZoom;
         this.hitbox.height = CANVAS_HEIGHT / this.appliedZoom;
 
+        if (!this.target) return;
+
         const dist = distance(this, this.target)
         const angle = angleBetween(this, this.target);
         const appliedDist = min(dist, dist * elapsed * 4);

@@ -39,10 +39,12 @@ const JS_FILES = [
     'entity/interpolator.js',
 
     'screen/screen.js',
+    'screen/world-screen.js',
     'screen/gameplay-screen.js',
     'screen/main-menu-screen.js',
     'screen/pause-screen.js',
     'screen/game-over-screen.js',
+    'screen/game-complete-screen.js',
 
     'level/matrix.js',
     'level/serialization.js',
@@ -70,6 +72,9 @@ const CONSTANTS = {
     "MOBILE_BUTTON_SIZE": 50,
 
     "SONG_VOLUME": 0.5,
+
+    "HUMAN_VISION_DISTANCE": 750,
+    "HUMAN_VISION_DIVIDER": 4,
 
     "DEBUG_INFO": 0,
     "DEBUG_HITBOXES": 0,
@@ -197,7 +202,7 @@ const argv = yargs(process.argv.slice(2)).options({
     js += 'ALL_LEVELS = [';
 
     for (const path of [
-        // 'level/levels/blank.js',
+        'level/levels/blank.js',
         'level/levels/tutorial-v2.js',
         'level/levels/tutorial-wall-jump.js',
         'level/levels/tutorial-roll.js',
@@ -213,6 +218,7 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/medium.js',
         'level/levels/stuff.js',
         'level/levels/green.js',
+        'level/levels/vertical.js',
     ]) {
         js += await fs.readFile('src/' + path, 'utf-8') + ',';
     }

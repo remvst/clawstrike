@@ -5,15 +5,52 @@ class Game {
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.screens = [new GameplayScreen(ALL_LEVELS[0])];
-
-        const backgroundScreen = new GameplayScreen(ALL_LEVELS[0]);
-        this.screens = [
-            backgroundScreen,
-            new MainMenuScreen(backgroundScreen),
-        ];
+        this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
+        this.screens = [];
 
         this.frame();
+        this.startNavigation();
+    }
+
+    async startNavigation() {
+        while (true) {
+            this.runTime = 0;
+            this.runLevelIndex = 0;
+
+            for (let level = 0 ; level < ALL_LEVELS.length; level++) {
+                this.runLevelIndex = level;
+
+                let success;
+                for (let attempt = 0; !success ; attempt++) {
+                    try {
+                        const gameplay = this.navigate(new GameplayScreen(ALL_LEVELS[level]), true);
+                        if (!attempt && !level) this.navigate(new MainMenuScreen(gameplay));
+
+                        // Reveal the level
+                        this.navigate(new TransitionScreen(0, -1)).await();
+
+                        await gameplay.await();
+
+                        success = true;
+
+                    } catch (err) {
+                        await this.navigate(new GameOverScreen()).await();
+                        this.screens = []; // Fix flickering
+                    }
+
+                    // Hide the level
+                    await this.navigate(new TransitionScreen(1, 0)).await();
+                }
+            }
+
+            this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
+            localStorage[nomangle("bt")] = this.bestRunTime;
+
+            const blankScreen = this.navigate(new WorldScreen([]));
+            await this.navigate(new GameCompleteScreen(blankScreen)).await();
+            await this.navigate(new TransitionScreen(1, 0)).await();
+            this.screens = []; // Fix flickering
+        }
     }
 
     frame() {
@@ -66,5 +103,11 @@ class Game {
         }
 
         requestAnimationFrame(() => this.frame());
+    }
+
+    navigate(screen, reset) {
+        if (reset) this.screens = [];
+        this.screens.push(screen);
+        return screen;
     }
 }

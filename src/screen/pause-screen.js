@@ -6,7 +6,7 @@ class PauseScreen extends Screen {
         this.released ||= !downKeys[27];
 
         if (downKeys[27] && this.released && this.isForeground()) {
-            G.screens.pop();
+            this.resolve();
             downKeys = {};
         }
     }

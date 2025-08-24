@@ -1,3 +1,5 @@
+let TOUCH_DOWN;
+
 ontouchstart = (event) => {
     inputMode = INPUT_MODE_TOUCH;
     event.preventDefault();
@@ -30,6 +32,8 @@ updateTouches = (touches) => {
         downKeys[38] = downKeys[38] || isBetween(0.75, relX, 1) && out.y > can.height - 300;
         downKeys[32] = downKeys[32] || isBetween(0.75, relX, 1) && out.y < can.height - 300;
     }
+
+    TOUCH_DOWN = touches.length > 0;
 };
 
 getEventPosition = (event, can, out) => {

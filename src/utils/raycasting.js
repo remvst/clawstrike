@@ -56,7 +56,7 @@ class Raycaster {
             y = startY;
 
         while (pointDistance(x, y, startX, startY) < maxDistance) {
-            if (DEBUG) {
+            if (DEBUG && G) {
                 G.castIterations++;
             }
             if (this.hasBlock(x, y, 0)) {
