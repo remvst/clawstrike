@@ -50,14 +50,8 @@ class GameCompleteScreen extends Screen {
 
         this.renderTitle(nomangle('CONGRATULATIONS'));
 
-        ctx.wrap(() => {
-            if (this.age % 2 < 0.5) return;
-
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 40px Impact';
-            ctx.fillText('Main menu: [SPACE]'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 2 / 3 + 50);
-        });
+        this.renderCommands([
+            nomangle('PRESS [SPACE] TO DISMISS'),
+        ]);
     }
 }
