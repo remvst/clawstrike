@@ -109,8 +109,32 @@ class MainMenuScreen extends Screen {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = 'bold 40px Impact';
-            ctx.fillText('[SPACE] to start'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 2 / 3 + 50);
+            ctx.font = '20px Impact';
+            ctx.letterSpacing = '0.15em';
+
+            ctx.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 2 / 3 + 60);
+
+            const commands = [
+                [nomangle('START NEW GAME'), nomangle('[SPACE]')],
+                [nomangle('9 LIVES MODE'), nomangle('[9]')],
+                [nomangle('DIFFICULTY: NORMAL'), nomangle('[K]')],
+            ];
+            const spacing = 35;
+
+            ctx.translate(0, -((commands.length - 1) * spacing) / 2);
+
+            for (const [command, shortcut] of commands) {
+                ctx.textAlign = 'right';
+                ctx.fillText(command, -10, 0);
+
+                ctx.textAlign = 'center';
+                ctx.fillText('-', 0, 0);
+
+                ctx.textAlign = 'left';
+                ctx.fillText(shortcut, 10, 0);
+
+                ctx.translate(0, spacing);
+            }
         });
     }
 }
