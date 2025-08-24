@@ -103,7 +103,10 @@ class Human extends Entity {
                 this.seesCat = cat;
 
                 // Cat was just spotted, delay the next shot a bit
-                if (!seesCat) this.nextShot = 0.2;
+                if (!seesCat) {
+                    this.nextShot = 0.2;
+                    zzfx(...[2,,400,.02,.02,.25,2,2.5,,114,,,,.3,,.1,.08,.63,.01,,464]); // Pickup 605
+                }
             }
         }
 
