@@ -14,7 +14,7 @@ class MenuScreen extends Screen {
 
         if (this.released) {
             for (const { detect, action, playSound } of this.commands) {
-                if (detect()) {
+                if (detect?.()) {
                     if (playSound) zzfx(...[.5,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
                     this.released = false;
                     action();
@@ -45,15 +45,13 @@ class MenuScreen extends Screen {
     }
 
     renderCommands() {
-        if (this.age % 2 < 1.5) {
-            const spacing = 50;
+        const spacing = 50;
 
-            ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
+        ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
 
-            for (const { label } of this.commands) {
-                ctx.wrap(() => this.renderCommandText(label));
-                ctx.translate(0, spacing);
-            }
+        for (const { label, detect } of this.commands) {
+            if (this.age % 2 < 1.5 || !detect) ctx.wrap(() => this.renderCommandText(label));
+            ctx.translate(0, spacing);
         }
     }
 

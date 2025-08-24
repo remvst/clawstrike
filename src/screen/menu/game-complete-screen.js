@@ -5,6 +5,12 @@ class GameCompleteScreen extends MenuScreen {
         this.worldScreen = worldScreen;
 
         this.title = nomangle('CONGRATULATIONS');
+        this.addCommand(nomangle('TIME: ') + formatTime(G.runTime));
+        this.addCommand(nomangle('DEATHS: ') + G.runDeaths);
+        this.addCommand('');
+        this.addCommand(nomangle('BEST TIME: ') + formatTime(G.bestRunTime));
+        this.addCommand('');
+        this.addCommand('');
         this.addCommand(
             nomangle('PRESS [SPACE] TO DISMISS'),
             () => downKeys[32] || (inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN),
