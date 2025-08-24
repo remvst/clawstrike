@@ -5,7 +5,7 @@ import fs from 'fs/promises';
 
 (async function main() {
     // const songId = '2025-08-22T03-40-11-162Z';
-    // const songId = '2025-08-22T03-51-09-925Z';
+    // const songId = '2025-08-22T06-18-13-376Z';
     const songId = new Date().toISOString().replace(/[:.]/g, '-');
 
     const outPath = 'ai/out/' + songId;
@@ -37,7 +37,8 @@ import fs from 'fs/promises';
 
         ## 2. Defining the instruments
 
-        Define each instrument that will be used in the song (at least 3).
+        Define each instrument that will be used in the song (at least 4, 5 is a good number).
+        We're going to need at least a melody, a bass and a drum.
         Each instrument should be defined following this JSON format: ${JSON.stringify(formats.instrument)}
 
         ## 3. Define the patterns for each instrument
@@ -52,6 +53,7 @@ import fs from 'fs/promises';
         Assemble the instruments and their patterns you generated into the song.
         Remember that patterns have up to 16 notes, but you'll need arrays of 32 items under the "n" key.
         Include breaks between notes to accomodate.
+        When including a pattern in the sequence, use the pattern index starting at 1 (i.e. the first pattern is 1, second pattern is 2). Do not include "0" as it would be a blank.
         Generate a final JSON object that contains everything in the sonantx-live format: ${JSON.stringify(formats.song)}
         `,
     });
