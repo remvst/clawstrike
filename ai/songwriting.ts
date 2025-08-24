@@ -5,7 +5,7 @@ import fs from 'fs/promises';
 
 (async function main() {
     // const songId = '2025-08-22T03-40-11-162Z';
-    // const songId = '2025-08-22T06-18-13-376Z';
+    // const songId = '2025-08-24T15-10-22-781Z';
     const songId = new Date().toISOString().replace(/[:.]/g, '-');
 
     const outPath = 'ai/out/' + songId;
