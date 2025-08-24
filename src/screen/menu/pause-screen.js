@@ -14,7 +14,7 @@ class PauseScreen extends MenuScreen {
         this.renderTitle(nomangle('PAUSED'));
 
         this.renderCommands([
-            [nomangle('RESUME'), nomangle('[ESC]')],
+            nomangle('PRESS [ESC] TO RESUME'),
         ]);
     }
 

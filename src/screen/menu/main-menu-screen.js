@@ -95,7 +95,7 @@ class MainMenuScreen extends MenuScreen {
 
         this.renderCommands([
             nomangle('PRESS [SPACE] TO START'),
-            nomangle('PRESS [K] TO CHANGE THE DIFFICULTY'),
+            nomangle('PRESS [K] TO CHANGE DIFFICULTY'),
         ]);
     }
 }
