@@ -84,6 +84,11 @@ class MainMenuScreen extends MenuScreen {
         G.runTime = 0;
     }
 
+    cycle(elapsed) {
+        super.cycle(elapsed);
+        for (let k = 37 ; k <= 40 ; k++) downKeys[k] = false; // disable arrow keys
+    }
+
     renderTitle() {
         ctx.wrap(() => {
             this.claw ||= (() => {
