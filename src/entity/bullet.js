@@ -49,10 +49,13 @@ class Bullet extends Entity {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
 
-        ctx.shadowColor = '#000';
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        // ctx.shadowColor = '#000';
+        // ctx.shadowOffsetX = 2;
+        // ctx.shadowOffsetY = 2;
         ctx.fillStyle = '#fff';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
         ctx.fillRect(3, -3, -20, 6);
+        ctx.strokeRect(3, -3, -20, 6);
     }
 }
