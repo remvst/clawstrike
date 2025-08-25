@@ -36,15 +36,13 @@ class PhysicalParticle extends Entity {
     }
 
     render() {
-        const speed = pointDistance(0, 0, this.vX, this.vY);
-
-        const s = speed / 25;
+        const s = pointDistance(0, 0, this.vX, this.vY) / 25;
         ctx.translate(this.x, this.y);
-        ctx.rotate(atan2(this.vY, this.vX));
+        ctx.rotate(atan2(this.vY, this.vX) + PI);
         ctx.fillStyle = this.color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
-        ctx.strokeRect(-s, -2, s, 4);
-        ctx.fillRect(-s, -2, s, 4);
+        ctx.fillRect(0, -2, s, 4);
+        ctx.strokeRect(0, -2, s, 4);
     }
 }

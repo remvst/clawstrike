@@ -229,13 +229,16 @@ class Human extends Entity {
             ctx.scale(this.facing, 1);
 
             ctx.fillStyle = '#fff';
-            ctx.shadowColor = '#000';
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
+            // ctx.shadowColor = '#000';
+            // ctx.shadowOffsetX = 2;
+            // ctx.shadowOffsetY = 2;
             ctx.font = 'bold 40px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 4;
 
+            ctx.strokeText(this.seesCat ? '!' : '?', 0, 0);
             ctx.fillText(this.seesCat ? '!' : '?', 0, 0);
         });
     }
