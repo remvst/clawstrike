@@ -12,10 +12,6 @@ const alternatives = {
     81: 37,
 };
 
-document.addEventListener('keydown', (event) => {
-    downKeys[alternatives[event.keyCode] || event.keyCode] = true;
-});
-
-document.addEventListener('keyup', (event) => {
-    downKeys[alternatives[event.keyCode] || event.keyCode] = false;
-});
+document.onkeydown = (event) => downKeys[alternatives[event.keyCode] || event.keyCode] = true;
+document.onkeyup = (event) => downKeys[alternatives[event.keyCode] || event.keyCode] = false;
+onblur = () => downKeys = {};
