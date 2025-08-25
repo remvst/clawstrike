@@ -378,14 +378,23 @@ class Cat extends Entity {
         // Body
         ctx.wrap(() => {
             ctx.lineWidth = BODY_THICKNESS;
-            ctx.lineJoin = 'round';
-            if (this.walking) ctx.rotate(Math.sin(this.age * PI * 2 * 5) * Math.PI / 16);
+            ctx.lineJoin = 'square';
+            ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.moveTo(-BODY_LENGTH / 2, 0);
-            if (this.rolling) ctx.lineTo(0, -10);
-            // if (this.walking) ctx.lineTo(0, Math.sin(this.age * Math.PI * 2 * 5) * 2);
-            ctx.lineTo(BODY_LENGTH / 2, 0);
+            ctx.moveTo(-BODY_LENGTH / 2 + BODY_THICKNESS / 2, 0);
+            const curveHeight = this.rolling
+                ? -10
+                : sin(this.age * PI * 2 * 4) * this.walking * 2;
+            ctx.bezierCurveTo(
+                0, curveHeight,
+                0, curveHeight,
+                BODY_LENGTH / 2 - BODY_THICKNESS / 2, 0,
+            );
             ctx.stroke();
+
+            ctx.fillStyle = '#000';
+            ctx.fillRect(-BODY_LENGTH / 2, 0, BODY_THICKNESS / 2, BODY_THICKNESS / 2);
+            ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
         });
 
         let frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
