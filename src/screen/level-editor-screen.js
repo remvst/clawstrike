@@ -426,9 +426,19 @@ class LevelEditorScreen extends WorldScreen {
         G.screens.push(new LevelEditorScreen(json));
     }
 
-    test() {
+    async test() {
         const serialized = serializeWorld(this.world);
-        G.screens.push(new TestScreen(serialized));
+
+        while (true) {
+            try {
+                await G.navigate(new TestScreen(serialized)).await();
+                break;
+            } catch (error) {
+                await G.navigate(new GameOverScreen()).await();
+                G.screens.pop();
+            }
+        }
+
     }
 
     optimize() {
@@ -511,7 +521,7 @@ class TestScreen extends GameplayScreen {
         super.cycle(elapsed);
 
         if (downKeys[27]) {
-            G.screens.pop();
+            this.resolve();
         }
     }
 
