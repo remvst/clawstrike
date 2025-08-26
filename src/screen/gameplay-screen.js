@@ -3,8 +3,6 @@ class GameplayScreen extends WorldScreen {
         super(level);
 
         this.addDifficultyChangeCommand();
-
-        this.world.addEntity(new Interpolator(this, 'transitionProgress', 0, -1, 0.5)).await();
     }
 
     cycle(elapsed) {

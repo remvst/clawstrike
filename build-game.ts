@@ -172,6 +172,11 @@ const MANGLE_PARAMS = {
         "text",
         "source",
         "frequency",
+        "spikes",
+        "type",
+        "matrix",
+        "transitionProgress",
+        "water",
     ]
 };
 
