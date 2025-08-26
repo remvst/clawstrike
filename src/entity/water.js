@@ -37,18 +37,21 @@ class Water extends Entity {
 
         ctx.globalAlpha = 0.5;
 
-        for (const offset of [-10, 0]) {
+        let speed = 10;
+        for (const offset of [-20, -10, 0]) {
             ctx.wrap(() => {
                 ctx.beginPath();
                 for (let x = 0 ; x <= this.length; x += 2) {
                     ctx.lineTo(
                         x,
-                        sin((x - this.age * 10) * TWO_PI / 20) * 2 + offset
+                        sin((x - this.age * speed) * TWO_PI / 20) * 2 + offset
                     );
                 }
                 ctx.lineTo(this.length, this.depth);
                 ctx.lineTo(0, this.depth);
                 ctx.fill();
+
+                speed *= 1.5;
             });
         }
     }
