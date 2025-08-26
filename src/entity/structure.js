@@ -56,11 +56,11 @@ class Structure extends Entity {
 
         const camera = firstItem(this.world.category('camera'));
 
-        const minX = max(this.x, camera.actual.x - CANVAS_WIDTH / 2);
-        const minY = max(this.y, camera.actual.y - CANVAS_HEIGHT / 2);
+        const minX = max(this.x, camera.actual.x - CANVAS_WIDTH / 2) + CELL_SIZE;
+        const minY = max(this.y, camera.actual.y - CANVAS_HEIGHT / 2) + CELL_SIZE;
 
-        const maxX = min(this.x + this.width, camera.actual.x + CANVAS_WIDTH / 2);
-        const maxY = min(this.y + this.height, camera.actual.y + CANVAS_HEIGHT / 2);
+        const maxX = min(this.x + this.width, camera.actual.x + CANVAS_WIDTH / 2) - CELL_SIZE;
+        const maxY = min(this.y + this.height, camera.actual.y + CANVAS_HEIGHT / 2) - CELL_SIZE;
 
         ctx.fillStyle = this.color;
         ctx.fillRect(minX, minY, maxX - minX, maxY - minY);
