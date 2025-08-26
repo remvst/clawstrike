@@ -343,7 +343,8 @@ class LevelEditorScreen extends WorldScreen {
         const actions = [
             this.contextMenuButton('Add Cat', () => this.insertEntity(new Cat())),
             this.contextMenuButton('Add Human', () => this.insertEntity(new Human())),
-            this.contextMenuButton('Add Spike', () => this.insertEntity(new Spikes())),
+            this.contextMenuButton('Add Spikes', () => this.insertEntity(new Spikes())),
+            this.contextMenuButton('Add Water', () => this.insertEntity(new Water())),
             this.contextMenuButton('Add Label', () => this.insertEntity(new Label('Hello world!'))),
             this.contextMenuSwatchSet([
                 this.colorSwatch('#f44'),
@@ -372,10 +373,20 @@ class LevelEditorScreen extends WorldScreen {
                         this.selected.angle = adjusted * Math.PI / 180;
                     }),
                 );
+            }
+            if (this.selected instanceof Spikes || this.selected instanceof Water) {
                 actions.push(
                     this.contextMenuButton('Set length', () => {
                         const length = parseInt(prompt('Length?', this.selected.length));
                         this.selected.length = roundToNearest(length, CELL_SIZE) || this.selected.length;
+                    }),
+                );
+            }
+            if (this.selected instanceof Water) {
+                actions.push(
+                    this.contextMenuButton('Set depth', () => {
+                        const depth = parseInt(prompt('Depth?', this.selected.depth));
+                        this.selected.depth = roundToNearest(depth, CELL_SIZE) || this.selected.depth;
                     }),
                 );
             }

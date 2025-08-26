@@ -18,6 +18,7 @@ class HUD extends Entity {
         this.cat = cat;
         this.clawAge = 0;
         this.alpha = 1;
+        this.z = 9;
     }
 
     cycle(elapsed) {

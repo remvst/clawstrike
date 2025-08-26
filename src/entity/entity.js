@@ -1,8 +1,9 @@
 class Entity {
     constructor() {
         this.x = this.y = this.previousX = this.previousY = this.age = 0;
+        this.z = 0;
         this.categories = [];
-        this.seed = Math.random();
+        this.seed = random();
 
         this.cachedHitbox = new Rect();
     }
@@ -18,6 +19,10 @@ class Entity {
 
         this.previousX = this.x;
         this.previousY = this.y;
+    }
+
+    renderBackground() {
+
     }
 
     render() {

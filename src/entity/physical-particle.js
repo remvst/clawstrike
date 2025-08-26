@@ -9,6 +9,8 @@ class PhysicalParticle extends Entity {
 
         this.vX = Math.cos(this.angle) * this.speed;
         this.vY = Math.sin(this.angle) * this.speed;
+
+        this.z = 1;
     }
 
     cycle(elapsed) {

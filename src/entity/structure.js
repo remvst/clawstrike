@@ -39,6 +39,8 @@ class Structure extends Entity {
         this.color = '#f00';
         this.cellColor = '#000';
         this.raycaster = new Raycaster(this);
+
+        this.z = 2;
     }
 
     cycle(elapsed) {
@@ -47,28 +49,37 @@ class Structure extends Entity {
         this.height = this.matrix.length * CELL_SIZE;
     }
 
-    render() {
-        if (!this.matrix) return;
-
+    renderBackground() {
         this.width = this.matrix[0].length * CELL_SIZE;
         this.height = this.matrix.length * CELL_SIZE;
 
-        const rows = this.matrix.length;
-        const cols = this.matrix[0].length;
+
+        const camera = firstItem(this.world.category('camera'));
+
+        const minX = max(this.x, camera.actual.x - CANVAS_WIDTH / 2);
+        const minY = max(this.y, camera.actual.y - CANVAS_HEIGHT / 2);
+
+        const maxX = min(this.x + this.width, camera.actual.x + CANVAS_WIDTH / 2);
+        const maxY = min(this.y + this.height, camera.actual.y + CANVAS_HEIGHT / 2);
 
         ctx.fillStyle = this.color;
-        ctx.fillRect(0, 0, this.width, this.height);
+        ctx.fillRect(minX, minY, maxX - minX, maxY - minY);
 
-        ctx.wrap(() => {
-            ctx.globalAlpha = 0.05;
-            ctx.fillStyle = BACKGROUND_STRIPES;
+        ctx.globalAlpha = 0.05;
+        ctx.fillStyle = BACKGROUND_STRIPES;
 
-            const offsetY = this.age * 30;
-            const offsetX = offsetY * BACKGROUND_STRIPES.width / BACKGROUND_STRIPES.height;
+        const offsetY = this.age * 30;
+        const offsetX = offsetY * BACKGROUND_STRIPES.width / BACKGROUND_STRIPES.height;
 
-            ctx.translate(offsetX, offsetY);
-            ctx.fillRect(-offsetX, -offsetY, this.width, this.height);
-        });
+        ctx.translate(offsetX, offsetY);
+        ctx.fillRect(minX - offsetX, minY - offsetY, maxX - minX, maxY - minY);
+    }
+
+    render() {
+        if (!this.matrix) return;
+
+        const rows = this.matrix.length;
+        const cols = this.matrix[0].length;
 
         this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx, can) => {
             // Cells

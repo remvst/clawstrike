@@ -24,6 +24,10 @@ class World {
             );
 
             for (const entity of this.entities) {
+                ctx.wrap(() => entity.renderBackground());
+            }
+
+            for (const entity of this.entities) {
                 ctx.wrap(() => entity.render());
             }
 
@@ -43,6 +47,8 @@ class World {
             this.categories[categoryId] ||= new Set();
             this.categories[categoryId].add(entity);
         }
+
+        this.entities.sort((a, b) => a.z - b.z);
 
         return entity;
     }
