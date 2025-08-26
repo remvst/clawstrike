@@ -14,6 +14,8 @@ class Game {
     }
 
     async startNavigation() {
+        let promptedEasyMode;
+
         while (true) {
             this.runTime = 0;
             this.runLevelIndex = 0;
@@ -43,6 +45,14 @@ class Game {
 
                         if (this.runDeaths < this.difficulty.maxDeaths) {
                             await this.navigate(new GameOverScreen()).await();
+
+                            if (this.difficulty == DIFFICULTY_NORMAL && attempt >= 5 && !promptedEasyMode) {
+                                if (confirm(nomangle('Switch to easy mode?'))) {
+                                    this.difficulty = DIFFICULTY_EASY;
+                                }
+                                promptedEasyMode = true;
+                            }
+
                             this.screens = []; // Fix flickering
                         } else {
                             await this.navigate(new FullGameOverScreen()).await();
