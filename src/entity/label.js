@@ -40,9 +40,8 @@ class Label extends Entity {
         ctx.font = 'bold 40px Impact';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        // ctx.shadowColor = '#000';
-        // ctx.shadowOffsetX = 5;
-        // ctx.shadowOffsetY = 2;
-        ctx.fillText(this.text, 0, 0);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 4;
+        ctx.drawCommandText(this.text);
     }
 }
