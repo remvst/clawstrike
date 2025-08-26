@@ -2,29 +2,6 @@ class MenuScreen extends Screen {
 
     constructor() {
         super();
-        this.commands = [];
-    }
-
-    cycle(elapsed) {
-        super.cycle(elapsed);
-
-        if (Object.values(downKeys).filter(x => x).length == 0) {
-            this.released = true;
-        }
-
-        if (this.released) {
-            for (const { detect, action, playSound } of this.commands) {
-                if (detect?.()) {
-                    if (playSound) zzfx(...[.5,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
-                    this.released = false;
-                    action();
-                }
-            }
-        }
-    }
-
-    addCommand(label, detect, action, playSound = true) {
-        this.commands.push({ label, detect, action, playSound });
     }
 
     render() {
@@ -50,7 +27,7 @@ class MenuScreen extends Screen {
         ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
 
         for (const { label, detect } of this.commands) {
-            if (this.age % 2 < 1.5 || !detect) ctx.wrap(() => this.renderCommandText(label));
+            if (this.age % 2 < 1.5 || !detect) ctx.wrap(() => this.renderCommandText(label.call ? label() : label));
             ctx.translate(0, spacing);
         }
     }
@@ -71,10 +48,12 @@ class MenuScreen extends Screen {
         ctx.translate(-totalWidth / 2, 0);
         for (const char of line.split('')) {
             if (char == '[') ctx.fillStyle = '#f00';
+            if (char == '(') ctx.fillStyle = '#0ff';
             ctx.strokeText(char, 0, 0);
             ctx.fillText(char, 0, 0);
             ctx.translate(ctx.measureText(char).width, 0);
             if (char == ']') ctx.fillStyle = '#fff';
+            if (char == ')') ctx.fillStyle = '#fff';
         }
     }
 }

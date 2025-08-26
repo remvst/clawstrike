@@ -8,6 +8,7 @@ class PauseScreen extends MenuScreen {
             () => downKeys[27],
             () => this.resolve(),
         );
+        this.addDifficultyChangeCommand();
     }
 
     absorb() {

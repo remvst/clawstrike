@@ -18,6 +18,9 @@ class Game {
             this.runLevelIndex = 0;
             this.runDeaths = 0;
 
+            const currentIndex = DIFFICULTIES.indexOf(DIFFICULTY);
+            if (currentIndex < 0) DIFFICULTY = DIFFICULTY_NORMAL;
+
             for (let level = 0 ; level < ALL_LEVELS.length; level++) {
                 this.runLevelIndex = level;
 

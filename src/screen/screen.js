@@ -4,6 +4,22 @@ class Screen {
             this.debugValues = () => ([]);
         }
         this.age = 0;
+        this.commands = [];
+    }
+
+    addCommand(label, detect, action, playSound = true) {
+        this.commands.push({ label, detect, action, playSound });
+    }
+
+    addDifficultyChangeCommand() {
+        this.addCommand(
+            () => nomangle('PRESS [K] TO SET DIFFICULTY ') + '(' + DIFFICULTY.label + ')',
+            () => downKeys[75],
+            () => {
+                const currentIndex = DIFFICULTIES.indexOf(DIFFICULTY);
+                if (currentIndex >= 0) DIFFICULTY = DIFFICULTIES[(currentIndex + 1) % DIFFICULTIES.length];
+            }
+        );
     }
 
     pop() {
@@ -35,6 +51,20 @@ class Screen {
 
     cycle(elapsed) {
         this.age += elapsed;
+
+        if (Object.values(downKeys).filter(x => x).length == 0 && !TOUCH_DOWN) {
+            this.releasedCommand = true;
+        }
+
+        if (this.releasedCommand && this.isForeground()) {
+            for (const { detect, action, playSound } of this.commands) {
+                if (detect?.()) {
+                    if (playSound) zzfx(...[.5,,500,,.02,.14,,3.2,,,325,.05,.03,,,,,.79,.04,,-1129]); // Pickup 819
+                    this.releasedCommand = false;
+                    action();
+                }
+            }
+        }
     }
 
     render() {

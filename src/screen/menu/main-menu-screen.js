@@ -16,14 +16,13 @@ class MainMenuScreen extends MenuScreen {
             this.addCommand(
                 nomangle('PRESS [9] TO START 9 LIVES MODE'),
                 () => downKeys[57],
-                () => console.log('TODO'), // TODO
+                () => {
+                    DIFFICULTY = DIFFICULTY_NINE_LIVES;
+                    this.start();
+                },
             );
         }
-        this.addCommand(
-            nomangle('PRESS [K] TO CHANGE DIFFICULTY'),
-            () => downKeys[75],
-            () => console.log('TODO'), // TODO
-        );
+        this.addDifficultyChangeCommand();
 
         if (DEBUG) {
             this.addCommand(

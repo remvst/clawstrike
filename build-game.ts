@@ -7,6 +7,7 @@ import * as terser from 'terser';
 import yargs from 'yargs/yargs';
 
 const JS_FILES = [
+    'difficulty.js',
     'globals.js',
 
     'input/keyboard.js',

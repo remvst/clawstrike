@@ -7,5 +7,6 @@ class GameOverScreen extends MenuScreen {
             () => downKeys[82] || TOUCH_DOWN,
             () => this.resolve(),
         );
+        this.addDifficultyChangeCommand();
     }
 }
