@@ -33,27 +33,15 @@ class MenuScreen extends Screen {
     }
 
     renderCommandText(line) {
-        ctx.font = '36px Impact';
+        ctx.font = nomangle('36px Impact');
         ctx.fillStyle = '#fff';
         ctx.strokeStyle = '#000';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = nomangle('middle');
         ctx.lineWidth = 5;
-        ctx.textAlign = 'left';
+        ctx.textAlign = nomangle('center');
         ctx.miterLimit = 2;
-        ctx.letterSpacing = '0.1em';
+        ctx.letterSpacing = nomangle('0.1em');
 
-        const chars = line.split('');
-        const totalWidth = chars.reduce((acc, char) => ctx.measureText(char).width + acc, 0);
-
-        ctx.translate(-totalWidth / 2, 0);
-        for (const char of line.split('')) {
-            if (char == '[') ctx.fillStyle = '#f00';
-            if (char == '(') ctx.fillStyle = '#0ff';
-            ctx.strokeText(char, 0, 0);
-            ctx.fillText(char, 0, 0);
-            ctx.translate(ctx.measureText(char).width, 0);
-            if (char == ']') ctx.fillStyle = '#fff';
-            if (char == ')') ctx.fillStyle = '#fff';
-        }
+        ctx.drawCommandText(line);
     }
 }

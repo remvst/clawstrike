@@ -53,15 +53,14 @@ class HUD extends Entity {
             for (const [label, value] of [
                 [nomangle('LEVEL'), (G.runLevelIndex + 1) + '/' + ALL_LEVELS.length],
                 [nomangle('TOTAL DEATHS'), G.runDeaths],
-                ['DIFFICULTY [K]', G.difficulty.label],
-                ['BEST', formatTime(G.bestRunTime)],
+                [nomangle('DIFFICULTY [K]'), G.difficulty.label],
+                [nomangle('BEST'), formatTime(G.bestRunTime)],
             ]) {
-                ctx.font = 'italic bold 16px Impact';
-                ctx.fillText(label, 0, 0);
-                ctx.strokeText(label, 0, 0);
+                ctx.font = nomangle('italic bold 16px Impact');
+                ctx.drawCommandText(label);
                 ctx.translate(0, 20);
 
-                ctx.font = 'italic bold 36px Impact';
+                ctx.font = nomangle('italic bold 36px Impact');
                 ctx.fillText(value, 0, 0);
                 ctx.strokeText(value, 0, 0);
                 ctx.translate(0, 50);
@@ -71,9 +70,9 @@ class HUD extends Entity {
         ctx.wrap(() => {
             ctx.translate(CANVAS_WIDTH / 2, 50);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 60px Impact';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
+            ctx.font = nomangle('bold 60px Impact');
+            ctx.textAlign = nomangle('left');
+            ctx.textBaseline = nomangle('top');
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 2;
 
@@ -81,7 +80,7 @@ class HUD extends Entity {
             const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
 
             ctx.translate(-totalWidth / 2, 0);
-            ctx.textAlign = 'center';
+            ctx.textAlign = nomangle('center');
             for (const char of formatted) {
                 const { width } = ctx.measureText(charForWidthCalculation(char));
                 ctx.fillText(char, width / 2, 0);
