@@ -9,7 +9,7 @@ class Game {
         this.screens = [];
 
         this.frame();
-        this.startNavigation();
+        setTimeout(() => this.startNavigation(), 0);
     }
 
     async startNavigation() {
