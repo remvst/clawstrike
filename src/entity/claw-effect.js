@@ -6,6 +6,7 @@ class ClawEffect extends Entity {
         this.scale = 1 + this.seed * 0.5;
         this.color = '#fff';
         this.z = 9;
+        this.stroke = true;
     }
 
     cycle(elapsed) {
@@ -58,6 +59,6 @@ class ClawEffect extends Entity {
         ctx.closePath();
         ctx.fill();
 
-        ctx.stroke();
+        if (this.stroke) ctx.stroke();
     }
 }

@@ -199,6 +199,7 @@ class HUD extends Entity {
                 this.claw.angle = PI / 4;
                 this.claw.x = CANVAS_WIDTH * 7 / 8;
                 this.claw.y = CANVAS_HEIGHT - 400;
+                this.claw.stroke = false;
                 this.claw.render();
             });
         });
