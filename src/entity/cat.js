@@ -6,6 +6,8 @@ class Cat extends Entity {
 
         this.z = 1;
 
+        this.damageTaken = 0;
+
         this.categories.push('cat');
         this.facing = 1;
         this.attackCooldown = 0;
@@ -27,8 +29,6 @@ class Cat extends Entity {
         this.vY = 0;
 
         this.viewAngle = 0;
-
-        this.health = 1;
 
         this.radiusX = 20;
         this.radiusY = 20;
@@ -312,14 +312,17 @@ class Cat extends Entity {
 
     damage() {
         firstItem(this.world.category('camera')).shake(0.1, 10);
+        zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
-        if (--this.health <= 0) {
+        let particleCount = 10;
+        if (++this.damageTaken >= G.difficulty.maxDamageTaken) {
+            particleCount = 100;
+
             this.world.removeEntity(this);
-
             zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
         }
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < particleCount; i++) {
             const part = new PhysicalParticle();
             part.x = this.x + rnd(-this.radiusX, this.radiusX);
             part.y = this.y + rnd(-this.radiusY, this.radiusY);
