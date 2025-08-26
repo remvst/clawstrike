@@ -155,12 +155,6 @@ class LevelEditorScreen extends WorldScreen {
             }
         };
 
-        can.onclick = () => {
-            if (this.editMode !== 'structure') return;
-            if (this.contextMenu.style.display === 'block') return;
-            // this.applyStructureChange();
-        };
-
         this.selected = null;
     }
 
@@ -348,12 +342,12 @@ class LevelEditorScreen extends WorldScreen {
             this.contextMenuButton('Add Label', () => this.insertEntity(new Label('Hello world!'))),
             this.contextMenuSwatchSet([
                 this.colorSwatch('#f44'),
-                this.colorSwatch('#0c0'),
+                this.colorSwatch('#7d7'),
                 this.colorSwatch('#08f'),
-                this.colorSwatch('#f80'),
-                this.colorSwatch('#f08'),
+                this.colorSwatch('#f98'),
                 this.colorSwatch('#b4f'),
                 this.colorSwatch('#4cb'),
+                this.colorSwatch('#f94'),
             ]),
         ];
 
