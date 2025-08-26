@@ -13,11 +13,11 @@ class Screen {
 
     addDifficultyChangeCommand() {
         this.addCommand(
-            () => nomangle('PRESS [K] TO SET DIFFICULTY ') + '(' + DIFFICULTY.label + ')',
+            () => nomangle('PRESS [K] TO SET DIFFICULTY ') + '(' + G.difficulty.label + ')',
             () => downKeys[75],
             () => {
-                const currentIndex = DIFFICULTIES.indexOf(DIFFICULTY);
-                if (currentIndex >= 0) DIFFICULTY = DIFFICULTIES[(currentIndex + 1) % DIFFICULTIES.length];
+                const currentIndex = DIFFICULTIES.indexOf(G.difficulty);
+                if (currentIndex >= 0) G.difficulty = DIFFICULTIES[(currentIndex + 1) % DIFFICULTIES.length];
             }
         );
     }

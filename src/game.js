@@ -7,6 +7,7 @@ class Game {
 
         this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
         this.screens = [];
+        this.difficulty = DIFFICULTY_NORMAL
 
         this.frame();
         setTimeout(() => this.startNavigation(), 0);
@@ -18,8 +19,8 @@ class Game {
             this.runLevelIndex = 0;
             this.runDeaths = 0;
 
-            const currentIndex = DIFFICULTIES.indexOf(DIFFICULTY);
-            if (currentIndex < 0) DIFFICULTY = DIFFICULTY_NORMAL;
+            const currentIndex = DIFFICULTIES.indexOf(this.difficulty);
+            if (currentIndex < 0) this.difficulty = DIFFICULTY_NORMAL;
 
             for (let level = 0 ; level < ALL_LEVELS.length; level++) {
                 this.runLevelIndex = level;
@@ -39,8 +40,14 @@ class Game {
 
                     } catch (err) {
                         this.runDeaths++;
-                        await this.navigate(new GameOverScreen()).await();
-                        this.screens = []; // Fix flickering
+
+                        if (this.runDeaths < this.difficulty.maxDeaths) {
+                            await this.navigate(new GameOverScreen()).await();
+                            this.screens = []; // Fix flickering
+                        } else {
+                            await this.navigate(new FullGameOverScreen()).await();
+                            await this.startNavigation();
+                        }
                     }
 
                     // Hide the level

@@ -53,7 +53,7 @@ class HUD extends Entity {
             for (const [label, value] of [
                 [nomangle('LEVEL'), (G.runLevelIndex + 1) + '/' + ALL_LEVELS.length],
                 [nomangle('TOTAL DEATHS'), G.runDeaths],
-                ['DIFFICULTY [K]', DIFFICULTY.label],
+                ['DIFFICULTY [K]', G.difficulty.label],
                 ['BEST', formatTime(G.bestRunTime)],
             ]) {
                 ctx.font = 'italic bold 16px Impact';

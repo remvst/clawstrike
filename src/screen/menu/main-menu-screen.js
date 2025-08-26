@@ -17,7 +17,7 @@ class MainMenuScreen extends MenuScreen {
                 nomangle('PRESS [9] TO START 9 LIVES MODE'),
                 () => downKeys[57],
                 () => {
-                    DIFFICULTY = DIFFICULTY_NINE_LIVES;
+                    G.difficulty = DIFFICULTY_NINE_LIVES;
                     this.start();
                 },
             );

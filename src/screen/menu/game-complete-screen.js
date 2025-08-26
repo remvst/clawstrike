@@ -5,11 +5,12 @@ class GameCompleteScreen extends MenuScreen {
         this.worldScreen = worldScreen;
 
         this.title = nomangle('CONGRATULATIONS');
-        this.addCommand(nomangle('TIME: ') + formatTime(G.runTime));
+        this.addCommand(nomangle('DIFFICULTY: ') + G.difficulty.label);
         this.addCommand(nomangle('DEATHS: ') + G.runDeaths);
-        this.addCommand('');
+        this.addCommand(nomangle('TIME: ') + formatTime(G.runTime));
         this.addCommand(nomangle('BEST TIME: ') + formatTime(G.bestRunTime));
         this.addCommand('');
+        this.addCommand('9 LIVES MODE UNLOCKED!');
         this.addCommand('');
         this.addCommand(
             nomangle('PRESS [SPACE] TO DISMISS'),
@@ -43,6 +44,7 @@ class GameCompleteScreen extends MenuScreen {
                     const particle = this.worldScreen.world.addEntity(new PhysicalParticle(color));
                     particle.x = x;
                     particle.y = y;
+                    particle.z = 999;
                 }
 
                 await world.addEntity(new Interpolator(flash, '_', 0, 0, rnd(0.25, 0.5))).await();
