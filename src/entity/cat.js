@@ -4,6 +4,8 @@ class Cat extends Entity {
 
         this.type = 'cat';
 
+        this.z = 1;
+
         this.categories.push('cat');
         this.facing = 1;
         this.attackCooldown = 0;

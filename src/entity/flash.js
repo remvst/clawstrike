@@ -3,6 +3,7 @@ class Flash extends Entity {
         super();
         this.color = color;
         this.alpha = 1;
+        this.z = 5;
     }
 
     render() {
