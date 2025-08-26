@@ -3,6 +3,8 @@ canvasPrototype.drawCommandText = function(text) {
     this.wrap(() => {
         const chars = text.split('');
 
+        ctx.miterLimit = 2;
+
         if (this.textAlign == nomangle('center')) {
             this.translate(-ctx.measureText(text).width / 2, 0);
             this.textAlign = nomangle('left');

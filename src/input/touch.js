@@ -1,21 +1,19 @@
 let TOUCH_DOWN;
 
-ontouchstart = (event) => {
+ontouchstart = (evt) => {
     inputMode = INPUT_MODE_TOUCH;
-    event.preventDefault();
-    updateTouches(event.touches);
+    evt.preventDefault();
+    updateTouches(evt.touches);
 };
 
-ontouchmove = (event) => {
-    event.preventDefault();
-    updateTouches(event.touches);
+ontouchmove = (evt) => {
+    evt.preventDefault();
+    updateTouches(evt.touches);
 };
 
-ontouchend = (event) => {
-    event.preventDefault();
-    updateTouches(event.touches);
-
-    if (onclick) onclick();
+ontouchend = (evt) => {
+    evt.preventDefault();
+    updateTouches(evt.touches);
 };
 
 updateTouches = (touches) => {
@@ -36,9 +34,9 @@ updateTouches = (touches) => {
     TOUCH_DOWN = touches.length > 0;
 };
 
-getEventPosition = (event, can, out) => {
+getEventPosition = (evt, can, out) => {
     if (!can) return;
     const canvasRect = can.getBoundingClientRect();
-    out.x = (event.pageX - canvasRect.left) / canvasRect.width * can.width;
-    out.y = (event.pageY - canvasRect.top) / canvasRect.height * can.height;
+    out.x = (evt.pageX - canvasRect.left) / canvasRect.width * can.width;
+    out.y = (evt.pageY - canvasRect.top) / canvasRect.height * can.height;
 }
