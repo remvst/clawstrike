@@ -7,7 +7,7 @@ class MainMenuScreen extends MenuScreen {
         this.title = document.title;
         this.addCommand(
             nomangle('PRESS [SPACE] TO START'),
-            () => downKeys[32] || inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN,
+            () => downKeys[32] || TOUCH_DOWN,
             () => this.start(),
             false,
         );
