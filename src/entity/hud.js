@@ -1,4 +1,4 @@
-const renderArrow = () => {
+renderArrow = () => {
     ctx.beginPath();
     ctx.moveTo(MOBILE_BUTTON_SIZE / 2, 0);
     ctx.lineTo(-MOBILE_BUTTON_SIZE / 2, MOBILE_BUTTON_SIZE / 2);
@@ -9,7 +9,6 @@ const renderArrow = () => {
 formatTime = x => {
     return (~~(x / 60)).toString().padStart(2, '0') + ':' + (x % 60).toFixed(2).padStart(5, '0');
 };
-charForWidthCalculation = x => isNaN(x) ? x : '0';
 
 class HUD extends Entity {
     constructor(cat) {
