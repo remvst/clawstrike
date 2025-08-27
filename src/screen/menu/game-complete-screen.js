@@ -36,12 +36,9 @@ class GameCompleteScreen extends MenuScreen {
             while (this.isForeground()) {
                 const x = camera.x + rnd(-CANVAS_WIDTH / 3, CANVAS_WIDTH / 3);
                 const y = camera.y + rnd(-CANVAS_HEIGHT / 4, 0);
-                const color = pick([
-                    '#fff',
-                ]);
 
                 for (let i = 0 ; i < 50; i++) {
-                    const particle = this.worldScreen.world.addEntity(new PhysicalParticle(color));
+                    const particle = this.worldScreen.world.addEntity(new PhysicalParticle('#fff'));
                     particle.x = x;
                     particle.y = y;
                     particle.z = 999;

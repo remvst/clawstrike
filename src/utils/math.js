@@ -43,10 +43,6 @@ angleBetween = (a, b) => {
     return atan2(b.y - a.y, b.x - a.x);
 }
 
-pick = (arr) => {
-    return arr[~~floor(random() * arr.length)];
-}
-
 rnd = (min, max) => {
     return random() * (max - min) + min;
 }

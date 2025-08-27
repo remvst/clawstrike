@@ -16,8 +16,6 @@ class Interpolator extends Entity {
         this.duration = duration;
         this.easing = easing;
 
-        this.affectedBySpeedRatio = object.affectedBySpeedRatio;
-
         this.cycle(0);
     }
 
