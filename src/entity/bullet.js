@@ -10,8 +10,8 @@ class Bullet extends Entity {
 
     cycle(elapsed) {
         const BULLET_SPEED = 800;
-        this.x += elapsed * Math.cos(this.angle) * BULLET_SPEED;
-        this.y += elapsed * Math.sin(this.angle) * BULLET_SPEED;
+        this.x += elapsed * cos(this.angle) * BULLET_SPEED;
+        this.y += elapsed * sin(this.angle) * BULLET_SPEED;
 
         // Structure hits
         for (const structure of this.world.category('structure')) {

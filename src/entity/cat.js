@@ -72,7 +72,7 @@ class Cat extends Entity {
     }
 
     get stickingToWall() {
-        if (Math.abs(this.x - this.wallStickX) > 5) return false;
+        if (abs(this.x - this.wallStickX) > 5) return false;
         if (this.landed) return false;
 
         let hasWall = false;
@@ -121,7 +121,7 @@ class Cat extends Entity {
             if (downKeys[39]) x = 1;
             if (this.rolling) x = x || this.facing;
 
-            const resisting = x && Math.sign(x) !== Math.sign(this.vX);
+            const resisting = x && sign(x) !== sign(this.vX);
             const pushing = x && !resisting;
 
             {
@@ -161,7 +161,7 @@ class Cat extends Entity {
                 }
 
                 // if (pushing) {
-                //     targetVX = x * Math.max(Math.abs(targetVX), Math.abs(this.vX));
+                //     targetVX = x * max(abs(targetVX), abs(this.vX));
                 // }
 
                 this.vX += between(-elapsed * acceleration, targetVX - this.vX, elapsed * acceleration);
@@ -196,14 +196,14 @@ class Cat extends Entity {
         }
 
         let targetAngle = 0;
-        let angleSpeed = Math.PI * 2;
+        let angleSpeed = PI * 2;
         if (this.landed) {
             targetAngle = 0;
             angleSpeed *= 4;
         } else if (isRising) {
-            targetAngle = -Math.PI / 3;
+            targetAngle = -PI / 3;
         } else {
-            targetAngle = Math.PI / 4;
+            targetAngle = PI / 4;
         }
 
         const angleDiff = normalizeAngle(targetAngle - this.viewAngle);
@@ -240,7 +240,7 @@ class Cat extends Entity {
         }
 
         if (x !== this.x) {
-            const readjustmentDirection = Math.sign(this.x - x);
+            const readjustmentDirection = sign(this.x - x);
             if (this.facing !== readjustmentDirection) {
                 this.vX = 0;
             }
@@ -265,7 +265,7 @@ class Cat extends Entity {
         if (!this.stickingToWall) {
             this.wallStickX = 0;
         } else {
-            this.viewAngle = -Math.PI / 2;
+            this.viewAngle = -PI / 2;
             this.lastStickToWall = this.age;
         }
     }
@@ -292,10 +292,10 @@ class Cat extends Entity {
         for (const human of this.world.category('human')) {
             if (this.attackHitbox.intersects(human.hitbox)) {
                 human.damage();
-                human.x += Math.sign(human.x - this.x) * 10;
+                human.x += sign(human.x - this.x) * 10;
 
                 target = human;
-                this.facing = Math.sign(human.x - this.x);
+                this.facing = sign(human.x - this.x);
             }
         }
 
@@ -306,8 +306,8 @@ class Cat extends Entity {
 
         zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
 
-        attack.x += Math.random() * 30 - 15;
-        attack.y += Math.random() * 50 - 25;
+        attack.x += random() * 30 - 15;
+        attack.y += random() * 50 - 25;
 
         const angle = target ? angleBetween(this, target) : atan2(0, this.facing);
         const dist = min(20, target ? distance(this, target) : 99);
@@ -340,7 +340,7 @@ class Cat extends Entity {
     }
 
     jumpData() {
-        const jumpPower = Math.min(1, this.jumpHoldTime / 0.1);
+        const jumpPower = min(1, this.jumpHoldTime / 0.1);
         const jumpHeight = 25 + jumpPower * 150;
         const peakY = this.jumpStartY - jumpHeight;
 
@@ -364,7 +364,7 @@ class Cat extends Entity {
         if (this.stickingToWall) ctx.translate(0, 10);
 
         if (this.rolling) {
-            ctx.rotate(this.rollingAge * Math.PI * 6);
+            ctx.rotate(this.rollingAge * PI * 6);
             ctx.scale(0.8, 0.8);
         }
 
@@ -407,16 +407,16 @@ class Cat extends Entity {
             ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
         });
 
-        let frontLegsBaseAngle = this.landed ? Math.PI / 2 : 0;
-        let backLegsBaseAngle = this.landed ? Math.PI / 2 : Math.PI;
+        let frontLegsBaseAngle = this.landed ? PI / 2 : 0;
+        let backLegsBaseAngle = this.landed ? PI / 2 : PI;
 
         if (this.rolling) {
-            frontLegsBaseAngle += Math.PI / 4;
-            backLegsBaseAngle -= Math.PI / 4;
+            frontLegsBaseAngle += PI / 4;
+            backLegsBaseAngle -= PI / 4;
         }
 
         const legsWalkAngle = this.walking || (!this.landed && !this.stickingToWall)
-            ? Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 4 * (this.stickingToWall ? 0.5 : 1)
+            ? sin(this.age * 3 * PI * 2) * PI / 4 * (this.stickingToWall ? 0.5 : 1)
             : 0;
 
         // Legs
@@ -428,8 +428,8 @@ class Cat extends Entity {
         ];
         if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
             const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
-            const startAngle = -Math.PI / 3;
-            const endAngle = Math.PI / 2;
+            const startAngle = -PI / 3;
+            const endAngle = PI / 2;
             legSettings[0][1] = interpolate(startAngle, endAngle, progress);
         }
 
@@ -452,10 +452,10 @@ class Cat extends Entity {
         ctx.wrap(() => {
             if (this.rolling) {
                 ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2 + 4, BODY_THICKNESS / 2 - 4);
-                ctx.rotate(Math.PI / 2 - Math.PI / 4);
+                ctx.rotate(PI / 2 - PI / 4);
             } else {
                 ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
-                ctx.rotate(-Math.PI / 2 - Math.PI / 4);
+                ctx.rotate(-PI / 2 - PI / 4);
             }
 
             ctx.strokeStyle = '#000';
@@ -463,10 +463,10 @@ class Cat extends Entity {
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
             ctx.moveTo(-10, 0);
-            const phase = this.age * Math.PI * (this.walking ? 5 : 0.5);
+            const phase = this.age * PI * (this.walking ? 5 : 0.5);
             for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
                 const amplitudeFactor = x / TAIL_LENGTH;
-                ctx.lineTo(x, Math.sin(x / TAIL_LENGTH * Math.PI * 2 + phase) * 5 * amplitudeFactor);
+                ctx.lineTo(x, sin(x / TAIL_LENGTH * PI * 2 + phase) * 5 * amplitudeFactor);
             }
             ctx.stroke();
         });
@@ -475,11 +475,11 @@ class Cat extends Entity {
         ctx.wrap(() => {
             ctx.translate(BODY_LENGTH / 2 - 5, 0);
 
-            ctx.rotate(-Math.PI / 2);
-            if (this.rolling) ctx.rotate(Math.PI - Math.PI / 3);
+            ctx.rotate(-PI / 2);
+            if (this.rolling) ctx.rotate(PI - PI / 3);
 
             ctx.translate(10, 0);
-            if (this.walking) ctx.rotate(Math.sin(this.age * 3 * Math.PI * 2) * Math.PI / 16);
+            if (this.walking) ctx.rotate(sin(this.age * 3 * PI * 2) * PI / 16);
 
             ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
 

@@ -71,7 +71,7 @@ class Human extends Entity {
             this.vY = 0;
             if (this.y <= y) this.lastLanded = this.age;
         }
-        if (x !== this.x) this.walkingDirection = Math.sign(this.x - x);
+        if (x !== this.x) this.walkingDirection = sign(this.x - x);
 
         // Aim at the cat
         const { seesCat } = this;
@@ -82,7 +82,7 @@ class Human extends Entity {
             this.seesCat = null;
             outer: for (const cat of this.world.category('cat')) {
                 // Cat is in our back, don't even look at it
-                if (Math.sign(cat.x - this.x) !== this.facing && !seesCat) continue;
+                if (sign(cat.x - this.x) !== this.facing && !seesCat) continue;
 
                 const distanceToCat = distance(this, cat);
 
@@ -111,20 +111,20 @@ class Human extends Entity {
         }
 
         if (this.seesCat && this.age - this.lastDamage > 0.5) {
-            this.facing = Math.sign(this.seesCat.x - this.x) || 1;
-            this.aim = Math.atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
+            this.facing = sign(this.seesCat.x - this.x) || 1;
+            this.aim = atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
             this.lastSeenCat = this.age;
         } else {
             if (this.age - this.lastSeenCat > 2) {
                 this.facing = this.walkingDirection;
-                this.aim = Math.atan2(1, this.facing / 2);
+                this.aim = atan2(1, this.facing / 2);
             }
         }
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
             const bullet = this.world.addEntity(new Bullet(this));
-            bullet.x = this.x + this.facing * 10 + Math.cos(this.aim) * 20;
-            bullet.y = this.y - 20 + Math.sin(this.aim) * 20;
+            bullet.x = this.x + this.facing * 10 + cos(this.aim) * 20;
+            bullet.y = this.y - 20 + sin(this.aim) * 20;
             this.nextShot = 0.2;
         }
     }
@@ -177,7 +177,7 @@ class Human extends Entity {
             ctx.translate(0, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
 
             const legBaseAngle = this.walking
-                ? Math.sin(this.age * Math.PI * 2 * 2) * Math.PI / 16
+                ? sin(this.age * PI * 2 * 2) * PI / 16
                 : 0;
 
             ctx.wrap(() => {
@@ -209,7 +209,7 @@ class Human extends Entity {
 
             let angle = this.aim;
             if (this.facing < 0) {
-                angle = Math.atan2(Math.sin(angle), Math.cos(angle) * -1);
+                angle = atan2(sin(angle), cos(angle) * -1);
             }
 
             ctx.rotate(angle);

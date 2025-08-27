@@ -104,15 +104,15 @@ class HUD extends Entity {
                 const radius = MOBILE_BUTTON_SIZE / 2;
 
                 for (let i = 0 ; i < 2 ; i++) {
-                    ctx.rotate(Math.PI);
+                    ctx.rotate(PI);
 
                     ctx.save();
 
                     ctx.beginPath();
-                    ctx.arc(0, 0, radius, Math.PI / 4, Math.PI);
+                    ctx.arc(0, 0, radius, PI / 4, PI);
 
                     ctx.translate(-radius, 0)
-                    ctx.rotate(Math.PI / 3 + Math.PI / 10);
+                    ctx.rotate(PI / 3 + PI / 10);
 
                     const LENGTH = MOBILE_BUTTON_SIZE / 8;
                     ctx.moveTo(LENGTH, LENGTH);
@@ -127,7 +127,7 @@ class HUD extends Entity {
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[38] ? 1 : 0.5;
                 ctx.translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 100);
-                ctx.rotate(-Math.PI / 2);
+                ctx.rotate(-PI / 2);
                 renderArrow();
             });
 

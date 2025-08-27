@@ -5,10 +5,10 @@ class PhysicalParticle extends Entity {
         this.color = color;
 
         this.speed = rnd(200, 400);
-        this.angle = rnd(-Math.PI, 0);
+        this.angle = rnd(-PI, 0);
 
-        this.vX = Math.cos(this.angle) * this.speed;
-        this.vY = Math.sin(this.angle) * this.speed;
+        this.vX = cos(this.angle) * this.speed;
+        this.vY = sin(this.angle) * this.speed;
 
         this.z = 1;
     }

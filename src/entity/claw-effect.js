@@ -22,7 +22,7 @@ class ClawEffect extends Entity {
 
         const fadeDuration = 0.25;
         const fadeProgress = (this.age - (1 - fadeDuration)) / fadeDuration;
-        ctx.globalAlpha *= 1 - Math.min(1, Math.max(0, fadeProgress));
+        ctx.globalAlpha *= 1 - min(1, max(0, fadeProgress));
 
         ctx.rotate(this.angle);
         ctx.scale(this.scale, this.scale);
@@ -41,7 +41,7 @@ class ClawEffect extends Entity {
 
         const THICKNESS = 5;
         const LENGTH = 40;
-        const l = LENGTH * Math.min(1, this.age / 0.1);
+        const l = LENGTH * min(1, this.age / 0.1);
 
         ctx.beginPath();
         ctx.translate(-LENGTH / 2, 0);

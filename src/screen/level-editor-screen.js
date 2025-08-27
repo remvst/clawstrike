@@ -301,9 +301,9 @@ class LevelEditorScreen extends WorldScreen {
             if (this.selected instanceof Spikes) {
                 actions.push(
                     this.contextMenuButton('Set angle', () => {
-                        const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / Math.PI));
+                        const angle = parseInt(prompt('Angle? (in degrees)', this.selected.angle * 180 / PI));
                         const adjusted = roundToNearest(angle, 90) || 0;
-                        this.selected.angle = adjusted * Math.PI / 180;
+                        this.selected.angle = adjusted * PI / 180;
                     }),
                 );
             }

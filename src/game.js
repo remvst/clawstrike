@@ -82,7 +82,7 @@ class Game {
 
     frame() {
         const now = performance.now();
-        const elapsed = Math.min((now - (this.lastFrame || 0)) / 1000, 1 / 30);
+        const elapsed = min((now - (this.lastFrame || 0)) / 1000, 1 / 30);
         this.lastFrame = now;
 
         if (!DEBUG || document.hasFocus()) {

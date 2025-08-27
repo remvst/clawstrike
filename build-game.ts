@@ -19,8 +19,6 @@ const JS_FILES = [
     'utils/raycasting.js',
     'utils/rect.js',
     'utils/first-item.js',
-    'utils/pick.js',
-    'utils/shuffle.js',
 
     'graphics/wrap.js',
     'graphics/create-canvas.js',

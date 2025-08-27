@@ -35,7 +35,7 @@ class WorldScreen extends Screen {
 
         let remaining = elapsed;
         while (remaining > 0) {
-            const advance = Math.min(remaining, 1 / 120);
+            const advance = min(remaining, 1 / 120);
             remaining -= advance;
             this.world.cycle(advance);
         }

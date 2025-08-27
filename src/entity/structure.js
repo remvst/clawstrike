@@ -186,7 +186,7 @@ class Structure extends Entity {
             let bottomLeft =  this.cellAt(leftX, bottomY) === 1;
             let bottomRight =  this.cellAt(rightX, bottomY) === 1;
 
-            const directionY = Math.sign(y - previousY);
+            const directionY = sign(y - previousY);
 
             const verticalCollisionCount = !!top + !!topLeft + !!topRight + !!bottom + !!bottomLeft + !!bottomRight;
             const horizontalCollisionCount = !!left + !!topLeft + !!bottomLeft + !!right + !!topRight + !!bottomRight;
@@ -217,8 +217,8 @@ class Structure extends Entity {
     }
 
     cellAt(x, y) {
-        const row = Math.floor((y - this.y) / CELL_SIZE);
-        const col = Math.floor((x - this.x) / CELL_SIZE);
+        const row = floor((y - this.y) / CELL_SIZE);
+        const col = floor((x - this.x) / CELL_SIZE);
         if (!isBetween(0, row, this.matrix.length)) return null;
         if (!isBetween(0, col, this.matrix[0].length)) return null
 
