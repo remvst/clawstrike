@@ -394,7 +394,7 @@ class Cat extends Entity {
             ctx.moveTo(-BODY_LENGTH / 2 + BODY_THICKNESS / 2, 0);
             const curveHeight = this.rolling
                 ? -10
-                : sin(this.age * PI * 2 * 4) * this.walking * 2;
+                : sin(this.age * PI * 2 * 4) * !!this.walking * 2;
             ctx.bezierCurveTo(
                 0, curveHeight,
                 0, curveHeight,
