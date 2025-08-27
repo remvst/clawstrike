@@ -288,11 +288,13 @@ class Cat extends Entity {
             this.attackCooldown = 0.1;
         }
 
+        let target;
         for (const human of this.world.category('human')) {
             if (this.attackHitbox.intersects(human.hitbox)) {
                 human.damage();
                 human.x += Math.sign(human.x - this.x) * 10;
 
+                target = human;
                 this.facing = Math.sign(human.x - this.x);
             }
         }
@@ -307,7 +309,10 @@ class Cat extends Entity {
         attack.x += Math.random() * 30 - 15;
         attack.y += Math.random() * 50 - 25;
 
-        this.x += this.facing * 20;
+        const angle = target ? angleBetween(this, target) : atan2(0, this.facing);
+        const dist = min(20, target ? distance(this, target) : 99);
+        this.x += dist * cos(angle);
+        this.y += max(0, dist * sin(angle));
     }
 
     damage() {
