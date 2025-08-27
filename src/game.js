@@ -7,13 +7,18 @@ class Game {
 
         this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
         this.screens = [];
-        this.difficulty = DIFFICULTY_NORMAL
+        this.difficulty = DIFFICULTY_NORMAL;
 
         this.frame();
         setTimeout(() => this.startNavigation(), 0);
     }
 
     async startNavigation() {
+        const params = new URLSearchParams(location.search);
+        if (DEBUG && params.get('level')) {
+            ALL_LEVELS = [JSON.parse(params.get('level'))];
+        }
+
         let promptedEasyMode;
 
         while (true) {
@@ -65,8 +70,10 @@ class Game {
                 }
             }
 
-            this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
-            localStorage[nomangle("bt")] = this.bestRunTime;
+            if (!params.get('level')) {
+                this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
+                localStorage[nomangle("bt")] = this.bestRunTime;
+            }
 
             const blankScreen = this.navigate(new WorldScreen([]));
             await this.navigate(new GameCompleteScreen(blankScreen)).await();

@@ -397,6 +397,7 @@ class LevelEditorScreen extends WorldScreen {
         actions.push(...[
             this.contextMenuButton('Load', () => this.load()),
             this.contextMenuButton('Save', () => this.save()),
+            this.contextMenuButton('Share Link', () => this.share()),
             this.contextMenuButton('Test', () => this.test()),
         ]);
 
@@ -415,11 +416,19 @@ class LevelEditorScreen extends WorldScreen {
         this.selected = null;
     }
 
+    share() {
+        const serialized = serializeWorld(this.world);
+        const url = `${location.protocol}/${location.host}/${location.pathname}?level=${encodeURIComponent(JSON.stringify(serialized))}`;
+        navigator.clipboard.writeText(url);
+        alert('Copied link to clipboard!');
+    }
+
     save() {
         const serialized = serializeWorld(this.world);
 
         navigator.clipboard.writeText(JSON.stringify(serialized));
         console.log(JSON.stringify(serialized));
+        alert('Copied to clipboard!');
     }
 
     load() {
