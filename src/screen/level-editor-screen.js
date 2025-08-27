@@ -2,81 +2,20 @@ class LevelEditorScreen extends WorldScreen {
     constructor(serializedWorld) {
         super(serializedWorld);
 
-        can.style.cursor = 'default';
-
         this.cursorPosition = {x: 0, y: 0};
 
-        const cameraTarget = new CameraTarget();
-        this.world.addEntity(cameraTarget);
-
         const camera = firstItem(this.world.category('camera'));
-        camera.target = cameraTarget;
+        camera.target = this.world.addEntity(new CameraTarget());
 
         this.world.editorMode = true;
 
         this.editMode = 'entity';
 
         this.contextMenu = document.createElement('div');
-        this.contextMenu.classList.add('context-menu');
+        this.contextMenu.className = 'context-menu';
         document.body.appendChild(this.contextMenu);
         document.body.addEventListener('click', () => this.contextMenu.style.display = 'none', false);
         this.contextMenu.addEventListener('click', (e) => e.stopPropagation(), false);
-
-        const styleTag = document.createElement('style');
-        styleTag.innerHTML = `
-        .context-menu {
-            position: absolute;
-            background-color: #222;
-            border: 1px solid white;
-            min-width: 200px;
-            max-width: 300px;
-            display: none;
-            width: auto;
-            height: auto;
-        }
-
-        .context-menu > * {
-            display: block;
-            border: none;
-            border-bottom: 1px solid #222;
-            background-color: #000;
-            color: white;
-            outline: none;
-        }
-
-        .context-menu > button {
-            text-align: left;
-            padding: 12px;
-            cursor: pointer;
-        }
-
-        .context-menu > button:hover {
-            background-color: #444;
-        }
-
-        .context-menu .color-swatch-set {
-            display: flex;
-            flex-direction: row;
-            justify-content: start;
-            gap: 12px;
-            padding: 12px;
-            box-sizing: border-box;
-            flex-wrap: wrap;
-        }
-
-        .context-menu .color-swatch {
-            width: 20px;
-            height: 20px;
-            border: 1px solid #444;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .context-menu .color-swatch:hover {
-            border-color: #fff;
-        }
-        `;
-        document.head.appendChild(styleTag);
 
         oncontextmenu = (e) => {
             e.preventDefault();
@@ -317,7 +256,7 @@ class LevelEditorScreen extends WorldScreen {
 
     colorSwatch(color) {
         const swatch = document.createElement('div');
-        swatch.classList.add('color-swatch');
+        swatch.className = 'color-swatch';
         swatch.style.backgroundColor = color;
         swatch.addEventListener('click', () => {
             this.contextMenu.style.display = 'none';
@@ -328,7 +267,7 @@ class LevelEditorScreen extends WorldScreen {
 
     contextMenuSwatchSet(children) {
         const buttonSet = document.createElement('div');
-        buttonSet.classList.add('color-swatch-set');
+        buttonSet.className = 'color-swatch-set';
         children.forEach(child => buttonSet.appendChild(child));
         return buttonSet;
     }

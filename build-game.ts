@@ -197,6 +197,9 @@ const argv = yargs(process.argv.slice(2)).options({
 
     let html = await fs.readFile('src/index.html', 'utf-8');
     let css = await fs.readFile('src/style.css', 'utf-8');
+    if (constants.DEBUG) {
+        css += await fs.readFile('src/editor.css', 'utf-8')
+    }
 
     const jsFiles = [...JS_FILES];
 

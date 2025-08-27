@@ -1,0 +1,51 @@
+.context-menu {
+    position: absolute;
+    background-color: #222;
+    border: 1px solid white;
+    min-width: 200px;
+    max-width: 300px;
+    display: none;
+    width: auto;
+    height: auto;
+}
+
+.context-menu > * {
+    display: block;
+    border: none;
+    border-bottom: 1px solid #222;
+    background-color: #000;
+    color: white;
+    outline: none;
+}
+
+.context-menu > button {
+    text-align: left;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.context-menu > button:hover {
+    background-color: #444;
+}
+
+.context-menu .color-swatch-set {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 12px;
+    padding: 12px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.context-menu .color-swatch {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #444;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.context-menu .color-swatch:hover {
+    border-color: #fff;
+}
