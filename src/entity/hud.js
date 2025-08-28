@@ -98,6 +98,7 @@ class HUD extends Entity {
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[40] ? 1 : 0.5;
                 ctx.lineCap = 'butt';
+                ctx.strokeStyle = '#fff';
 
                 ctx.translate(CANVAS_WIDTH * 5 / 8, CANVAS_HEIGHT - 100);
 
