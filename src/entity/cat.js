@@ -150,7 +150,7 @@ class Cat extends Entity {
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
-                        acceleration = 2000;
+                        acceleration = 3000;
                     } else if (pushing) {
                         acceleration = 2000;
                     } else {
