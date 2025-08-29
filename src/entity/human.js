@@ -215,7 +215,7 @@ class Human extends Entity {
 
         // Arm
         ctx.wrap(() => {
-            ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2);
+            ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2 + ARM_THICKNESS / 2);
 
             let angle = this.aim;
             if (this.facing < 0) {
