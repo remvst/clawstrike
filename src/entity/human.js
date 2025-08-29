@@ -128,12 +128,20 @@ class Human extends Entity {
             bullet.x = this.x + this.facing * 10 + cos(this.aim) * 20;
             bullet.y = this.y - 20 + sin(this.aim) * 20;
             this.nextShot = 0.2;
+            this.lastBullet = bullet;
         }
     }
 
     damage() {
         this.lastDamage = this.age;
         this.nextShot = max(this.nextShot, 1);
+
+        // Remove the last bullet if it was shot recently
+        // This is to avoid getting shot while hitting an enemy
+        if (this.lastBullet?.age < 0.2) {
+            this.lastBullet.world?.removeEntity(this.lastBullet);
+            this.lastBullet = null;
+        }
 
         zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
