@@ -7,6 +7,8 @@ class Spikes extends Entity {
 
         this.angle = 0;
         this.length = CELL_SIZE;
+
+        this.z = Z_SPIKES;
     }
 
     get hitbox() {

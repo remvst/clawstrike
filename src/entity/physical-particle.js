@@ -10,7 +10,7 @@ class PhysicalParticle extends Entity {
         this.vX = cos(this.angle) * this.speed;
         this.vY = sin(this.angle) * this.speed;
 
-        this.z = 1;
+        this.z = Z_PARTICLE;
     }
 
     cycle(elapsed) {

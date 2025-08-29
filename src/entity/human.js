@@ -5,7 +5,7 @@ class Human extends Entity {
 
         this.type = 'human';
 
-        this.z = 3;
+        this.z = Z_HUMAN;
 
         this.categories.push('human');
         this.aim = 0;

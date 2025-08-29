@@ -4,7 +4,7 @@ class Cat extends Entity {
 
         this.type = 'cat';
 
-        this.z = 1;
+        this.z = Z_CAT;
 
         this.damageTaken = 0;
 

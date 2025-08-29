@@ -3,7 +3,7 @@ class Water extends Entity {
     constructor() {
         super();
 
-        this.z = -1;
+        this.z = Z_WATER;
 
         this.type = 'water';
 

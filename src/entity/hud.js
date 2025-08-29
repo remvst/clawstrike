@@ -16,7 +16,7 @@ class HUD extends Entity {
         this.categories.push('hud');
         this.cat = cat;
         this.alpha = 1;
-        this.z = 9;
+        this.z = Z_HUD;
     }
 
     cycle(elapsed) {

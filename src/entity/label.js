@@ -4,7 +4,7 @@ class Label extends Entity {
         this.type = 'text';
         this.text = text;
 
-        this.z = 1;
+        this.z = Z_LABEL;
 
         this.visibleStartAge = 0;
 

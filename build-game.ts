@@ -193,6 +193,23 @@ const argv = yargs(process.argv.slice(2)).options({
         ...CONSTANTS,
     };
 
+    let z = 0;
+    for (const constant of [
+        "Z_WATER",
+        "Z_LABEL",
+        "Z_STRUCTURE",
+        "Z_SPIKES",
+        "Z_CAT",
+        "Z_HUMAN",
+        "Z_BULLET",
+        "Z_PARTICLE",
+        "Z_FLASH",
+        "Z_HUD",
+        "Z_CLAW",
+    ]) {
+        constants[constant] = z++;
+    }
+
     let html = await fs.readFile('src/index.html', 'utf-8');
     let css = await fs.readFile('src/style.css', 'utf-8');
     if (constants.DEBUG) {
