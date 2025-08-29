@@ -23,6 +23,7 @@ const JS_FILES = [
     'graphics/wrap.js',
     'graphics/create-canvas.js',
     'graphics/typography.js',
+    'graphics/colors.js',
 
     'entity/entity.js',
     'entity/human.js',
@@ -42,6 +43,7 @@ const JS_FILES = [
     'screen/screen.js',
     'screen/world-screen.js',
     'screen/gameplay-screen.js',
+    'screen/story-screen.js',
 
     'screen/menu/menu-screen.js',
     'screen/menu/main-menu-screen.js',
@@ -79,7 +81,7 @@ const CONSTANTS = {
     "HUMAN_VISION_DISTANCE": 600,
     "HUMAN_VISION_DIVIDER": 4,
 
-    "DEBUG_INFO": 1,
+    "DEBUG_INFO": 0,
     "DEBUG_HITBOXES": 0,
     "DEBUG_JUMP": 0,
     "DEBUG_VISION": 0,

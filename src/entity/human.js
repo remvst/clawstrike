@@ -177,7 +177,7 @@ class Human extends Entity {
         const ARM_LENGTH = 20;
         const ARM_THICKNESS = 5;
 
-        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
+        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : COLORS.characters;
 
         // Body
         ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
@@ -227,7 +227,7 @@ class Human extends Entity {
 
             // Gun
             ctx.wrap(() => {
-                ctx.fillStyle = '#000';
+                ctx.fillStyle = COLORS.characters;
                 ctx.translate(ARM_LENGTH, -2);
                 ctx.fillRect(0, 0, 15, -5);
                 ctx.fillRect(0, 0, 5, 5);

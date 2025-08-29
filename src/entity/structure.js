@@ -37,7 +37,6 @@ class Structure extends Entity {
         this.type = 'structure';
         this.categories.push('structure');
         this.color = '#f00';
-        this.cellColor = '#000';
         this.raycaster = new Raycaster(this);
 
         this.z = 2;
@@ -50,9 +49,10 @@ class Structure extends Entity {
     }
 
     renderBackground() {
+        if (!COLORS.structureBackground) return;
+
         this.width = this.matrix[0].length * CELL_SIZE;
         this.height = this.matrix.length * CELL_SIZE;
-
 
         const camera = firstItem(this.world.category('camera'));
 
@@ -84,7 +84,7 @@ class Structure extends Entity {
         this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx, can) => {
             // Cells
             ctx.wrap(() => {
-                ctx.fillStyle = this.cellColor;
+                ctx.fillStyle = COLORS.structure;
 
                 for (let row = rows - 1 ; row >= 0 ; row--) {
                     for (let col = 0 ; col < cols ; col++) {
@@ -101,7 +101,6 @@ class Structure extends Entity {
                 }
             });
 
-            ctx.strokeStyle = '#fff';
             ctx.globalAlpha = 0.2;
             ctx.lineWidth = 2;
 

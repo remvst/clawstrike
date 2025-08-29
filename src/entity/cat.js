@@ -11,7 +11,7 @@ class Cat extends Entity {
         this.categories.push('cat');
         this.facing = 1;
         this.attackCooldown = 0;
-        this.lastAttack = 0;
+        this.lastAttack = -9;
         this.heat = 0;
         this.nextHeatReset = 0;
         this.releasedAttack = false;
@@ -383,7 +383,7 @@ class Cat extends Entity {
 
         const ATTACK_ANIMATION_DURATION = 0.2;
 
-        ctx.fillStyle = ctx.strokeStyle = '#000';
+        ctx.fillStyle = ctx.strokeStyle = COLORS.characters;
 
         // Body
         ctx.wrap(() => {
@@ -402,7 +402,7 @@ class Cat extends Entity {
             );
             ctx.stroke();
 
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = COLORS.characters;
             ctx.fillRect(-BODY_LENGTH / 2, 0, BODY_THICKNESS / 2, BODY_THICKNESS / 2);
             ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
         });
@@ -435,7 +435,7 @@ class Cat extends Entity {
 
         for (const [x, angle] of legSettings) {
             ctx.wrap(() => {
-                ctx.strokeStyle = '#000';
+                ctx.strokeStyle = COLORS.characters;
                 ctx.lineCap = 'round';
                 ctx.lineWidth = LEG_THICKNESS;
 
@@ -458,7 +458,7 @@ class Cat extends Entity {
                 ctx.rotate(-PI / 2 - PI / 4);
             }
 
-            ctx.strokeStyle = '#000';
+            ctx.strokeStyle = COLORS.characters;
             ctx.lineCap = 'round';
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
@@ -485,13 +485,13 @@ class Cat extends Entity {
 
             // Eyes
             if (this.age % 3 > 0.1) ctx.wrap(() => {
-                ctx.fillStyle = '#fff';
+                ctx.fillStyle = COLORS.eyes;
                 ctx.fillRect(0, -3, 4, -4);
                 ctx.fillRect(0, 3, 4, 4);
             });
 
             // Ears
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = COLORS.characters;
             ctx.beginPath();
             ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
