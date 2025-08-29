@@ -215,8 +215,7 @@ class Cat extends Entity {
             this.attack();
         }
 
-        this.nextHeatReset -= elapsed;
-        if (this.nextHeatReset <= 0) {
+        if ((this.nextHeatReset -= elapsed) <= 0) {
             this.heat = 0;
         }
 
@@ -282,8 +281,8 @@ class Cat extends Entity {
 
         this.nextHeatReset = 0.5;
         this.heat++;
-        if (this.heat >= 5) {
-            this.attackCooldown = 1;
+        if (this.heat >= 6) {
+            this.attackCooldown = 0.5;
         } else {
             this.attackCooldown = 0.1;
         }
@@ -310,7 +309,7 @@ class Cat extends Entity {
         attack.y += random() * 50 - 25;
 
         const angle = target ? angleBetween(this, target) : atan2(0, this.facing);
-        const dist = min(20, target ? distance(this, target) : 99);
+        const dist = min(10, target ? distance(this, target) : 99);
         this.x += dist * cos(angle);
         this.y += max(0, dist * sin(angle));
     }
