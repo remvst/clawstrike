@@ -19,7 +19,7 @@ class Rect {
     }
 
     render() {
-        if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
+        if (DEBUG) ctx.wrap(() => {
             ctx.translate(this.x, this.y);
             ctx.strokeStyle = '#fff';
             ctx.strokeRect(-this.width / 2, -this.height / 2, this.width, this.height);
