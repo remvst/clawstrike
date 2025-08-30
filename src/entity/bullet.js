@@ -11,6 +11,8 @@ class Bullet extends Entity {
     }
 
     cycle(elapsed) {
+        const { x, y } = this;
+
         const BULLET_SPEED = 800;
         this.x += elapsed * cos(this.angle) * BULLET_SPEED;
         this.y += elapsed * sin(this.angle) * BULLET_SPEED;
@@ -21,10 +23,9 @@ class Bullet extends Entity {
                 this.world.removeEntity(this);
 
                 for (let i = 0; i < 5; i++) {
-                    const part = new PhysicalParticle('#fff');
-                    part.x = this.x;
-                    part.y = this.y;
-                    this.world.addEntity(part);
+                    const part = this.world.addEntity(new PhysicalParticle('#fff'));
+                    part.x = x;
+                    part.y = y;
                 }
                 return;
             }
