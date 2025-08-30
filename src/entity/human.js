@@ -28,6 +28,8 @@ class Human extends Entity {
         this.lastCatCheck = 0;
 
         this.health = 3;
+
+        this.visionDistance = 0;
     }
 
     get landed() {
@@ -36,6 +38,8 @@ class Human extends Entity {
 
     cycle(elapsed) {
         super.cycle(elapsed);
+
+        const { facing } = this;
 
         // Left/right movement
         this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2 && this.landed && this.age - this.lastDamage > 0.5;
@@ -88,7 +92,7 @@ class Human extends Entity {
 
                 const distanceToCat = distance(this, cat);
 
-                if (distanceToCat > HUMAN_VISION_DISTANCE) continue; // Too far away
+                if (distanceToCat > this.visionDistance) continue; // Too far away
 
                 const angleToCat = angleBetween(this, cat);
                 const baseAngle = this.facing > 0 ? 0 : PI;
@@ -129,6 +133,11 @@ class Human extends Entity {
             bullet.y = this.y - 20 + sin(this.aim) * 20;
             this.nextShot = 0.2;
             this.lastBullet = bullet;
+        }
+
+        this.visionDistance = min(HUMAN_VISION_DISTANCE, this.visionDistance + elapsed * 1000);
+        if (this.facing != facing) {
+            this.visionDistance = 0;
         }
     }
 
@@ -283,9 +292,10 @@ class Human extends Entity {
             ctx.translate(this.x, this.y);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.lineTo(cos(baseAngle + PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE, sin(baseAngle + PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE);
+            ctx.lineTo(cos(baseAngle + PI / HUMAN_VISION_DIVIDER) * this.visionDistance, sin(baseAngle + PI / HUMAN_VISION_DIVIDER) * this.visionDistance);
             ctx.moveTo(0, 0);
-            ctx.lineTo(cos(baseAngle - PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE, sin(baseAngle - PI / HUMAN_VISION_DIVIDER) * HUMAN_VISION_DISTANCE);
+            ctx.lineTo(cos(baseAngle - PI / HUMAN_VISION_DIVIDER) * this.visionDistance, sin(baseAngle - PI / HUMAN_VISION_DIVIDER) * this.visionDistance);
+            ctx.arc(0, 0, this.visionDistance, baseAngle - PI / HUMAN_VISION_DIVIDER, baseAngle + PI / HUMAN_VISION_DIVIDER);
             ctx.stroke();
         });
     }
