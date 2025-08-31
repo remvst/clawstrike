@@ -546,8 +546,18 @@ class Cat extends Entity {
             // Eyes
             if (this.age % 3 > 0.1) ctx.wrap(() => {
                 ctx.fillStyle = '#fff';
-                ctx.fillRect(0, -3, 4, -4);
-                ctx.fillRect(0, 3, 4, 4);
+                ctx.beginPath();
+
+                for (const scaleY of [-1, 1]) {
+                    ctx.wrap(() => {
+                        ctx.scale(1, scaleY);
+                        ctx.moveTo(0, 3);
+                        ctx.lineTo(0, 7);
+                        ctx.lineTo(4, 7);
+                        ctx.lineTo(2, 3);
+                    });
+                }
+                ctx.fill();
             });
 
             // Ears
