@@ -5,7 +5,7 @@ class ClawEffect extends Entity {
         this.angle = this.seed * TWO_PI;
         this.scale = 1 + this.seed * 0.5;
         this.color = '#fff';
-        this.z = 9;
+        this.z = Z_CLAW;
         this.stroke = true;
     }
 

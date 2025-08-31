@@ -39,7 +39,7 @@ class Structure extends Entity {
         this.color = '#f00';
         this.raycaster = new Raycaster(this);
 
-        this.z = 2;
+        this.z = Z_STRUCTURE;
     }
 
     cycle(elapsed) {

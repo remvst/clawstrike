@@ -32,6 +32,7 @@ const JS_FILES = [
     'entity/flash.js',
     'entity/cat.js',
     'entity/structure.js',
+    'entity/particle.js',
     'entity/physical-particle.js',
     'entity/camera.js',
     'entity/hud.js',
@@ -78,7 +79,7 @@ const CONSTANTS = {
 
     "SONG_VOLUME": 0.5,
 
-    "HUMAN_VISION_DISTANCE": 600,
+    "HUMAN_VISION_DISTANCE": 500,
     "HUMAN_VISION_DIVIDER": 4,
 
     "DEBUG_INFO": 0,
@@ -195,6 +196,23 @@ const argv = yargs(process.argv.slice(2)).options({
         ...CONSTANTS,
     };
 
+    let z = 0;
+    for (const constant of [
+        "Z_WATER",
+        "Z_LABEL",
+        "Z_STRUCTURE",
+        "Z_SPIKES",
+        "Z_CAT",
+        "Z_HUMAN",
+        "Z_BULLET",
+        "Z_PARTICLE",
+        "Z_FLASH",
+        "Z_HUD",
+        "Z_CLAW",
+    ]) {
+        constants[constant] = z++;
+    }
+
     let html = await fs.readFile('src/index.html', 'utf-8');
     let css = await fs.readFile('src/style.css', 'utf-8');
     if (constants.DEBUG) {
@@ -221,6 +239,7 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/tutorial-wall-jump.js',
         'level/levels/first-level.js',
         'level/levels/tutorial-roll.js',
+        'level/levels/random.js',
         'level/levels/second-level.js',
         'level/levels/stuff.js',
         'level/levels/green.js',

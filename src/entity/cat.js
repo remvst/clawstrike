@@ -4,7 +4,7 @@ class Cat extends Entity {
 
         this.type = 'cat';
 
-        this.z = 1;
+        this.z = Z_CAT;
 
         this.damageTaken = 0;
 
@@ -65,6 +65,29 @@ class Cat extends Entity {
         if (this.stickingToWall) {
             this.vX = this.wallStickDirection * 400;
             this.facing = this.wallStickDirection;
+        }
+
+        for (let i = 0 ; i < 10 ; i++) {
+            const particle = this.world.addEntity(new Particle('#fff'));
+            particle.size = rnd(5, 10);
+
+            if (this.stickingToWall) {
+                particle.x = this.x - this.wallStickDirection * this.hitbox.width / 2 + rnd(-5, 5);
+                particle.y = this.y + rnd(-1, 1) * this.hitbox.height / 2;
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(20, 50) * this.wallStickDirection,
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            } else {
+                particle.x = this.x - rnd(-1, 1) * this.hitbox.width / 2;
+                particle.y = this.y + this.hitbox.height / 2;
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(-40, 40),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
         }
 
         this.wallStickX = 0;
@@ -150,7 +173,7 @@ class Cat extends Entity {
                     targetVX = 400 * x;
                 } else {
                     if (resisting) {
-                        acceleration = 2000;
+                        acceleration = 3000;
                     } else if (pushing) {
                         acceleration = 2000;
                     } else {
@@ -215,8 +238,7 @@ class Cat extends Entity {
             this.attack();
         }
 
-        this.nextHeatReset -= elapsed;
-        if (this.nextHeatReset <= 0) {
+        if ((this.nextHeatReset -= elapsed) <= 0) {
             this.heat = 0;
         }
 
@@ -236,6 +258,19 @@ class Cat extends Entity {
         }
 
         if (this.landed && !landed) {
+            for (let i = 0 ; i < 10 ; i++) {
+                const particle = this.world.addEntity(new Particle('#fff'));
+                particle.x = this.x - rnd(-1, 1) * this.hitbox.width / 2;
+                particle.y = this.y + this.hitbox.height / 2;
+                particle.size = rnd(5, 10);
+
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(-40, 40),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
+
             zzfx(...[.05,,339,.01,.01,,4,4.4,11,-6,-486,.09,,,,,,.64,.03,.2]); // Blip 426
         }
 
@@ -268,6 +303,21 @@ class Cat extends Entity {
             this.viewAngle = -PI / 2;
             this.lastStickToWall = this.age;
         }
+
+        if (this.rolling && this.landed && this.age - (this.lastRollParticle || 0) > 1 / 60) {
+            this.lastRollParticle = this.age;
+
+            const particle = this.world.addEntity(new Particle('#fff'));
+            particle.x = this.x + rnd(-10, 10);
+            particle.y = this.y + this.hitbox.height / 2 + rnd(0, -10);
+            particle.size = rnd(4, 8);
+
+            particle.animate(rnd(0.2, 0.5), {
+                x: rnd(-10, 10),
+                y: rnd(-20, -50),
+                size: -particle.size,
+            });
+        }
     }
 
     get landed() {
@@ -282,8 +332,8 @@ class Cat extends Entity {
 
         this.nextHeatReset = 0.5;
         this.heat++;
-        if (this.heat >= 5) {
-            this.attackCooldown = 1;
+        if (this.heat >= 6) {
+            this.attackCooldown = 0.5;
         } else {
             this.attackCooldown = 0.1;
         }
@@ -299,10 +349,9 @@ class Cat extends Entity {
             }
         }
 
-        const attack = new ClawEffect();
+        const attack = this.world.addEntity(new ClawEffect());
         attack.x = this.x + this.facing * 60;
         attack.y = this.y;
-        this.world.addEntity(attack);
 
         zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
 
@@ -310,7 +359,7 @@ class Cat extends Entity {
         attack.y += random() * 50 - 25;
 
         const angle = target ? angleBetween(this, target) : atan2(0, this.facing);
-        const dist = min(20, target ? distance(this, target) : 99);
+        const dist = min(10, target ? distance(this, target) : 99);
         this.x += dist * cos(angle);
         this.y += max(0, dist * sin(angle));
     }

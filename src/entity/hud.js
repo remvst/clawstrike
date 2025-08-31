@@ -16,7 +16,7 @@ class HUD extends Entity {
         this.categories.push('hud');
         this.cat = cat;
         this.alpha = 1;
-        this.z = 9;
+        this.z = Z_HUD;
     }
 
     cycle(elapsed) {
@@ -44,7 +44,7 @@ class HUD extends Entity {
 
             for (const [label, value] of [
                 [nomangle('TOTAL TIME'), formatTime(G.runTime)],
-                [nomangle('LEVEL'), (G.runLevelIndex + 1) + '/' + ALL_LEVELS.length],
+                [nomangle('LEVEL'), (G.runLevelIndex) + '/' + (ALL_LEVELS.length - 1)],
                 [nomangle('TOTAL DEATHS'), G.runDeaths],
                 [nomangle('DIFFICULTY [K]'), G.difficulty.label],
                 [nomangle('BEST'), formatTime(G.bestRunTime)],

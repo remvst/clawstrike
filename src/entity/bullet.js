@@ -5,10 +5,14 @@ class Bullet extends Entity {
         this.angle = owner.aim;
         this.hitbox.width = this.hitbox.height = 2;
 
+        this.z = Z_BULLET;
+
         zzfx(...[0.8,,221,.01,.03,.19,4,2.5,,,,,,1.1,,.2,,.61,.09]); // Shoot 93
     }
 
     cycle(elapsed) {
+        const { x, y } = this;
+
         const BULLET_SPEED = 800;
         this.x += elapsed * cos(this.angle) * BULLET_SPEED;
         this.y += elapsed * sin(this.angle) * BULLET_SPEED;
@@ -19,10 +23,9 @@ class Bullet extends Entity {
                 this.world.removeEntity(this);
 
                 for (let i = 0; i < 5; i++) {
-                    const part = new PhysicalParticle('#fff');
-                    part.x = this.x;
-                    part.y = this.y;
-                    this.world.addEntity(part);
+                    const part = this.world.addEntity(new PhysicalParticle('#fff'));
+                    part.x = x;
+                    part.y = y;
                 }
                 return;
             }

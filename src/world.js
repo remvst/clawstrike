@@ -5,7 +5,7 @@ class World {
     }
 
     cycle(elapsed) {
-        for (const entity of this.entities) {
+        for (const entity of this.entities.slice()) {
             if (DEBUG && this.editorMode && entity.type) continue;
             entity.cycle(elapsed);
         }
