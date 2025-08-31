@@ -9,6 +9,7 @@ class PauseScreen extends MenuScreen {
             () => this.resolve(),
         );
         this.addDifficultyChangeCommand();
+        this.addMainMenuCommand();
     }
 
     absorb() {

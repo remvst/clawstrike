@@ -12,6 +12,7 @@ class GameOverScreen extends MenuScreen {
         if (G.difficulty.maxDeaths == Infinity) {
             this.addDifficultyChangeCommand();
         }
+        this.addMainMenuCommand();
     }
 }
 
