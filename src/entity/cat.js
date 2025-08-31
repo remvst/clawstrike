@@ -6,6 +6,7 @@ class Cat extends Entity {
 
         this.z = Z_CAT;
 
+        this.lastDamage = -9;
         this.damageTaken = 0;
 
         this.categories.push('cat');
@@ -378,6 +379,8 @@ class Cat extends Entity {
         firstItem(this.world.category('camera')).shake(0.1, 10);
         zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
+        this.lastDamage = this.age;
+
         let particleCount = 10;
         if (++this.damageTaken >= G.difficulty.maxDamageTaken) {
             particleCount = 100;
@@ -442,7 +445,7 @@ class Cat extends Entity {
 
         const ATTACK_ANIMATION_DURATION = 0.2;
 
-        ctx.fillStyle = ctx.strokeStyle = '#000';
+        ctx.fillStyle = ctx.strokeStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
 
         // Body
         ctx.wrap(() => {
@@ -461,7 +464,6 @@ class Cat extends Entity {
             );
             ctx.stroke();
 
-            ctx.fillStyle = '#000';
             ctx.fillRect(-BODY_LENGTH / 2, 0, BODY_THICKNESS / 2, BODY_THICKNESS / 2);
             ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
         });
@@ -494,7 +496,6 @@ class Cat extends Entity {
 
         for (const [x, angle] of legSettings) {
             ctx.wrap(() => {
-                ctx.strokeStyle = '#000';
                 ctx.lineCap = 'round';
                 ctx.lineWidth = LEG_THICKNESS;
 
@@ -517,7 +518,6 @@ class Cat extends Entity {
                 ctx.rotate(-PI / 2 - PI / 4);
             }
 
-            ctx.strokeStyle = '#000';
             ctx.lineCap = 'round';
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
@@ -550,7 +550,6 @@ class Cat extends Entity {
             });
 
             // Ears
-            ctx.fillStyle = '#000';
             ctx.beginPath();
             ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
