@@ -32,7 +32,7 @@ class Water extends Entity {
     }
 
     render() {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#0ff';
         ctx.translate(this.x - this.length / 2, this.y - this.depth / 2);
 
         ctx.globalAlpha = 0.5;
