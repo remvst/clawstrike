@@ -197,15 +197,15 @@ const argv = yargs(process.argv.slice(2)).options({
 
     let z = 0;
     for (const constant of [
-        "Z_WATER",
         "Z_LABEL",
         "Z_MEOW",
-        "Z_STRUCTURE",
         "Z_SPIKES",
         "Z_CAT",
         "Z_HUMAN",
         "Z_BULLET",
         "Z_PARTICLE",
+        "Z_WATER",
+        "Z_STRUCTURE",
         "Z_FLASH",
         "Z_HUD",
         "Z_CLAW",
