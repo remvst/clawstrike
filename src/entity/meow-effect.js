@@ -7,6 +7,22 @@ class MeowEffect extends Entity {
         this.z = Z_MEOW;
         this.stroke = true;
         this.affected = new Set();
+
+        const labels = [
+            nomangle('MEOW'),
+            nomangle('MEOW'),
+            nomangle('MEWR'),
+            nomangle('MEW'),
+            nomangle('MOW'),
+            nomangle('MAW'),
+            nomangle('VRAOW'),
+            nomangle('MEWR'),
+            nomangle('MAORRAO'),
+            nomangle('MEWP'),
+        ]
+        this.textLabel = labels[~~(this.seed * labels.length)];
+        this.textX = rnd(-50, 50);
+        this.textY = rnd(-20, -50);
     }
 
     get radius() {
@@ -41,5 +57,10 @@ class MeowEffect extends Entity {
             ctx.arc(0, 0, r, 0, TWO_PI);
             ctx.stroke();
         }
+
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.font = '16px Impact';
+        ctx.fillText(this.textLabel, this.textX, this.textY);
     }
 }

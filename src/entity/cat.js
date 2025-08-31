@@ -305,8 +305,9 @@ class Cat extends Entity {
             this.lastStickToWall = this.age;
         }
 
-        if (this.releasedMeow && downKeys[69]) {
+        if (this.releasedMeow && downKeys[69] && this.age - (this.lastMeow || 0) > 0.3) {
             this.releasedMeow = false;
+            this.lastMeow = this.age;
             zzfx(...[.5,,282,.02,.03,,2,4,,,,,,1,,,,.78,.03]); // Jump 1017
             const meow = this.world.addEntity(new MeowEffect());
             meow.x = this.x;
