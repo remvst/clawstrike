@@ -939,13 +939,14 @@ playSong = () => new MusicGenerator(SONG).createAudioBuffer(buffer => {
     source.loop = true;
 
     const gainNode = audioCtx.createGain();
-    gainNode.gain.value = SONG_VOLUME;
     gainNode.connect(audioCtx.destination);
     source.connect(gainNode);
     source.nomangle(start)();
 
     playSong = () => 0;
-    setSongVolume = (x) => gainNode.gain.value = x;
+    setSongVolume = (x) => gainNode.gain.value = x * SONG_VOLUME;
+
+    setSongVolume(1);
 });
 
 setSongVolume = () => 0;

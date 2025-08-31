@@ -15,4 +15,8 @@ class PauseScreen extends MenuScreen {
     absorb() {
         return true;
     }
+
+    get songVolume() {
+        return 0.2;
+    }
 }

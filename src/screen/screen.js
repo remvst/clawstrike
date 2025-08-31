@@ -7,6 +7,10 @@ class Screen {
         this.commands = [];
     }
 
+    get songVolume() {
+        return 1;
+    }
+
     addCommand(label, detect, action, playSound = true) {
         this.commands.push({ label, detect, action, playSound });
     }
@@ -72,6 +76,10 @@ class Screen {
                     action();
                 }
             }
+        }
+
+        if (this.isForeground()) {
+            setSongVolume(this.songVolume * (document.hasFocus() ? 1 : 0));
         }
     }
 
