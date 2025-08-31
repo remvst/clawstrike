@@ -558,6 +558,22 @@ class Cat extends Entity {
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
             ctx.fill();
+
+            for (const scaleY of [-1, 1]) {
+                for (const angle of [0, PI / 16]) {
+                    ctx.wrap(() => {
+                        ctx.scale(1, scaleY);
+                        ctx.rotate(angle);
+                        ctx.strokeStyle = '#000';
+                        ctx.lineWidth = 0.5;
+                        ctx.globalAlpha = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(-5, 5);
+                        ctx.lineTo(-5, 20);
+                        ctx.stroke();
+                    });
+                }
+            }
         });
     }
 
