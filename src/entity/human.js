@@ -144,7 +144,7 @@ class Human extends Entity {
 
         if (this.seesCat && this.age - this.lastDamage > 0.5) {
             this.facing = sign(this.seesCat.x - this.x) || 1;
-            this.aim = atan2(this.seesCat.y - this.y, this.seesCat.x - this.x);
+            this.aim = atan2(this.seesCat.y - this.eyes[0].y, this.seesCat.x - this.eyes[0].x);
             this.lastSeenCat = this.age;
         } else {
             if (this.age - this.lastSeenCat > 2) {

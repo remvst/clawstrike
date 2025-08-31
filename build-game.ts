@@ -253,6 +253,8 @@ const argv = yargs(process.argv.slice(2)).options({
 
     js += '];';
 
+    js += 'INTRO_LEVEL = ' + await fs.readFile('src/level/levels/intro.js', 'utf-8') + ';';
+
     js = hardcodeConstants(js, constants);
     js = macro(js, NOMANGLE);
     js = macro(js, EVALUATE);

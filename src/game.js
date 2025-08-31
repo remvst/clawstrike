@@ -21,9 +21,6 @@ class Game {
 
         let promptedEasyMode;
 
-        this.navigate(new StoryScreen());
-        return;
-
         while (true) {
             this.runTime = 0;
             this.runLevelIndex = 0;

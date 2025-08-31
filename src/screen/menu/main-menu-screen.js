@@ -26,6 +26,11 @@ class MainMenuScreen extends MenuScreen {
 
         if (DEBUG) {
             this.addCommand(
+                nomangle('PRESS [ENTER] TO FOR INTRO'),
+                () => downKeys[13],
+                () => G.navigate(new StoryScreen(), true).await(),
+            );
+            this.addCommand(
                 nomangle('PRESS [E] TO ENTER LEVEL EDITOR'),
                 () => downKeys[69], // nice
                 () => G.navigate(new LevelEditorScreen(ALL_LEVELS[0]), true),

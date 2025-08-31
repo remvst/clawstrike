@@ -4,6 +4,7 @@ class Bullet extends Entity {
         this.owner = owner;
         this.angle = owner.aim;
         this.hitbox.width = this.hitbox.height = 2;
+        this.categories.push('bullet');
 
         this.z = Z_BULLET;
 

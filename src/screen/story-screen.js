@@ -2,7 +2,7 @@
 
 class StoryScreen extends WorldScreen {
     constructor() {
-        super([{"type":"text","x":275,"y":-50,"text":"[SPACE] = ATTACK"},{"type":"cat","x":225,"y":200},{"type":"structure","x":0,"y":0,"matrix":[[1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,2,0,0,2,0,0,1],[1,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1]],"color":"#08f"},{"type":"human","x":375,"y":175}]);
+        super(INTRO_LEVEL);
         // this.cycle(3);
 
         const cameraTarget = this.world.addEntity(new Entity());
@@ -23,12 +23,15 @@ class StoryScreen extends WorldScreen {
             characters: '#fff',
             eyes: '#000',
         };
+
+        this.endTriggered = false;
     }
 
     cycle(elapsed) {
         const camera = firstItem(this.world.category('camera'));
         const cat = firstItem(this.world.category('cat'));
         const human = firstItem(this.world.category('human'));
+        const bullet = firstItem(this.world.category('bullet'));
 
         downKeys = {};
 
@@ -38,6 +41,27 @@ class StoryScreen extends WorldScreen {
         human.seesCat = cat;
         human.facing = -1;
         camera.shakePower = 0;
+
+        if (bullet) {
+            camera.target = bullet;
+            // camera.x = camera.target.x;
+            // camera.y = camera.target.y;
+            camera.zoom += elapsed;
+        }
+
+        if (!cat && !this.endTriggered) {
+            this.endTriggered = true;
+
+            // console.log('Flash effect started');
+
+            const flash = this.world.addEntity(new Flash('#000'));
+            flash.alpha = 1;
+            // flash.interp('alpha', 0, 1, 4 * 0.1).then(() => {
+            //     console.log('Flash effect completed');
+            //     this.resolve();
+            // });
+                // this.resolve();
+        }
 
         super.cycle(elapsed * 0.1);
     }
