@@ -28,6 +28,7 @@ const JS_FILES = [
     'entity/human.js',
     'entity/bullet.js',
     'entity/claw-effect.js',
+    'entity/meow-effect.js',
     'entity/flash.js',
     'entity/cat.js',
     'entity/structure.js',
@@ -83,7 +84,7 @@ const CONSTANTS = {
     "DEBUG_INFO": 1,
     "DEBUG_HITBOXES": 0,
     "DEBUG_JUMP": 0,
-    "DEBUG_VISION": 0,
+    "DEBUG_VISION": 1,
 };
 
 const MANGLE_PARAMS = {
@@ -198,6 +199,7 @@ const argv = yargs(process.argv.slice(2)).options({
     for (const constant of [
         "Z_WATER",
         "Z_LABEL",
+        "Z_MEOW",
         "Z_STRUCTURE",
         "Z_SPIKES",
         "Z_CAT",

@@ -165,6 +165,12 @@ class Structure extends Entity {
         });
 
         ctx.drawImage(this.prerendered, this.x, this.y);
+
+        ctx.fillStyle = '#000';
+        ctx.fillRect(this.x, this.y, -CANVAS_WIDTH / 2, this.height);
+        ctx.fillRect(this.x + this.width, this.y, CANVAS_WIDTH  / 2, this.height);
+        ctx.fillRect(this.x - CANVAS_WIDTH / 2, this.y, CANVAS_WIDTH + this.width, -CANVAS_HEIGHT / 2);
+        ctx.fillRect(this.x - CANVAS_WIDTH / 2, this.y + this.height, CANVAS_WIDTH + this.width, this.height);
     }
 
     reposition(entity, radiusX, radiusY, previousX, previousY) {

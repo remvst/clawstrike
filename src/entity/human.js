@@ -70,13 +70,17 @@ class Human extends Entity {
         return true;
     }
 
+    get confused() {
+        return this.age - this.lastSeenCat < 2;
+    }
+
     cycle(elapsed) {
         super.cycle(elapsed);
 
         const { facing } = this;
 
         // Left/right movement
-        this.walking = ((this.age + this.seed * 8) % 8) < 5 && this.age - this.lastSeenCat > 2 && this.landed && this.age - this.lastDamage > 0.5;
+        this.walking = ((this.age + this.seed * 8) % 8) < 5 && !this.confused && this.landed && this.age - this.lastDamage > 0.5;
         if (this.walking) {
             this.x += this.walkingDirection * 100 * elapsed;
         }
@@ -175,9 +179,16 @@ class Human extends Entity {
         }
 
         this.visionDistance = min(HUMAN_VISION_DISTANCE, this.visionDistance + elapsed * 2000);
-        if (this.facing != facing) {
+        if (this.facing != this.previousFacing) {
             this.visionDistance = 0;
+            this.previousFacing = this.facing;
         }
+    }
+
+    hear(cat) {
+        this.lastSeenCat = this.age;
+        this.facing = this.walkingDirection = sign(cat.x - this.x) || 1;
+        this.aim = atan2(1, this.facing / 2);
     }
 
     damage() {
