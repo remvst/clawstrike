@@ -349,10 +349,9 @@ class Cat extends Entity {
             }
         }
 
-        const attack = new ClawEffect();
+        const attack = this.world.addEntity(new ClawEffect());
         attack.x = this.x + this.facing * 60;
         attack.y = this.y;
-        this.world.addEntity(attack);
 
         zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
 
