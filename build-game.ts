@@ -31,6 +31,7 @@ const JS_FILES = [
     'entity/flash.js',
     'entity/cat.js',
     'entity/structure.js',
+    'entity/particle.js',
     'entity/physical-particle.js',
     'entity/camera.js',
     'entity/hud.js',

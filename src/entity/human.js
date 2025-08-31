@@ -129,10 +129,6 @@ class Human extends Entity {
                     abs(angleDiff) > PI / HUMAN_VISION_DIVIDER &&
                     !this.feetVision.contains(cat)
                 ) continue; // Out of vision cone
-
-                if (this.feetVision.contains(cat)) {
-                    console.log('in feet');
-                }
                 if (!this.canSee(cat)) continue;
 
                 this.seesCat = cat;
@@ -159,10 +155,23 @@ class Human extends Entity {
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
             const bullet = this.world.addEntity(new Bullet(this));
-            bullet.x = this.x + this.facing * 10 + cos(this.aim) * 20;
-            bullet.y = this.y - 20 + sin(this.aim) * 20;
+            bullet.x = this.x + this.facing * 10 + cos(this.aim) * 35;
+            bullet.y = this.y - 20 + sin(this.aim) * 35;
             this.nextShot = 0.2;
             this.lastBullet = bullet;
+
+            for (let i = 0 ; i < 5 ; i++) {
+                const particle = this.world.addEntity(new Particle('#fff'));
+                particle.x = bullet.x;
+                particle.y = bullet.y;
+                particle.size = rnd(5, 10);
+
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(-10, 10),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
         }
 
         this.visionDistance = min(HUMAN_VISION_DISTANCE, this.visionDistance + elapsed * 2000);
@@ -187,6 +196,19 @@ class Human extends Entity {
         if (--this.health <= 0) {
             zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
             this.world.removeEntity(this);
+
+            for (let i = 0 ; i < 50 ; i++) {
+                const particle = this.world.addEntity(new Particle('#fff'));
+                particle.x = this.x + rnd(-this.hitbox.width, this.hitbox.width) / 2;
+                particle.y = this.y + rnd(-this.hitbox.height, this.hitbox.height) / 2;
+                particle.size = rnd(5, 10);
+
+                particle.animate(rnd(0.5, 1), {
+                    x: rnd(-100, 100),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
         }
 
         for (let i = 0; i < (this.health ? 10 : 50); i++) {

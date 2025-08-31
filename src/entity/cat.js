@@ -67,6 +67,29 @@ class Cat extends Entity {
             this.facing = this.wallStickDirection;
         }
 
+        for (let i = 0 ; i < 10 ; i++) {
+            const particle = this.world.addEntity(new Particle('#fff'));
+            particle.size = rnd(5, 10);
+
+            if (this.stickingToWall) {
+                particle.x = this.x - this.wallStickDirection * this.hitbox.width / 2 + rnd(-5, 5);
+                particle.y = this.y + rnd(-1, 1) * this.hitbox.height / 2;
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(20, 50) * this.wallStickDirection,
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            } else {
+                particle.x = this.x - rnd(-1, 1) * this.hitbox.width / 2;
+                particle.y = this.y + this.hitbox.height / 2;
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(-40, 40),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
+        }
+
         this.wallStickX = 0;
         this.wallStickDirection = 0;
     }
@@ -235,6 +258,19 @@ class Cat extends Entity {
         }
 
         if (this.landed && !landed) {
+            for (let i = 0 ; i < 10 ; i++) {
+                const particle = this.world.addEntity(new Particle('#fff'));
+                particle.x = this.x - rnd(-1, 1) * this.hitbox.width / 2;
+                particle.y = this.y + this.hitbox.height / 2;
+                particle.size = rnd(5, 10);
+
+                particle.animate(rnd(0.2, 0.5), {
+                    x: rnd(-40, 40),
+                    y: rnd(-20, -50),
+                    size: -particle.size,
+                });
+            }
+
             zzfx(...[.05,,339,.01,.01,,4,4.4,11,-6,-486,.09,,,,,,.64,.03,.2]); // Blip 426
         }
 
@@ -266,6 +302,21 @@ class Cat extends Entity {
         } else {
             this.viewAngle = -PI / 2;
             this.lastStickToWall = this.age;
+        }
+
+        if (this.rolling && this.landed && this.age - (this.lastRollParticle || 0) > 1 / 60) {
+            this.lastRollParticle = this.age;
+
+            const particle = this.world.addEntity(new Particle('#fff'));
+            particle.x = this.x + rnd(-10, 10);
+            particle.y = this.y + this.hitbox.height / 2 + rnd(0, -10);
+            particle.size = rnd(4, 8);
+
+            particle.animate(rnd(0.2, 0.5), {
+                x: rnd(-10, 10),
+                y: rnd(-20, -50),
+                size: -particle.size,
+            });
         }
     }
 

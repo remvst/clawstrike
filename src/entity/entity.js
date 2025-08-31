@@ -52,4 +52,13 @@ class Entity {
             ctx.fillRect(-cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
         });
     }
+
+    interp(
+        interpProperty,
+        fromValue,
+        toValue,
+        interpDuration,
+    ) {
+        return this.world.addEntity(new Interpolator(this, interpProperty, fromValue, toValue, interpDuration)).await();
+    }
 }
