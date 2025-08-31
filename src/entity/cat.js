@@ -297,7 +297,7 @@ class Cat extends Entity {
             }
         }
 
-        if (!this.stickingToWall) {
+        if (!this.stickingToWall || downKeys[40]) {
             this.wallStickX = 0;
         } else {
             this.viewAngle = -PI / 2;
