@@ -299,7 +299,6 @@ class Human extends Entity {
 
             // Gun
             ctx.wrap(() => {
-                ctx.fillStyle = '#000';
                 ctx.translate(ARM_LENGTH, -2);
                 ctx.fillRect(0, 0, 15, -5);
                 ctx.fillRect(0, 0, 5, 5);
