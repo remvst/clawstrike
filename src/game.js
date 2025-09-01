@@ -5,7 +5,7 @@ class Game {
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
+        this.bestRunTime = parseInt(localStorage[nomangle("bt")]) || 0;
         this.screens = [];
         this.difficulty = inputMode == INPUT_MODE_TOUCH ? DIFFICULTY_EASY : DIFFICULTY_NORMAL;
 
