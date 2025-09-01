@@ -1,15 +1,10 @@
 class MeowEffect extends Entity {
     constructor() {
         super();
-        this.angle = this.seed * TWO_PI;
-        this.scale = 1 + this.seed * 0.5;
-        this.color = '#fff';
         this.z = Z_MEOW;
-        this.stroke = true;
         this.affected = new Set();
 
         const labels = [
-            nomangle('MEOW'),
             nomangle('MEOW'),
             nomangle('MEWR'),
             nomangle('MEW'),
