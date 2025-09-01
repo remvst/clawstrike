@@ -70,5 +70,9 @@ class StoryScreen extends WorldScreen {
         this.enemy.facing = this.enemy.walkingDirection = -1;
         this.enemy.lastDamage = this.enemy.age - 0.2;
         this.enemy.aim = angleBetween(this.enemy, this.owner);
+
+        if (this.age > 10) {
+            this.resolve();
+        }
     }
 }
