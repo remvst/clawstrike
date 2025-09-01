@@ -130,9 +130,10 @@ class Human extends Entity {
                 const angleToCat = angleBetween(this.eyes[0], cat);
                 const baseAngle = this.facing > 0 ? 0 : PI;
                 const angleDiff = normalizeAngle(angleToCat - baseAngle);
+                const divider = cat.y < this.y ? HUMAN_VISION_DIVIDER_TOP : HUMAN_VISION_DIVIDER_BOTTOM;
                 if (
                     !seesCat &&
-                    abs(angleDiff) > PI / HUMAN_VISION_DIVIDER &&
+                    abs(angleDiff) > PI / divider &&
                     !this.feetVision.contains(cat)
                 ) continue; // Out of vision cone
                 if (!this.canSee(cat)) continue;
@@ -373,14 +374,13 @@ class Human extends Entity {
         });
 
         if (DEBUG_VISION) ctx.wrap(() => {
-            const baseAngle = this.facing > 0 ? 0 : PI;
-
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 2;
             ctx.translate(this.eyes[0].x, this.eyes[0].y);
+            ctx.scale(this.facing, 1);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.arc(0, 0, this.visionDistance, baseAngle - PI / HUMAN_VISION_DIVIDER, baseAngle + PI / HUMAN_VISION_DIVIDER);
+            ctx.arc(0, 0, this.visionDistance, - PI / HUMAN_VISION_DIVIDER_TOP, PI / HUMAN_VISION_DIVIDER_BOTTOM);
             ctx.closePath();
             ctx.stroke();
         });
