@@ -15,7 +15,6 @@ class MenuScreen extends Screen {
         ctx.textBaseline = 'middle';
         ctx.font = 'bold 160px Impact';
         ctx.strokeStyle = '#000';
-        ctx.miterLimit = 2;
         ctx.lineWidth = 20;
         ctx.strokeText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
         ctx.fillText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
@@ -39,7 +38,6 @@ class MenuScreen extends Screen {
         ctx.textBaseline = nomangle('middle');
         ctx.lineWidth = 5;
         ctx.textAlign = nomangle('center');
-        ctx.miterLimit = 2;
         ctx.letterSpacing = nomangle('0.1em');
 
         ctx.drawCommandText(line);

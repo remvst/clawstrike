@@ -88,6 +88,8 @@ class Game {
         const elapsed = min((now - (this.lastFrame || 0)) / 1000, 1 / 30);
         this.lastFrame = now;
 
+        ctx.miterLimit = 2;
+
         if (!DEBUG || document.hasFocus()) {
             if (DEBUG) {
                 if (downKeys[71]) elapsed *= 0.1;
