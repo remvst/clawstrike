@@ -367,8 +367,8 @@ class Cat extends Entity {
 
         zzfx(...[0.1,,170,.04,.04,.06,1,1.8,25,4,,,,5,,,,.85,.01]); // Jump 62
 
-        attack.x += random() * 30 - 15;
-        attack.y += random() * 50 - 25;
+        attack.x += rnd(-15, 15);
+        attack.y += rnd(-25, 25);
 
         const angle = target ? angleBetween(this, target) : atan2(0, this.facing);
         const dist = min(10, target ? distance(this, target) : 99);

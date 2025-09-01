@@ -205,6 +205,7 @@ const MANGLE_PARAMS = {
         "matrix",
         "transitionProgress",
         "water",
+        "acceleration",
     ]
 };
 
