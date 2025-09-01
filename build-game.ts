@@ -231,7 +231,7 @@ const argv = yargs(process.argv.slice(2)).options({
         jsFiles.map(path => fs.readFile('src/' + path, 'utf-8')))
     ).join('\n');
 
-    js += 'ALL_LEVELS = [';
+    js += 'ALL_LEVELS = [\n';
 
     for (const path of [
         'level/levels/blank.js',
@@ -249,12 +249,12 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/cramped.js',
         'level/levels/climb.js',
     ]) {
-        js += await fs.readFile('src/' + path, 'utf-8') + ',';
+        js += (await fs.readFile('src/' + path, 'utf-8')).trim() + ',\n';
     }
 
-    js += '];';
+    js += '];\n';
 
-    js += 'INTRO_LEVEL = ' + await fs.readFile('src/level/levels/intro.js', 'utf-8') + ';';
+    js += 'INTRO_LEVEL = ' + await fs.readFile('src/level/levels/intro.js', 'utf-8') + ';\n';
 
     js = hardcodeConstants(js, constants);
     js = macro(js, NOMANGLE);
