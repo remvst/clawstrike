@@ -6,23 +6,27 @@ class MainMenuScreen extends MenuScreen {
 
         this.title = document.title;
         this.addCommand(
-            nomangle('PRESS [SPACE] TO START'),
+            inputMode == INPUT_MODE_KEYBOARD
+                ? nomangle('PRESS [SPACE] TO START')
+                : nomangle('[TAP] TO START'),
             () => downKeys[32] || TOUCH_DOWN,
             () => this.start(),
             false,
         );
 
-        if (G.bestRunTime) {
-            this.addCommand(
-                nomangle('PRESS [9] TO START 9 LIVES MODE'),
-                () => downKeys[57],
-                () => {
-                    G.difficulty = DIFFICULTY_NINE_LIVES;
-                    this.start();
-                },
-            );
+        if (inputMode == INPUT_MODE_KEYBOARD) {
+            if (G.bestRunTime) {
+                this.addCommand(
+                    nomangle('PRESS [9] TO START 9 LIVES MODE'),
+                    () => downKeys[57],
+                    () => {
+                        G.difficulty = DIFFICULTY_NINE_LIVES;
+                        this.start();
+                    },
+                );
+            }
+            this.addDifficultyChangeCommand();
         }
-        this.addDifficultyChangeCommand();
 
         if (DEBUG) {
             this.addCommand(
