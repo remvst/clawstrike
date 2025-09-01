@@ -9,6 +9,13 @@ class Game {
         this.screens = [];
         this.difficulty = inputMode == INPUT_MODE_TOUCH ? DIFFICULTY_EASY : DIFFICULTY_NORMAL;
 
+        if (DEBUG) {
+            const params = new URLSearchParams(location.search);
+            if (params.get('level')) {
+                ALL_LEVELS = [JSON.parse(params.get('level'))];
+            }
+        }
+
         this.frame();
         setTimeout(async () => {
             await this.navigate(new StoryScreen()).awaitCompletion();
@@ -17,11 +24,6 @@ class Game {
     }
 
     async startNavigation() {
-        const params = new URLSearchParams(location.search);
-        if (DEBUG && params.get('level')) {
-            ALL_LEVELS = [JSON.parse(params.get('level'))];
-        }
-
         let promptedEasyMode;
 
         while (true) {
@@ -73,10 +75,8 @@ class Game {
                 }
             }
 
-            if (!params.get('level')) {
-                this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
-                localStorage[nomangle("bt")] = this.bestRunTime;
-            }
+            this.bestRunTime = min(this.bestRunTime || 9999, this.runTime);
+            localStorage[nomangle("bt")] = this.bestRunTime;
 
             const blankScreen = this.navigate(new WorldScreen([]));
             await this.navigate(new GameCompleteScreen(blankScreen)).awaitCompletion();
