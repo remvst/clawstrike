@@ -30,6 +30,8 @@ class Human extends Entity {
         this.health = 3;
 
         this.visionDistance = 0;
+
+        this.color = '#000';
     }
 
     get landed() {
@@ -158,30 +160,34 @@ class Human extends Entity {
         }
 
         if ((this.nextShot -= elapsed) <= 0 && this.seesCat) {
-            const bullet = this.world.addEntity(new Bullet(this));
-            bullet.x = this.x + this.facing * 10 + cos(this.aim) * 35;
-            bullet.y = this.y - 20 + sin(this.aim) * 35;
-            this.nextShot = 0.2;
-            this.lastBullet = bullet;
-
-            for (let i = 0 ; i < 5 ; i++) {
-                const particle = this.world.addEntity(new Particle('#fff'));
-                particle.x = bullet.x;
-                particle.y = bullet.y;
-                particle.size = rnd(5, 10);
-
-                particle.animate(rnd(0.2, 0.5), {
-                    x: rnd(-10, 10),
-                    y: rnd(-20, -50),
-                    size: -particle.size,
-                });
-            }
+            this.shoot();
         }
 
         this.visionDistance = min(HUMAN_VISION_DISTANCE, this.visionDistance + elapsed * 2000);
         if (this.facing != this.previousFacing) {
             this.visionDistance = 0;
             this.previousFacing = this.facing;
+        }
+    }
+
+    shoot() {
+        const bullet = this.world.addEntity(new Bullet(this));
+        bullet.x = this.x + this.facing * 10 + cos(this.aim) * 35;
+        bullet.y = this.y - 20 + sin(this.aim) * 35;
+        this.nextShot = 0.2;
+        this.lastBullet = bullet;
+
+        for (let i = 0 ; i < 5 ; i++) {
+            const particle = this.world.addEntity(new Particle('#fff'));
+            particle.x = bullet.x;
+            particle.y = bullet.y;
+            particle.size = rnd(5, 10);
+
+            particle.animate(rnd(0.2, 0.5), {
+                x: rnd(-10, 10),
+                y: rnd(-20, -50),
+                size: -particle.size,
+            });
         }
     }
 
@@ -246,10 +252,10 @@ class Human extends Entity {
         const NECK_THICKNESS = 8;
         const NECK_LENGTH = 4;
 
-        const ARM_LENGTH = 20;
+        const ARM_LENGTH = 25;
         const ARM_THICKNESS = 5;
 
-        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : COLORS.characters;
+        ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : this.color;
 
         // Body
         ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
@@ -295,13 +301,13 @@ class Human extends Entity {
             }
 
             ctx.rotate(angle);
-            ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH, ARM_THICKNESS);
+            ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH + 1, ARM_THICKNESS);
 
             // Gun
             ctx.wrap(() => {
-                ctx.translate(ARM_LENGTH, -2);
+                ctx.translate(ARM_LENGTH - 5, -ARM_THICKNESS / 2);
                 ctx.fillRect(0, 0, 15, -5);
-                ctx.fillRect(0, 0, 5, 5);
+                // ctx.fillRect(0, 0, 5, 5);
             });
         });
 

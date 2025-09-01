@@ -49,8 +49,6 @@ class Structure extends Entity {
     }
 
     renderBackground() {
-        if (!COLORS.structureBackground) return;
-
         this.width = this.matrix[0].length * CELL_SIZE;
         this.height = this.matrix.length * CELL_SIZE;
 
@@ -84,7 +82,7 @@ class Structure extends Entity {
         this.prerendered = this.prerendered || createCanvas(this.width, this.height, (ctx, can) => {
             // Cells
             ctx.wrap(() => {
-                ctx.fillStyle = COLORS.structure;
+                ctx.fillStyle = '#000';
 
                 for (let row = rows - 1 ; row >= 0 ; row--) {
                     for (let col = 0 ; col < cols ; col++) {

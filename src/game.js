@@ -10,7 +10,10 @@ class Game {
         this.difficulty = DIFFICULTY_NORMAL;
 
         this.frame();
-        setTimeout(() => this.startNavigation(), 0);
+        setTimeout(async () => {
+            await this.navigate(new StoryScreen()).await();
+            this.startNavigation();
+        }, 0);
     }
 
     async startNavigation() {

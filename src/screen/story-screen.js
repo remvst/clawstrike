@@ -3,66 +3,72 @@
 class StoryScreen extends WorldScreen {
     constructor() {
         super(INTRO_LEVEL);
-        // this.cycle(3);
 
-        const cameraTarget = this.world.addEntity(new Entity());
         const camera = firstItem(this.world.category('camera'));
-        const cat = firstItem(this.world.category('cat'));
-        const human = firstItem(this.world.category('human'));
+        const structure = firstItem(this.world.category('structure'));
+        structure.color = '#000';
 
-        cameraTarget.x = (cat.x + human.x) / 2;
-        cameraTarget.y = (cat.y + human.y) / 2 - 20;
-        camera.target = cameraTarget;
+        this.owner = this.world.addEntity(new Human());
+        this.owner.x = CELL_SIZE * 4;
+
+        this.enemy = this.world.addEntity(new Human());
+        this.enemy.x = CELL_SIZE * 8;
+
+        this.owner.color = this.enemy.color = '#fff';
+        this.owner.y = this.enemy.y = CELL_SIZE * 2;
+
+        camera.x = (this.owner.x + this.enemy.x) / 2;
+        camera.y = (this.owner.y + this.enemy.y) / 2;
         camera.zoom = 3;
-        camera.x = cameraTarget.x;
-        camera.y = cameraTarget.y;
 
-        COLORS = {
-            structure: '#000',
-            structureBackground: false,
-            characters: '#fff',
-            eyes: '#000',
-        };
+        this.addCommand(
+            () => '',
+            () => downKeys[13],
+            () => this.resolve(),
+        );
 
-        this.endTriggered = false;
+        (async () => {
+            this.cycle(0.2);
+
+            const fadeIn = this.world.addEntity(new Flash('#000'));
+            await fadeIn.interp('alpha', 1, 0, 1);
+
+            // Shoot and wait for the owner to take damage
+            this.enemy.shoot();
+            while (this.owner.health >= 3) await fadeIn.interp('_', 0, 0, 0);
+
+            for (const entity of this.world.entities.slice()) {
+                if (!(entity instanceof Camera)) this.world.removeEntity(entity);
+                this.render();
+            }
+
+            const flash = this.world.addEntity(new Flash('#fff'));
+            flash.alpha = 1;
+            await flash.interp('alpha', 1, 0, 2);
+            this.world.removeEntity(flash);
+
+            const label = this.world.addEntity(new Label(nomangle('AVENGE YOUR HOOMAN')));
+            label.x = camera.x;
+            label.y = camera.y;
+            camera.zoom = 1;
+
+            await label.interp('_', 0, 0, 2);
+
+            this.resolve();
+        })();
     }
 
     cycle(elapsed) {
-        const camera = firstItem(this.world.category('camera'));
-        const cat = firstItem(this.world.category('cat'));
-        const human = firstItem(this.world.category('human'));
-        const bullet = firstItem(this.world.category('bullet'));
+        super.cycle(elapsed * (this.world.category('bullet').size ? 0.1 : 1));
 
-        downKeys = {};
+        this.owner.walking = false;
+        this.owner.facing = this.owner.walkingDirection = 1;
+        this.owner.lastDamage = this.owner.age - 0.2;
+        this.owner.aim = PI / 2 + PI / 8;
 
-        human.walking = false;
-        human.nextShot = this.age < 2 * 0.1 || human.lastBullet ? 9 : 0;
-        human.lastSeenCat = human.age;
-        human.seesCat = cat;
-        human.facing = -1;
-        camera.shakePower = 0;
-
-        if (bullet) {
-            camera.target = bullet;
-            // camera.x = camera.target.x;
-            // camera.y = camera.target.y;
-            camera.zoom += elapsed;
-        }
-
-        if (!cat && !this.endTriggered) {
-            this.endTriggered = true;
-
-            // console.log('Flash effect started');
-
-            const flash = this.world.addEntity(new Flash('#000'));
-            flash.alpha = 1;
-            // flash.interp('alpha', 0, 1, 4 * 0.1).then(() => {
-            //     console.log('Flash effect completed');
-            //     this.resolve();
-            // });
-                // this.resolve();
-        }
-
-        super.cycle(elapsed * 0.1);
+        this.enemy.walking = false;
+        this.enemy.facing = this.enemy.walkingDirection = -1;
+        this.enemy.lastDamage = this.enemy.age - 0.2;
+        this.enemy.aim = angleBetween(this.enemy, this.owner);
     }
 }
