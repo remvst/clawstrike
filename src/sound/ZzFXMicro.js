@@ -54,9 +54,9 @@ class FunZZfx {
         this.source.connect(this.gainNode);
     }
 
-    setRate(rate) {
-        this.source.playbackRate.value = rate;
-    }
+    // setRate(rate) {
+    //     this.source.playbackRate.value = rate;
+    // }
 
     setVolume(volume) {
         this.gainNode.gain.value = volume;
@@ -66,9 +66,9 @@ class FunZZfx {
         this.source.start();
     }
 
-    stop() {
-        this.source.stop();
-    }
+    // stop() {
+    //     this.source.stop();
+    // }
 }
 
 
