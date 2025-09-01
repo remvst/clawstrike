@@ -61,7 +61,7 @@ class Structure extends Entity {
         const maxY = min(this.y + this.height, camera.actual.y + CANVAS_HEIGHT / 2) - CELL_SIZE;
 
         ctx.fillStyle = this.color;
-        fillRect(minX, minY, maxX - minX, maxY - minY);
+        ctx.fillRect(minX, minY, maxX - minX, maxY - minY);
 
         ctx.globalAlpha = 0.05;
         ctx.fillStyle = BACKGROUND_STRIPES;
@@ -69,8 +69,8 @@ class Structure extends Entity {
         const offsetY = this.age * 30;
         const offsetX = offsetY * BACKGROUND_STRIPES.width / BACKGROUND_STRIPES.height;
 
-        translate(offsetX, offsetY);
-        fillRect(minX - offsetX, minY - offsetY, maxX - minX, maxY - minY);
+        ctx.translate(offsetX, offsetY);
+        ctx.fillRect(minX - offsetX, minY - offsetY, maxX - minX, maxY - minY);
     }
 
     render() {
@@ -161,13 +161,13 @@ class Structure extends Entity {
             }
         });
 
-        drawImage(this.prerendered, this.x, this.y);
+        ctx.drawImage(this.prerendered, this.x, this.y);
 
         ctx.fillStyle = '#000';
-        fillRect(this.x, this.y, -CANVAS_WIDTH / 2, this.height);
-        fillRect(this.x + this.width, this.y, CANVAS_WIDTH  / 2, this.height);
-        fillRect(this.x - CANVAS_WIDTH / 2, this.y, CANVAS_WIDTH + this.width, -CANVAS_HEIGHT / 2);
-        fillRect(this.x - CANVAS_WIDTH / 2, this.y + this.height, CANVAS_WIDTH + this.width, this.height);
+        ctx.fillRect(this.x, this.y, -CANVAS_WIDTH / 2, this.height);
+        ctx.fillRect(this.x + this.width, this.y, CANVAS_WIDTH  / 2, this.height);
+        ctx.fillRect(this.x - CANVAS_WIDTH / 2, this.y, CANVAS_WIDTH + this.width, -CANVAS_HEIGHT / 2);
+        ctx.fillRect(this.x - CANVAS_WIDTH / 2, this.y + this.height, CANVAS_WIDTH + this.width, this.height);
     }
 
     reposition(entity, radiusX, radiusY, previousX, previousY) {

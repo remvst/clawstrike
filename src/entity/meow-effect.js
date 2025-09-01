@@ -39,7 +39,7 @@ class MeowEffect extends Entity {
     }
 
     render() {
-        translate(this.x, this.y);
+        ctx.translate(this.x, this.y);
         ctx.globalAlpha = 1 - this.age / 0.5;
 
         const count = 5;
@@ -48,14 +48,14 @@ class MeowEffect extends Entity {
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 1;
         for (let r = roundToNearest(this.radius, spacing), i = 0 ; i < count ; r += spacing, i++) {
-            beginPath();
-            arc(0, 0, r, 0, TWO_PI);
-            stroke();
+            ctx.beginPath();
+            ctx.arc(0, 0, r, 0, TWO_PI);
+            ctx.stroke();
         }
 
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
         ctx.font = '16px Impact';
-        fillText(this.textLabel, this.textX, this.textY);
+        ctx.fillText(this.textLabel, this.textX, this.textY);
     }
 }

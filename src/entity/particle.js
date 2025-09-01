@@ -10,12 +10,12 @@ class Particle extends Entity {
 
     render() {
         ctx.globalAlpha = this.alpha;
-        translate(this.x, this.y);
+        ctx.translate(this.x, this.y);
         ctx.fillStyle = this.color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
-        fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
-        strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
     }
 
     animate(duration, values) {

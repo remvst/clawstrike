@@ -39,12 +39,12 @@ class PhysicalParticle extends Entity {
 
     render() {
         const s = pointDistance(0, 0, this.vX, this.vY) / 25;
-        translate(this.x, this.y);
-        rotate(atan2(this.vY, this.vX) + PI);
+        ctx.translate(this.x, this.y);
+        ctx.rotate(atan2(this.vY, this.vX) + PI);
         ctx.fillStyle = this.color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
-        fillRect(0, -2, s, 4);
-        strokeRect(0, -2, s, 4);
+        ctx.fillRect(0, -2, s, 4);
+        ctx.strokeRect(0, -2, s, 4);
     }
 }

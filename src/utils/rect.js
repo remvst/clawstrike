@@ -19,10 +19,10 @@ class Rect {
     }
 
     render() {
-        if (DEBUG) wrap(() => {
-            translate(this.x, this.y);
+        if (DEBUG) ctx.wrap(() => {
+            ctx.translate(this.x, this.y);
             ctx.strokeStyle = '#fff';
-            strokeRect(-this.width / 2, -this.height / 2, this.width, this.height);
+            ctx.strokeRect(-this.width / 2, -this.height / 2, this.width, this.height);
         });
     }
 }

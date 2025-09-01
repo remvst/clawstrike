@@ -31,25 +31,25 @@ class Entity {
 
     cancelCamera() {
         const camera = firstItem(this.world.category('camera'));
-        translate(
+        ctx.translate(
             camera.actual.x - (1 / camera.appliedZoom) * CANVAS_WIDTH / 2,
             camera.actual.y - (1 / camera.appliedZoom) * CANVAS_HEIGHT / 2,
         );
-        scale(1 / camera.appliedZoom, 1 / camera.appliedZoom);
+        ctx.scale(1 / camera.appliedZoom, 1 / camera.appliedZoom);
     }
 
     renderDebug() {
         if (DEBUG && DEBUG_HITBOXES) this.hitbox.render();
 
-        if (DEBUG && DEBUG_HITBOXES) wrap(() => {
+        if (DEBUG && DEBUG_HITBOXES) ctx.wrap(() => {
             this.cancelCamera();
 
             const cornerRadius = 10;
             ctx.fillStyle = '#fff';
-            fillRect(-cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
-            fillRect(CANVAS_WIDTH -cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
-            fillRect(CANVAS_WIDTH -cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
-            fillRect(-cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+            ctx.fillRect(-cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+            ctx.fillRect(CANVAS_WIDTH -cornerRadius, -cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+            ctx.fillRect(CANVAS_WIDTH -cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
+            ctx.fillRect(-cornerRadius, CANVAS_HEIGHT-cornerRadius ,cornerRadius * 2, cornerRadius * 2);
         });
     }
 

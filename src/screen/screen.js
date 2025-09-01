@@ -116,15 +116,15 @@ class TransitionScreen extends Screen {
     }
 
     render() {
-        translate(interpolate(this.from, this.to, this.progress) * (CANVAS_WIDTH + 200), 0);
+        ctx.translate(interpolate(this.from, this.to, this.progress) * (CANVAS_WIDTH + 200), 0);
 
         ctx.fillStyle = '#000';
-        beginPath();
-        fillRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 20, 20);
-        moveTo(0, 0);
-        lineTo(CANVAS_WIDTH + 200, 0);
-        lineTo(CANVAS_WIDTH, CANVAS_HEIGHT);
-        lineTo(-200, CANVAS_HEIGHT);
-        fill();
+        ctx.beginPath();
+        ctx.fillRect(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 20, 20);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(CANVAS_WIDTH + 200, 0);
+        ctx.lineTo(CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.lineTo(-200, CANVAS_HEIGHT);
+        ctx.fill();
     }
 }

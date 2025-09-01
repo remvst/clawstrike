@@ -23,7 +23,6 @@ const JS_FILES = [
     'graphics/wrap.js',
     'graphics/create-canvas.js',
     'graphics/typography.js',
-    'graphics/global-canvas.js',
 
     'entity/entity.js',
     'entity/human.js',

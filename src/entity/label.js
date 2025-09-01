@@ -28,20 +28,20 @@ class Label extends Entity {
     render() {
         if (!this.visibleStartAge && !(DEBUG && this.world.editorMode)) return;
 
-        translate(this.x, this.y);
+        ctx.translate(this.x, this.y);
 
         const animationRatio = DEBUG && this.world.editorMode
             ? 1
             : between(0, (this.age - this.visibleStartAge) / 0.3, 1);
 
         ctx.globalAlpha = interpolate(0, 0.9, animationRatio);
-        translate(0, interpolate(20, 0, animationRatio));
+        ctx.translate(0, interpolate(20, 0, animationRatio));
         ctx.fillStyle = '#fff';
         ctx.font = 'bold 40px Impact';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 4;
-        drawCommandText(this.text);
+        ctx.drawCommandText(this.text);
     }
 }

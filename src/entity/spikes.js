@@ -33,19 +33,19 @@ class Spikes extends Entity {
 
     render() {
         ctx.fillStyle = '#000';
-        translate(this.x, this.y);
-        rotate(this.angle);
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
 
-        wrap(() => {
-            translate(-this.length / 2, 0);
+        ctx.wrap(() => {
+            ctx.translate(-this.length / 2, 0);
 
-            beginPath();
+            ctx.beginPath();
             for (let x = 0 ; x < this.length; x += 10) {
-                lineTo(x, 0);
-                lineTo(x + 5, -20);
-                lineTo(x + 10, 0);
+                ctx.lineTo(x, 0);
+                ctx.lineTo(x + 5, -20);
+                ctx.lineTo(x + 10, 0);
             }
-            fill();
+            ctx.fill();
         });
     }
 }

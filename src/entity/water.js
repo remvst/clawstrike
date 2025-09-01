@@ -33,23 +33,23 @@ class Water extends Entity {
 
     render() {
         ctx.fillStyle = '#0ff';
-        translate(this.x - this.length / 2, this.y - this.depth / 2);
+        ctx.translate(this.x - this.length / 2, this.y - this.depth / 2);
 
         ctx.globalAlpha = 0.5;
 
         let speed = 10;
         for (const offset of [-20, -10, 0]) {
-            wrap(() => {
-                beginPath();
+            ctx.wrap(() => {
+                ctx.beginPath();
                 for (let x = 0 ; x <= this.length; x += 2) {
-                    lineTo(
+                    ctx.lineTo(
                         x,
                         sin((x - this.age * speed) * TWO_PI / 20) * 2 + offset
                     );
                 }
-                lineTo(this.length, this.depth);
-                lineTo(0, this.depth);
-                fill();
+                ctx.lineTo(this.length, this.depth);
+                ctx.lineTo(0, this.depth);
+                ctx.fill();
 
                 speed *= 1.5;
             });
