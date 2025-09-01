@@ -29,6 +29,7 @@ const JS_FILES = [
     'entity/human.js',
     'entity/bullet.js',
     'entity/claw-effect.js',
+    'entity/meow-effect.js',
     'entity/flash.js',
     'entity/cat.js',
     'entity/structure.js',
@@ -80,7 +81,7 @@ const CONSTANTS = {
     "SONG_VOLUME": 0.5,
 
     "HUMAN_VISION_DISTANCE": 500,
-    "HUMAN_VISION_DIVIDER": 4,
+    "HUMAN_VISION_DIVIDER": 3,
 
     "DEBUG_INFO": 0,
     "DEBUG_HITBOXES": 0,
@@ -198,14 +199,15 @@ const argv = yargs(process.argv.slice(2)).options({
 
     let z = 0;
     for (const constant of [
-        "Z_WATER",
         "Z_LABEL",
-        "Z_STRUCTURE",
+        "Z_MEOW",
         "Z_SPIKES",
         "Z_CAT",
         "Z_HUMAN",
         "Z_BULLET",
         "Z_PARTICLE",
+        "Z_WATER",
+        "Z_STRUCTURE",
         "Z_FLASH",
         "Z_HUD",
         "Z_CLAW",

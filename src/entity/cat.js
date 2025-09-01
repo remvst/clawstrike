@@ -6,6 +6,7 @@ class Cat extends Entity {
 
         this.z = Z_CAT;
 
+        this.lastDamage = -9;
         this.damageTaken = 0;
 
         this.categories.push('cat');
@@ -297,12 +298,23 @@ class Cat extends Entity {
             }
         }
 
-        if (!this.stickingToWall) {
+        if (!this.stickingToWall || downKeys[40]) {
             this.wallStickX = 0;
         } else {
             this.viewAngle = -PI / 2;
             this.lastStickToWall = this.age;
         }
+
+        if (this.releasedMeow && downKeys[69] && this.age - (this.lastMeow || 0) > 0.3) {
+            this.releasedMeow = false;
+            this.lastMeow = this.age;
+            zzfx(...[.5,,282,.02,.03,,2,4,,,,,,1,,,,.78,.03]); // Jump 1017
+            const meow = this.world.addEntity(new MeowEffect());
+            meow.x = this.x;
+            meow.y = this.y;
+        }
+
+        this.releasedMeow ||= !downKeys[69];
 
         if (this.rolling && this.landed && this.age - (this.lastRollParticle || 0) > 1 / 60) {
             this.lastRollParticle = this.age;
@@ -368,6 +380,8 @@ class Cat extends Entity {
         firstItem(this.world.category('camera')).shake(0.1, 10);
         zzfx(...[1.1,,339,,.01,.05,1,2.4,-6,2,,,.09,1.1,,.5,,.67,.1]); // Hit 222
 
+        this.lastDamage = this.age;
+
         let particleCount = 10;
         if (++this.damageTaken >= G.difficulty.maxDamageTaken) {
             particleCount = 100;
@@ -432,7 +446,7 @@ class Cat extends Entity {
 
         const ATTACK_ANIMATION_DURATION = 0.2;
 
-        ctx.fillStyle = ctx.strokeStyle = COLORS.characters;
+        ctx.fillStyle = ctx.strokeStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
 
         // Body
         ctx.wrap(() => {
@@ -451,7 +465,6 @@ class Cat extends Entity {
             );
             ctx.stroke();
 
-            ctx.fillStyle = COLORS.characters;
             ctx.fillRect(-BODY_LENGTH / 2, 0, BODY_THICKNESS / 2, BODY_THICKNESS / 2);
             ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
         });
@@ -484,7 +497,6 @@ class Cat extends Entity {
 
         for (const [x, angle] of legSettings) {
             ctx.wrap(() => {
-                ctx.strokeStyle = COLORS.characters;
                 ctx.lineCap = 'round';
                 ctx.lineWidth = LEG_THICKNESS;
 
@@ -507,7 +519,6 @@ class Cat extends Entity {
                 ctx.rotate(-PI / 2 - PI / 4);
             }
 
-            ctx.strokeStyle = COLORS.characters;
             ctx.lineCap = 'round';
             ctx.lineWidth = TAIL_THICKNESS;
             ctx.beginPath();
@@ -534,13 +545,22 @@ class Cat extends Entity {
 
             // Eyes
             if (this.age % 3 > 0.1) ctx.wrap(() => {
-                ctx.fillStyle = COLORS.eyes;
-                ctx.fillRect(0, -3, 4, -4);
-                ctx.fillRect(0, 3, 4, 4);
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+
+                for (const scaleY of [-1, 1]) {
+                    ctx.wrap(() => {
+                        ctx.scale(1, scaleY);
+                        ctx.moveTo(0, 3);
+                        ctx.lineTo(0, 7);
+                        ctx.lineTo(4, 7);
+                        ctx.lineTo(2, 3);
+                    });
+                }
+                ctx.fill();
             });
 
             // Ears
-            ctx.fillStyle = COLORS.characters;
             ctx.beginPath();
             ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
@@ -549,6 +569,22 @@ class Cat extends Entity {
             ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
             ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
             ctx.fill();
+
+            for (const scaleY of [-1, 1]) {
+                for (const angle of [0, PI / 16]) {
+                    ctx.wrap(() => {
+                        ctx.scale(1, scaleY);
+                        ctx.rotate(angle);
+                        ctx.strokeStyle = '#000';
+                        ctx.lineWidth = 0.5;
+                        ctx.globalAlpha = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(-5, 5);
+                        ctx.lineTo(-5, 20);
+                        ctx.stroke();
+                    });
+                }
+            }
         });
     }
 

@@ -10,7 +10,7 @@ class GameCompleteScreen extends MenuScreen {
         this.addCommand(nomangle('TIME: ') + formatTime(G.runTime));
         this.addCommand(nomangle('BEST TIME: ') + formatTime(G.bestRunTime));
         this.addCommand('');
-        this.addCommand('9 LIVES MODE UNLOCKED!');
+        this.addCommand('(9 LIVES MODE) UNLOCKED!');
         this.addCommand('');
         this.addCommand(
             nomangle('PRESS [SPACE] TO DISMISS'),

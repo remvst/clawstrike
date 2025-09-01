@@ -7,6 +7,10 @@ class Screen {
         this.commands = [];
     }
 
+    get songVolume() {
+        return 1;
+    }
+
     addCommand(label, detect, action, playSound = true) {
         this.commands.push({ label, detect, action, playSound });
     }
@@ -19,6 +23,14 @@ class Screen {
                 const currentIndex = DIFFICULTIES.indexOf(G.difficulty);
                 if (currentIndex >= 0) G.difficulty = DIFFICULTIES[(currentIndex + 1) % DIFFICULTIES.length];
             }
+        );
+    }
+
+    addMainMenuCommand() {
+        this.addCommand(
+            () => nomangle('PRESS [M] TO RETURN TO MAIN MENU'),
+            () => downKeys[77],
+            () => G.startNavigation(),
         );
     }
 
@@ -64,6 +76,10 @@ class Screen {
                     action();
                 }
             }
+        }
+
+        if (this.isForeground()) {
+            setSongVolume(this.songVolume * (document.hasFocus() ? 1 : 0));
         }
     }
 
