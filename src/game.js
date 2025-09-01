@@ -7,7 +7,7 @@ class Game {
 
         this.bestRunTime = parseInt(localStorage[nomangle("bt")] || 0);
         this.screens = [];
-        this.difficulty = DIFFICULTY_NORMAL;
+        this.difficulty = inputMode == INPUT_MODE_TOUCH ? DIFFICULTY_EASY : DIFFICULTY_NORMAL;
 
         this.frame();
         setTimeout(async () => {
