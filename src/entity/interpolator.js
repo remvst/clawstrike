@@ -19,7 +19,7 @@ class Interpolator extends Entity {
         this.cycle(0);
     }
 
-    await() {
+    awaitCompletion() {
         return new Promise(resolve => this.resolve = resolve);
     }
 

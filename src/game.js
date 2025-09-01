@@ -11,7 +11,7 @@ class Game {
 
         this.frame();
         setTimeout(async () => {
-            await this.navigate(new StoryScreen()).await();
+            await this.navigate(new StoryScreen()).awaitCompletion();
             this.startNavigation();
         }, 0);
     }
@@ -42,9 +42,9 @@ class Game {
                         if (!attempt && !level) this.navigate(new MainMenuScreen(gameplay));
 
                         // Reveal the level
-                        this.navigate(new TransitionScreen(0, -1)).await();
+                        this.navigate(new TransitionScreen(0, -1)).awaitCompletion();
 
-                        await gameplay.await();
+                        await gameplay.awaitCompletion();
 
                         success = true;
 
@@ -52,7 +52,7 @@ class Game {
                         this.runDeaths++;
 
                         if (this.runDeaths < this.difficulty.maxDeaths) {
-                            await this.navigate(new GameOverScreen()).await();
+                            await this.navigate(new GameOverScreen()).awaitCompletion();
 
                             if (this.difficulty == DIFFICULTY_NORMAL && attempt >= 5 && !promptedEasyMode) {
                                 if (confirm(nomangle('Switch to easy mode?'))) {
@@ -63,13 +63,13 @@ class Game {
 
                             this.screens = []; // Fix flickering
                         } else {
-                            await this.navigate(new FullGameOverScreen()).await();
+                            await this.navigate(new FullGameOverScreen()).awaitCompletion();
                             await this.startNavigation();
                         }
                     }
 
                     // Hide the level
-                    await this.navigate(new TransitionScreen(1, 0)).await();
+                    await this.navigate(new TransitionScreen(1, 0)).awaitCompletion();
                 }
             }
 
@@ -79,7 +79,7 @@ class Game {
             }
 
             const blankScreen = this.navigate(new WorldScreen([]));
-            await this.navigate(new GameCompleteScreen(blankScreen)).await();
+            await this.navigate(new GameCompleteScreen(blankScreen)).awaitCompletion();
         }
     }
 

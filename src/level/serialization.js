@@ -24,10 +24,10 @@ if (DEBUG) {
     }
 }
 
-deserializeEntity = (data) => {
-    const entity = new (DESERIALIZE_MAP[data.type])();
-    for (const key in data) {
-        entity[key] = data[key];
+deserializeEntity = (levelData) => {
+    const entity = new (DESERIALIZE_MAP[levelData.type])();
+    for (const key in levelData) {
+        entity[key] = levelData[key];
     }
     return entity;
 };
@@ -43,11 +43,10 @@ if (DEBUG) {
     }
 }
 
-deserializeWorld = (data) => {
+deserializeWorld = (levelData) => {
     const world = new World();
-    for (const obj of data) {
-        const entity = deserializeEntity(obj);
-        world.addEntity(entity);
+    for (const obj of levelData) {
+        world.addEntity(deserializeEntity(obj));
     }
     return world;
 }

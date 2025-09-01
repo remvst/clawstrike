@@ -384,10 +384,10 @@ class LevelEditorScreen extends WorldScreen {
 
         while (true) {
             try {
-                await G.navigate(new TestScreen(serialized)).await();
+                await G.navigate(new TestScreen(serialized)).awaitCompletion();
                 break;
             } catch (error) {
-                await G.navigate(new GameOverScreen()).await();
+                await G.navigate(new GameOverScreen()).awaitCompletion();
                 G.screens.pop();
             }
         }

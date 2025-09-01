@@ -31,7 +31,7 @@ class GameCompleteScreen extends MenuScreen {
 
         (async () => {
             const flash = world.addEntity(new Flash('#000'));
-            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.5)).await();
+            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.5)).awaitCompletion();
 
             while (this.isForeground()) {
                 const x = camera.x + rnd(-CANVAS_WIDTH / 3, CANVAS_WIDTH / 3);
@@ -44,7 +44,7 @@ class GameCompleteScreen extends MenuScreen {
                     particle.z = 999;
                 }
 
-                await world.addEntity(new Interpolator(flash, '_', 0, 0, rnd(0.25, 0.5))).await();
+                await world.addEntity(new Interpolator(flash, '_', 0, 0, rnd(0.25, 0.5))).awaitCompletion();
             }
         })();
     }

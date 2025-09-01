@@ -18,7 +18,7 @@ class GameplayScreen extends WorldScreen {
         this.released ||= !downKeys[27];
         if (this.isForeground() && this.released && downKeys[27]) {
             this.released = false;
-            G.navigate(new PauseScreen()).await();
+            G.navigate(new PauseScreen()).awaitCompletion();
         }
 
         const hud = firstItem(this.world.category('hud'));
@@ -33,7 +33,7 @@ class GameplayScreen extends WorldScreen {
                 this.timeFactor = 0.25;
 
                 (async () => {
-                    await this.world.addEntity(new Interpolator(camera, 'zoom', camera.zoom, 2, 0.5)).await();
+                    await this.world.addEntity(new Interpolator(camera, 'zoom', camera.zoom, 2, 0.5)).awaitCompletion();
                     this.resolve();
                 })();
             }

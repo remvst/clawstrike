@@ -55,7 +55,7 @@ class Screen {
         resolvers.reject();
     }
 
-    await() {
+    awaitCompletion() {
         return new Promise((resolve, reject) => {
             this.resolvers = { resolve, reject };
         });
