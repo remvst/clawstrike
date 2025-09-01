@@ -27,9 +27,7 @@ class Game {
         let promptedEasyMode;
 
         while (true) {
-            this.runTime = 0;
-            this.runLevelIndex = 0;
-            this.runDeaths = 0;
+            this.runTime = this.runLevelIndex = this.runDeaths = 0;
 
             const currentIndex = DIFFICULTIES.indexOf(this.difficulty);
             if (currentIndex < 0) this.difficulty = DIFFICULTY_NORMAL;
@@ -37,8 +35,7 @@ class Game {
             for (let level = 0 ; level < ALL_LEVELS.length; level++) {
                 this.runLevelIndex = level;
 
-                let success;
-                for (let attempt = 0; !success ; attempt++) {
+                for (let attempt = 0; ; attempt++) {
                     try {
                         const gameplay = this.navigate(new GameplayScreen(ALL_LEVELS[level]), true);
                         if (!attempt && !level) this.navigate(new MainMenuScreen(gameplay));
@@ -48,8 +45,7 @@ class Game {
 
                         await gameplay.awaitCompletion();
 
-                        success = true;
-
+                        break;
                     } catch (err) {
                         this.runDeaths++;
 
