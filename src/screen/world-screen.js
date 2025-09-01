@@ -43,7 +43,7 @@ class WorldScreen extends Screen {
 
     render() {
         super.render();
-        ctx.wrap(() => this.world.render());
+        wrap(() => this.world.render());
     }
 
     absorb() {

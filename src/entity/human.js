@@ -238,8 +238,8 @@ class Human extends Entity {
     }
 
     render() {
-        ctx.translate(this.x, this.y);
-        ctx.scale(this.facing, 1);
+        translate(this.x, this.y);
+        scale(this.facing, 1);
 
         const BODY_LENGTH = 40;
         const BODY_THICKNESS = 20;
@@ -259,58 +259,58 @@ class Human extends Entity {
         ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : this.color;
 
         // Body
-        ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
+        fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
 
         // Legs
-        ctx.wrap(() => {
-            ctx.translate(0, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
+        wrap(() => {
+            translate(0, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
 
             const legBaseAngle = this.walking
                 ? sin(this.age * PI * 2 * 2) * PI / 16
                 : 0;
 
-            ctx.wrap(() => {
-                ctx.translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, 0);
-                ctx.rotate(legBaseAngle);
-                ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
+            wrap(() => {
+                translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, 0);
+                rotate(legBaseAngle);
+                fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
             });
 
-            ctx.wrap(() => {
-                ctx.translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, 0);
-                ctx.rotate(-legBaseAngle);
-                ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
+            wrap(() => {
+                translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, 0);
+                rotate(-legBaseAngle);
+                fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
             });
         });
 
-        ctx.wrap(() => {
+        wrap(() => {
             // Neck
-            ctx.translate(0, -BODY_LENGTH / 2);
-            ctx.fillRect(-NECK_THICKNESS / 2, 0, NECK_THICKNESS, -NECK_LENGTH);
+            translate(0, -BODY_LENGTH / 2);
+            fillRect(-NECK_THICKNESS / 2, 0, NECK_THICKNESS, -NECK_LENGTH);
 
             // Head
-            ctx.translate(0, -NECK_LENGTH - HEAD_HEIGHT / 2);
-            ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
+            translate(0, -NECK_LENGTH - HEAD_HEIGHT / 2);
+            fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
         });
 
         // Arm
-        ctx.wrap(() => {
-            ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2 + ARM_THICKNESS / 2);
+        wrap(() => {
+            translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2 + ARM_THICKNESS / 2);
 
             let angle = this.aim;
             if (this.facing < 0) {
                 angle = atan2(sin(angle), cos(angle) * -1);
             }
 
-            ctx.rotate(angle);
-            ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH + 1, ARM_THICKNESS);
+            rotate(angle);
+            fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH + 1, ARM_THICKNESS);
 
             // Gun
-            ctx.fillRect(ARM_LENGTH - 5, -ARM_THICKNESS / 2, 15, -5);
+            fillRect(ARM_LENGTH - 5, -ARM_THICKNESS / 2, 15, -5);
         });
 
-        if (this.age - this.lastSeenCat < 1) ctx.wrap(() => {
-            ctx.translate(0, -70);
-            ctx.scale(this.facing, 1);
+        if (this.age - this.lastSeenCat < 1) wrap(() => {
+            translate(0, -70);
+            scale(this.facing, 1);
 
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 40px Arial';
@@ -319,8 +319,8 @@ class Human extends Entity {
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 4;
 
-            ctx.strokeText(this.seesCat ? '!' : '?', 0, 0);
-            ctx.fillText(this.seesCat ? '!' : '?', 0, 0);
+            strokeText(this.seesCat ? '!' : '?', 0, 0);
+            fillText(this.seesCat ? '!' : '?', 0, 0);
         });
     }
 
@@ -329,14 +329,14 @@ class Human extends Entity {
 
         super.renderDebug();
 
-        if (DEBUG_VISION) ctx.wrap(() => {
+        if (DEBUG_VISION) wrap(() => {
             for (const cat of this.world.category('cat')) {
-                ctx.beginPath();
+                beginPath();
                 ctx.strokeStyle = '#fff';
                 ctx.lineWidth = 2;
-                ctx.moveTo(this.eyes.x, this.eyes.y);
-                ctx.lineTo(cat.x, cat.y);
-                ctx.stroke();
+                moveTo(this.eyes.x, this.eyes.y);
+                lineTo(cat.x, cat.y);
+                stroke();
 
                 for (const eye of this.eyes) {
                     for (const structure of this.world.category('structure')) {
@@ -344,41 +344,41 @@ class Human extends Entity {
                         const distanceToCat = distance(eye, cat);
                         const impact = structure.raycaster.castRay(eye.x, eye.y, angleToCat, distanceToCat);
                         if (impact) {
-                            ctx.beginPath();
+                            beginPath();
                             ctx.strokeStyle = '#f00';
                             ctx.lineWidth = 2;
-                            ctx.moveTo(eye.x, eye.y);
-                            ctx.lineTo(impact.x, impact.y);
-                            ctx.stroke();
+                            moveTo(eye.x, eye.y);
+                            lineTo(impact.x, impact.y);
+                            stroke();
                         }
                     }
                 }
             }
 
             if (this.seesCat) {
-                ctx.beginPath();
+                beginPath();
                 ctx.strokeStyle = '#0f0';
                 ctx.lineWidth = 10;
-                ctx.moveTo(this.eyes[0].x, this.eyes[0].y);
-                ctx.lineTo(this.seesCat.x, this.seesCat.y);
-                ctx.stroke();
+                moveTo(this.eyes[0].x, this.eyes[0].y);
+                lineTo(this.seesCat.x, this.seesCat.y);
+                stroke();
             }
         });
 
-        if (DEBUG_VISION) ctx.wrap(() => {
+        if (DEBUG_VISION) wrap(() => {
             this.feetVision.render();
         });
 
-        if (DEBUG_VISION) ctx.wrap(() => {
+        if (DEBUG_VISION) wrap(() => {
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 2;
-            ctx.translate(this.eyes[0].x, this.eyes[0].y);
-            ctx.scale(this.facing, 1);
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.arc(0, 0, this.visionDistance, - PI / HUMAN_VISION_DIVIDER_TOP, PI / HUMAN_VISION_DIVIDER_BOTTOM);
-            ctx.closePath();
-            ctx.stroke();
+            translate(this.eyes[0].x, this.eyes[0].y);
+            scale(this.facing, 1);
+            beginPath();
+            moveTo(0, 0);
+            arc(0, 0, this.visionDistance, - PI / HUMAN_VISION_DIVIDER_TOP, PI / HUMAN_VISION_DIVIDER_BOTTOM);
+            closePath();
+            stroke();
         });
     }
 }

@@ -97,7 +97,7 @@ class MainMenuScreen extends MenuScreen {
     }
 
     renderTitle() {
-        ctx.wrap(() => {
+        wrap(() => {
             this.claw ||= (() => {
                 const claw = new ClawEffect();
                 claw.x = CANVAS_WIDTH / 2;

@@ -107,10 +107,10 @@ class LevelEditorScreen extends WorldScreen {
     render() {
         super.render();
 
-        ctx.wrap(() => {
+        wrap(() => {
             const camera = firstItem(this.world.category('camera'));
-            ctx.scale(camera.appliedZoom, camera.appliedZoom);
-            ctx.translate(
+            scale(camera.appliedZoom, camera.appliedZoom);
+            translate(
                 CANVAS_WIDTH / 2 / camera.zoom - camera.x,
                 CANVAS_HEIGHT / 2 / camera.zoom - camera.y,
             );
@@ -122,22 +122,22 @@ class LevelEditorScreen extends WorldScreen {
             const maxY = ceilToNearest(minY + CANVAS_HEIGHT,CELL_SIZE) + CELL_SIZE;
 
             // Grid
-            ctx.wrap(() => {
+            wrap(() => {
                 ctx.fillStyle = '#888';
                 for (let x = minX ; x <= maxX ; x += CELL_SIZE) {
-                    ctx.fillRect(x, minY, 0.5, maxY - minY);
+                    fillRect(x, minY, 0.5, maxY - minY);
                 }
 
                 for (let y = minY ; y <= maxY ; y += CELL_SIZE) {
-                    ctx.fillRect(minX, y, maxX - minX, 0.5);
+                    fillRect(minX, y, maxX - minX, 0.5);
                 }
             });
 
             // Cursor
-            if (this.editMode === 'structure') ctx.wrap(() => {
+            if (this.editMode === 'structure') wrap(() => {
                 ctx.fillStyle = '#fff';
                 ctx.globalAlpha = 0.4;
-                ctx.fillRect(
+                fillRect(
                     floorToNearest(this.cursorPosition.x, CELL_SIZE),
                     floorToNearest(this.cursorPosition.y, CELL_SIZE),
                     CELL_SIZE,
@@ -147,12 +147,12 @@ class LevelEditorScreen extends WorldScreen {
 
             // Selection
             if (this.editMode === 'entity' && this.selected) {
-                ctx.wrap(() => {
+                wrap(() => {
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 3;
 
-                    ctx.translate(this.selected.hitbox.x, this.selected.hitbox.y);
-                    ctx.strokeRect(
+                    translate(this.selected.hitbox.x, this.selected.hitbox.y);
+                    strokeRect(
                         -this.selected.hitbox.width / 2,
                         -this.selected.hitbox.height / 2,
                         this.selected.hitbox.width,
@@ -163,7 +163,7 @@ class LevelEditorScreen extends WorldScreen {
         });
 
         // HUD
-        ctx.wrap(() => {
+        wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -171,7 +171,7 @@ class LevelEditorScreen extends WorldScreen {
             ctx.shadowColor = '#000';
             ctx.shadowOffsetX = 2;
             ctx.shadowOffsetY = 2;
-            ctx.fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
+            fillText('Edit mode: ' + this.editMode, CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
         });
     }
 
@@ -479,7 +479,7 @@ class TestScreen extends GameplayScreen {
     }
 
     render() {
-        ctx.wrap(() => super.render());
+        wrap(() => super.render());
 
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
@@ -488,6 +488,6 @@ class TestScreen extends GameplayScreen {
         ctx.shadowColor = '#000';
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
-        ctx.fillText('[ESC] to go back to editor'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
+        fillText('[ESC] to go back to editor'.toUpperCase(), CANVAS_WIDTH / 2, CANVAS_HEIGHT * 4 / 5);
     }
 }

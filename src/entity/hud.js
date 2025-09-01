@@ -1,9 +1,9 @@
 renderArrow = () => {
-    ctx.beginPath();
-    ctx.moveTo(MOBILE_BUTTON_SIZE / 2, 0);
-    ctx.lineTo(-MOBILE_BUTTON_SIZE / 2, MOBILE_BUTTON_SIZE / 2);
-    ctx.lineTo(-MOBILE_BUTTON_SIZE / 2, -MOBILE_BUTTON_SIZE / 2);
-    ctx.fill();
+    beginPath();
+    moveTo(MOBILE_BUTTON_SIZE / 2, 0);
+    lineTo(-MOBILE_BUTTON_SIZE / 2, MOBILE_BUTTON_SIZE / 2);
+    lineTo(-MOBILE_BUTTON_SIZE / 2, -MOBILE_BUTTON_SIZE / 2);
+    fill();
 }
 
 formatTime = x => {
@@ -35,12 +35,12 @@ class HUD extends Entity {
         ctx.fillStyle = '#fff';
         ctx.lineWidth = 10;
 
-        ctx.wrap(() => {
+        wrap(() => {
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
             ctx.lineWidth = 1;
 
-            ctx.translate(50, 50);
+            translate(50, 50);
 
             for (const [label, value] of [
                 [nomangle('TOTAL TIME'), formatTime(G.runTime)],
@@ -50,89 +50,89 @@ class HUD extends Entity {
                 [nomangle('BEST'), formatTime(G.bestRunTime)],
             ]) {
                 ctx.font = nomangle('italic bold 16px Impact');
-                ctx.drawCommandText(label);
-                ctx.translate(0, 20);
+                drawCommandText(label);
+                translate(0, 20);
 
                 ctx.font = nomangle('italic bold 36px Impact');
-                ctx.fillText(value, 0, 0);
-                ctx.strokeText(value, 0, 0);
-                ctx.translate(0, 50);
+                fillText(value, 0, 0);
+                strokeText(value, 0, 0);
+                translate(0, 50);
             }
         });
 
-        ctx.wrap(() => {
+        wrap(() => {
             return;
-            ctx.translate(CANVAS_WIDTH / 2, 50);
+            translate(CANVAS_WIDTH / 2, 50);
             ctx.font = nomangle('bold 60px Impact');
             ctx.textBaseline = nomangle('top');
             ctx.lineWidth = 2;
 
             const formatted = formatTime(G.runTime).split('');
-            const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
+            const totalWidth = formatted.reduce((acc, x) => acc + measureText(charForWidthCalculation(x)).width, 0);
 
-            ctx.translate(-totalWidth / 2, 0);
+            translate(-totalWidth / 2, 0);
             ctx.textAlign = nomangle('center');
 
             for (const char of formatted) {
-                const { width } = ctx.measureText(charForWidthCalculation(char));
-                ctx.fillText(char, width / 2, 0);
-                ctx.strokeText(char, width / 2, 0);
-                ctx.translate(width, 0);
+                const { width } = measureText(charForWidthCalculation(char));
+                fillText(char, width / 2, 0);
+                strokeText(char, width / 2, 0);
+                translate(width, 0);
             }
         });
 
-        if (inputMode == INPUT_MODE_TOUCH) ctx.wrap(() => {
-            ctx.wrap(() => {
+        if (inputMode == INPUT_MODE_TOUCH) wrap(() => {
+            wrap(() => {
                 ctx.globalAlpha = downKeys[37] ? 1 : 0.5;
-                ctx.translate(CANVAS_WIDTH / 8, CANVAS_HEIGHT - 100);
-                ctx.scale(-1, 1);
+                translate(CANVAS_WIDTH / 8, CANVAS_HEIGHT - 100);
+                scale(-1, 1);
                 renderArrow();
             });
 
-            ctx.wrap(() => {
+            wrap(() => {
                 ctx.globalAlpha = downKeys[39] ? 1 : 0.5;
-                ctx.translate(CANVAS_WIDTH * 3 / 8, CANVAS_HEIGHT - 100);
+                translate(CANVAS_WIDTH * 3 / 8, CANVAS_HEIGHT - 100);
                 renderArrow();
             });
 
-            ctx.wrap(() => {
+            wrap(() => {
                 ctx.globalAlpha = downKeys[40] ? 1 : 0.5;
                 ctx.lineCap = 'butt';
                 ctx.strokeStyle = '#fff';
 
-                ctx.translate(CANVAS_WIDTH * 5 / 8, CANVAS_HEIGHT - 100);
+                translate(CANVAS_WIDTH * 5 / 8, CANVAS_HEIGHT - 100);
 
                 const radius = MOBILE_BUTTON_SIZE / 2;
 
                 for (let i = 0 ; i < 2 ; i++) {
-                    ctx.rotate(PI);
+                    rotate(PI);
 
-                    ctx.save();
+                    save();
 
-                    ctx.beginPath();
-                    ctx.arc(0, 0, radius, PI / 4, PI);
+                    beginPath();
+                    arc(0, 0, radius, PI / 4, PI);
 
-                    ctx.translate(-radius, 0)
-                    ctx.rotate(PI / 3 + PI / 10);
+                    translate(-radius, 0)
+                    rotate(PI / 3 + PI / 10);
 
                     const LENGTH = MOBILE_BUTTON_SIZE / 8;
-                    ctx.moveTo(LENGTH, LENGTH);
-                    ctx.lineTo(0, 0);
-                    ctx.lineTo(LENGTH, -LENGTH);
-                    ctx.stroke();
+                    moveTo(LENGTH, LENGTH);
+                    lineTo(0, 0);
+                    lineTo(LENGTH, -LENGTH);
+                    stroke();
 
-                    ctx.restore();
+                    restore();
                 }
             });
 
-            ctx.wrap(() => {
+            wrap(() => {
                 ctx.globalAlpha = downKeys[38] ? 1 : 0.5;
-                ctx.translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 100);
-                ctx.rotate(-PI / 2);
+                translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 100);
+                rotate(-PI / 2);
                 renderArrow();
             });
 
-            ctx.wrap(() => {
+            wrap(() => {
                 ctx.globalAlpha = downKeys[32] ? 1 : 0.5;
 
                 this.claw ||= new ClawEffect();

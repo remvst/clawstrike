@@ -5,7 +5,7 @@ canvasPrototype.drawCommandText = function(text) {
 
         ctx.miterLimit = 2;
 
-        const { width } = ctx.measureText(text);
+        const { width } = measureText(text);
         if (this.textAlign == nomangle('center')) {
             this.translate(-width / 2, 0);
         } else if (this.textAlign == nomangle('right')) {

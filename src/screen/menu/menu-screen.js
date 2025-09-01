@@ -5,8 +5,8 @@ class MenuScreen extends Screen {
     }
 
     render() {
-        ctx.wrap(() => this.renderTitle());
-        ctx.wrap(() => this.renderCommands());
+        wrap(() => this.renderTitle());
+        wrap(() => this.renderCommands());
     }
 
     renderTitle() {
@@ -17,18 +17,18 @@ class MenuScreen extends Screen {
         ctx.strokeStyle = '#000';
         ctx.miterLimit = 2;
         ctx.lineWidth = 20;
-        ctx.strokeText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
-        ctx.fillText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+        strokeText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
+        fillText(this.title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 3);
     }
 
     renderCommands() {
         const spacing = 50;
 
-        ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
+        translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
 
         for (const { label, detect } of this.commands) {
-            if (this.age % 2 < 1.5 || !detect) ctx.wrap(() => this.renderCommandText(label.call ? label() : label));
-            ctx.translate(0, spacing);
+            if (this.age % 2 < 1.5 || !detect) wrap(() => this.renderCommandText(label.call ? label() : label));
+            translate(0, spacing);
         }
     }
 
@@ -42,6 +42,6 @@ class MenuScreen extends Screen {
         ctx.miterLimit = 2;
         ctx.letterSpacing = nomangle('0.1em');
 
-        ctx.drawCommandText(line);
+        drawCommandText(line);
     }
 }

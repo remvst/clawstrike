@@ -12,28 +12,28 @@ class World {
     }
 
     render() {
-        ctx.wrap(() => {
+        wrap(() => {
             ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, can.width, can.height);
+            fillRect(0, 0, can.width, can.height);
 
             const camera = firstItem(this.category('camera'));
-            ctx.scale(camera.appliedZoom, camera.appliedZoom);
-            ctx.translate(
+            scale(camera.appliedZoom, camera.appliedZoom);
+            translate(
                 CANVAS_WIDTH / 2 / camera.zoom - camera.actual.x,
                 CANVAS_HEIGHT / 2 / camera.zoom - camera.actual.y,
             );
 
             for (const entity of this.entities) {
-                ctx.wrap(() => entity.renderBackground());
+                wrap(() => entity.renderBackground());
             }
 
             for (const entity of this.entities) {
-                ctx.wrap(() => entity.render());
+                wrap(() => entity.render());
             }
 
             if (DEBUG) {
                 for (const entity of this.entities) {
-                    ctx.wrap(() => entity.renderDebug());
+                    wrap(() => entity.renderDebug());
                 }
             }
         });

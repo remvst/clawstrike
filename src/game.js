@@ -102,16 +102,16 @@ class Game {
             }
 
             for (const screen of this.screens) {
-                ctx.wrap(() => screen.render());
+                wrap(() => screen.render());
             }
 
-            if (DEBUG && DEBUG_INFO) ctx.wrap(() => {
+            if (DEBUG && DEBUG_INFO) wrap(() => {
                 this.frameTimes[this.lastFrameIndex] = now;
                 const nextIndex = (this.lastFrameIndex + 1) % this.frameTimes.length;
                 const fps = (this.frameTimes.length - 1) / ((now - this.frameTimes[nextIndex]) / 1000);
                 this.lastFrameIndex = nextIndex;
 
-                ctx.translate(10, 10);
+                translate(10, 10);
                 ctx.font = '20px Courier';
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
@@ -128,8 +128,8 @@ class Game {
                 }
 
                 for (const value of debugValues) {
-                    ctx.fillText(value, 0, 0);
-                    ctx.translate(0, 20);
+                    fillText(value, 0, 0);
+                    translate(0, 20);
                 }
             });
         }

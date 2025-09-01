@@ -18,19 +18,19 @@ class ClawEffect extends Entity {
     }
 
     render() {
-        ctx.translate(this.x, this.y);
+        translate(this.x, this.y);
 
         const fadeDuration = 0.25;
         const fadeProgress = (this.age - (1 - fadeDuration)) / fadeDuration;
         ctx.globalAlpha *= 1 - min(1, max(0, fadeProgress));
 
-        ctx.rotate(this.angle);
-        ctx.scale(this.scale, this.scale);
+        rotate(this.angle);
+        scale(this.scale, this.scale);
 
         for (const [y, s] of [[0, 1], [-5, 0.8], [5, 0.8]]) {
-            ctx.wrap(() => {
-                ctx.translate(0, y);
-                ctx.scale(s, s);
+            wrap(() => {
+                translate(0, y);
+                scale(s, s);
                 this.drawClaw();
             });
         }
@@ -43,22 +43,22 @@ class ClawEffect extends Entity {
         const LENGTH = 40;
         const l = LENGTH * min(1, this.age / 0.1);
 
-        ctx.beginPath();
-        ctx.translate(-LENGTH / 2, 0);
-        ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(
+        beginPath();
+        translate(-LENGTH / 2, 0);
+        moveTo(0, 0);
+        bezierCurveTo(
             l / 2, -THICKNESS / 2,
             l / 2, -THICKNESS / 2,
             l, 0
         );
-        ctx.bezierCurveTo(
+        bezierCurveTo(
             l / 2, THICKNESS / 2,
             l / 2, THICKNESS / 2,
             0, 0
         );
-        ctx.closePath();
-        ctx.fill();
+        closePath();
+        fill();
 
-        if (this.stroke) ctx.stroke();
+        if (this.stroke) stroke();
     }
 }

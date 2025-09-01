@@ -73,14 +73,14 @@ class StoryScreen extends WorldScreen {
     }
 
     render() {
-        ctx.wrap(() => super.render());
-        ctx.wrap(() => {
+        wrap(() => super.render());
+        wrap(() => {
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 32px Impact';
             ctx.textAlign = 'right';
 
-            ctx.translate(CANVAS_WIDTH - 20, CANVAS_HEIGHT - 20);
-            ctx.drawCommandText(nomangle('[ENTER] SKIP'));
+            translate(CANVAS_WIDTH - 20, CANVAS_HEIGHT - 20);
+            drawCommandText(nomangle('[ENTER] SKIP'));
         });
     }
 }
