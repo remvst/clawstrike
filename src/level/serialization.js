@@ -1,19 +1,16 @@
-const serializableTypes = [
+DESERIALIZE_MAP = {};
+for (const type of [
     Structure,
     Cat,
     Human,
     Spikes,
     Label,
     Water,
-];
-
-const deserializeMap = {};
-for (const type of serializableTypes) {
-    const dummy = new type();
-    deserializeMap[dummy.type] = type;
+]) {
+    DESERIALIZE_MAP[(new type()).type] = type;
 }
 
-const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length', 'text', 'color', 'length', 'depth'];
+const serializedProperties = ['type', 'x', 'y', 'angle', 'matrix', 'length', 'text', 'color', 'depth'];
 
 if (DEBUG) {
     serializeEntity = (entity) => {
@@ -28,8 +25,7 @@ if (DEBUG) {
 }
 
 deserializeEntity = (data) => {
-    const type = deserializeMap[data.type];
-    const entity = new type();
+    const entity = new (DESERIALIZE_MAP[data.type])();
     for (const key in data) {
         entity[key] = data[key];
     }

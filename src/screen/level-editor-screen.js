@@ -401,11 +401,11 @@ class LevelEditorScreen extends WorldScreen {
             const rows = matrix.length;
             const cols = matrix[0].length;
 
-            let firstRow = Number.MAX_SAFE_INTEGER;
-            let firstCol = Number.MAX_SAFE_INTEGER;
+            let firstRow = 999;
+            let firstCol = 999;
 
-            let lastRow = Number.MIN_SAFE_INTEGER;
-            let lastCol = Number.MIN_SAFE_INTEGER;
+            let lastRow = -999;
+            let lastCol = -999;
 
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
