@@ -14,7 +14,6 @@ class Bullet extends Entity {
     cycle(elapsed) {
         const { x, y } = this;
 
-        const BULLET_SPEED = 800;
         this.x += elapsed * cos(this.angle) * BULLET_SPEED;
         this.y += elapsed * sin(this.angle) * BULLET_SPEED;
 

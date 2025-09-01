@@ -431,42 +431,27 @@ class Cat extends Entity {
             ctx.scale(0.8, 0.8);
         }
 
-        const BODY_LENGTH = 40;
-        const BODY_THICKNESS = 20;
-        const LEG_LENGTH = 15;
-        const LEG_THICKNESS = 4;
-        const TAIL_LENGTH = 30;
-        const TAIL_THICKNESS = 5;
-
-        const HEAD_WIDTH = 20;
-        const HEAD_HEIGHT = 20;
-
-        const EAR_LENGTH = 10;
-        const EAR_WIDTH = 5;
-
-        const ATTACK_ANIMATION_DURATION = 0.2;
-
         ctx.fillStyle = ctx.strokeStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
 
         // Body
         ctx.wrap(() => {
-            ctx.lineWidth = BODY_THICKNESS;
-            ctx.lineJoin = 'square';
+            ctx.lineWidth = CAT_BODY_THICKNESS;
+            ctx.lineJoin = nomangle('square');
             ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.moveTo(-BODY_LENGTH / 2 + BODY_THICKNESS / 2, 0);
+            ctx.moveTo(-CAT_BODY_LENGTH / 2 + CAT_BODY_THICKNESS / 2, 0);
             const curveHeight = this.rolling
                 ? -10
                 : sin(this.age * PI * 2 * 4) * !!this.walking * 2;
             ctx.bezierCurveTo(
                 0, curveHeight,
                 0, curveHeight,
-                BODY_LENGTH / 2 - BODY_THICKNESS / 2, 0,
+                CAT_BODY_LENGTH / 2 - CAT_BODY_THICKNESS / 2, 0,
             );
             ctx.stroke();
 
-            ctx.fillRect(-BODY_LENGTH / 2, 0, BODY_THICKNESS / 2, BODY_THICKNESS / 2);
-            ctx.fillRect(BODY_LENGTH / 2, 0, -BODY_THICKNESS / 2, BODY_THICKNESS / 2);
+            ctx.fillRect(-CAT_BODY_LENGTH / 2, 0, CAT_BODY_THICKNESS / 2, CAT_BODY_THICKNESS / 2);
+            ctx.fillRect(CAT_BODY_LENGTH / 2, 0, -CAT_BODY_THICKNESS / 2, CAT_BODY_THICKNESS / 2);
         });
 
         let frontLegsBaseAngle = this.landed ? PI / 2 : 0;
@@ -483,13 +468,13 @@ class Cat extends Entity {
 
         // Legs
         const legSettings = [
-            [BODY_LENGTH / 2 - LEG_THICKNESS / 2, frontLegsBaseAngle + legsWalkAngle],
-            [BODY_LENGTH / 2 - LEG_THICKNESS / 2 - 5, frontLegsBaseAngle - legsWalkAngle],
-            [-BODY_LENGTH / 2 + LEG_THICKNESS / 2, backLegsBaseAngle - legsWalkAngle],
-            [-BODY_LENGTH / 2 + LEG_THICKNESS / 2 + 5, backLegsBaseAngle + legsWalkAngle],
+            [CAT_BODY_LENGTH / 2 - CAT_LEG_THICKNESS / 2, frontLegsBaseAngle + legsWalkAngle],
+            [CAT_BODY_LENGTH / 2 - CAT_LEG_THICKNESS / 2 - 5, frontLegsBaseAngle - legsWalkAngle],
+            [-CAT_BODY_LENGTH / 2 + CAT_LEG_THICKNESS / 2, backLegsBaseAngle - legsWalkAngle],
+            [-CAT_BODY_LENGTH / 2 + CAT_LEG_THICKNESS / 2 + 5, backLegsBaseAngle + legsWalkAngle],
         ];
-        if (this.age - this.lastAttack < ATTACK_ANIMATION_DURATION) {
-            const progress = (this.age - this.lastAttack) / ATTACK_ANIMATION_DURATION;
+        if (this.age - this.lastAttack < CAT_ATTACK_ANIMATION_DURATION) {
+            const progress = (this.age - this.lastAttack) / CAT_ATTACK_ANIMATION_DURATION;
             const startAngle = -PI / 3;
             const endAngle = PI / 2;
             legSettings[0][1] = interpolate(startAngle, endAngle, progress);
@@ -498,13 +483,13 @@ class Cat extends Entity {
         for (const [x, angle] of legSettings) {
             ctx.wrap(() => {
                 ctx.lineCap = 'round';
-                ctx.lineWidth = LEG_THICKNESS;
+                ctx.lineWidth = CAT_LEG_THICKNESS;
 
-                ctx.translate(x, BODY_THICKNESS / 2 - LEG_THICKNESS / 2);
+                ctx.translate(x, CAT_BODY_THICKNESS / 2 - CAT_LEG_THICKNESS / 2);
                 ctx.rotate(angle);
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
-                ctx.lineTo(LEG_LENGTH, 0);
+                ctx.lineTo(CAT_LEG_LENGTH, 0);
                 ctx.stroke();
             });
         }
@@ -512,28 +497,28 @@ class Cat extends Entity {
         // Tail
         ctx.wrap(() => {
             if (this.rolling) {
-                ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2 + 4, BODY_THICKNESS / 2 - 4);
+                ctx.translate(-CAT_BODY_LENGTH / 2 + CAT_TAIL_THICKNESS / 2 + 4, CAT_BODY_THICKNESS / 2 - 4);
                 ctx.rotate(PI / 2 - PI / 4);
             } else {
-                ctx.translate(-BODY_LENGTH / 2 + TAIL_THICKNESS / 2, -BODY_THICKNESS / 2);
+                ctx.translate(-CAT_BODY_LENGTH / 2 + CAT_TAIL_THICKNESS / 2, -CAT_BODY_THICKNESS / 2);
                 ctx.rotate(-PI / 2 - PI / 4);
             }
 
             ctx.lineCap = 'round';
-            ctx.lineWidth = TAIL_THICKNESS;
+            ctx.lineWidth = CAT_TAIL_THICKNESS;
             ctx.beginPath();
             ctx.moveTo(-10, 0);
             const phase = this.age * PI * (this.walking ? 5 : 0.5);
-            for (let x = 0 ; x < TAIL_LENGTH; x += 4) {
-                const amplitudeFactor = x / TAIL_LENGTH;
-                ctx.lineTo(x, sin(x / TAIL_LENGTH * PI * 2 + phase) * 5 * amplitudeFactor);
+            for (let x = 0 ; x < CAT_TAIL_LENGTH; x += 4) {
+                const amplitudeFactor = x / CAT_TAIL_LENGTH;
+                ctx.lineTo(x, sin(x / CAT_TAIL_LENGTH * PI * 2 + phase) * 5 * amplitudeFactor);
             }
             ctx.stroke();
         });
 
         // Head
         ctx.wrap(() => {
-            ctx.translate(BODY_LENGTH / 2 - 5, 0);
+            ctx.translate(CAT_BODY_LENGTH / 2 - 5, 0);
 
             ctx.rotate(-PI / 2);
             if (this.rolling) ctx.rotate(PI - PI / 3);
@@ -541,7 +526,7 @@ class Cat extends Entity {
             ctx.translate(10, 0);
             if (this.walking) ctx.rotate(sin(this.age * 3 * PI * 2) * PI / 16);
 
-            ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
+            ctx.fillRect(-CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2, CAT_HEAD_WIDTH, CAT_HEAD_HEIGHT);
 
             // Eyes
             if (this.age % 3 > 0.1) ctx.wrap(() => {
@@ -562,12 +547,12 @@ class Cat extends Entity {
 
             // Ears
             ctx.beginPath();
-            ctx.moveTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2);
-            ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, -HEAD_HEIGHT / 2);
-            ctx.lineTo(HEAD_WIDTH / 2, -HEAD_HEIGHT / 2 + EAR_WIDTH);
-            ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2 - EAR_WIDTH);
-            ctx.lineTo(HEAD_WIDTH / 2 + EAR_LENGTH, HEAD_HEIGHT / 2);
-            ctx.lineTo(HEAD_WIDTH / 2, HEAD_HEIGHT / 2);
+            ctx.moveTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2);
+            ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, -CAT_HEAD_HEIGHT / 2);
+            ctx.lineTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2 + CAT_EAR_WIDTH);
+            ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2 - CAT_EAR_WIDTH);
+            ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, CAT_HEAD_HEIGHT / 2);
+            ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2);
             ctx.fill();
 
             for (const scaleY of [-1, 1]) {

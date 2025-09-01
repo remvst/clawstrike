@@ -241,60 +241,45 @@ class Human extends Entity {
         ctx.translate(this.x, this.y);
         ctx.scale(this.facing, 1);
 
-        const BODY_LENGTH = 40;
-        const BODY_THICKNESS = 20;
-
-        const LEG_LENGTH = 20;
-        const LEG_THICKNESS = 8;
-
-        const HEAD_WIDTH = 15;
-        const HEAD_HEIGHT = 15;
-
-        const NECK_THICKNESS = 8;
-        const NECK_LENGTH = 4;
-
-        const ARM_LENGTH = 25;
-        const ARM_THICKNESS = 5;
-
         ctx.fillStyle = this.age - this.lastDamage < 0.1 ? '#fff' : this.color;
 
         // Body
-        ctx.fillRect(-BODY_THICKNESS / 2, -BODY_LENGTH / 2, BODY_THICKNESS, BODY_LENGTH);
+        ctx.fillRect(-HUMAN_BODY_THICKNESS / 2, -HUMAN_BODY_LENGTH / 2, HUMAN_BODY_THICKNESS, HUMAN_BODY_LENGTH);
 
         // Legs
         ctx.wrap(() => {
-            ctx.translate(0, BODY_LENGTH / 2 - LEG_THICKNESS / 2);
+            ctx.translate(0, HUMAN_BODY_LENGTH / 2 - HUMAN_LEG_THICKNESS / 2);
 
             const legBaseAngle = this.walking
                 ? sin(this.age * PI * 2 * 2) * PI / 16
                 : 0;
 
             ctx.wrap(() => {
-                ctx.translate(-BODY_THICKNESS / 2 + LEG_THICKNESS / 2, 0);
+                ctx.translate(-HUMAN_BODY_THICKNESS / 2 + HUMAN_LEG_THICKNESS / 2, 0);
                 ctx.rotate(legBaseAngle);
-                ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
+                ctx.fillRect(-HUMAN_LEG_THICKNESS / 2, 0, HUMAN_LEG_THICKNESS, HUMAN_LEG_LENGTH + HUMAN_LEG_THICKNESS / 2);
             });
 
             ctx.wrap(() => {
-                ctx.translate(BODY_THICKNESS / 2 - LEG_THICKNESS / 2, 0);
+                ctx.translate(HUMAN_BODY_THICKNESS / 2 - HUMAN_LEG_THICKNESS / 2, 0);
                 ctx.rotate(-legBaseAngle);
-                ctx.fillRect(-LEG_THICKNESS / 2, 0, LEG_THICKNESS, LEG_LENGTH + LEG_THICKNESS / 2);
+                ctx.fillRect(-HUMAN_LEG_THICKNESS / 2, 0, HUMAN_LEG_THICKNESS, HUMAN_LEG_LENGTH + HUMAN_LEG_THICKNESS / 2);
             });
         });
 
         ctx.wrap(() => {
             // Neck
-            ctx.translate(0, -BODY_LENGTH / 2);
-            ctx.fillRect(-NECK_THICKNESS / 2, 0, NECK_THICKNESS, -NECK_LENGTH);
+            ctx.translate(0, -HUMAN_BODY_LENGTH / 2);
+            ctx.fillRect(-HUMAN_NECK_THICKNESS / 2, 0, HUMAN_NECK_THICKNESS, -HUMAN_NECK_LENGTH);
 
             // Head
-            ctx.translate(0, -NECK_LENGTH - HEAD_HEIGHT / 2);
-            ctx.fillRect(-HEAD_WIDTH / 2, -HEAD_HEIGHT / 2, HEAD_WIDTH, HEAD_HEIGHT);
+            ctx.translate(0, -HUMAN_NECK_LENGTH - HUMAN_HEAD_HEIGHT / 2);
+            ctx.fillRect(-HUMAN_HEAD_WIDTH / 2, -HUMAN_HEAD_HEIGHT / 2, HUMAN_HEAD_WIDTH, HUMAN_HEAD_HEIGHT);
         });
 
         // Arm
         ctx.wrap(() => {
-            ctx.translate(BODY_THICKNESS / 2 - ARM_THICKNESS / 2, -BODY_LENGTH / 2 + ARM_THICKNESS / 2);
+            ctx.translate(HUMAN_BODY_THICKNESS / 2 - HUMAN_ARM_THICKNESS / 2, -HUMAN_BODY_LENGTH / 2 + HUMAN_ARM_THICKNESS / 2);
 
             let angle = this.aim;
             if (this.facing < 0) {
@@ -302,10 +287,10 @@ class Human extends Entity {
             }
 
             ctx.rotate(angle);
-            ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH + 1, ARM_THICKNESS);
+            ctx.fillRect(0, -HUMAN_ARM_THICKNESS / 2, HUMAN_ARM_LENGTH + 1, HUMAN_ARM_THICKNESS);
 
             // Gun
-            ctx.fillRect(ARM_LENGTH - 5, -ARM_THICKNESS / 2, 15, -5);
+            ctx.fillRect(HUMAN_ARM_LENGTH - 5, -HUMAN_ARM_THICKNESS / 2, 15, -5);
         });
 
         if (this.age - this.lastSeenCat < 1) ctx.wrap(() => {
