@@ -52,7 +52,6 @@ const JS_FILES = [
     'screen/menu/game-over-screen.js',
     'screen/menu/game-complete-screen.js',
 
-    'level/matrix.js',
     'level/serialization.js',
 
     'sound/sonantx.js',
@@ -217,7 +216,7 @@ const argv = yargs(process.argv.slice(2)).options({
     let html = await fs.readFile('src/index.html', 'utf-8');
     let css = await fs.readFile('src/style.css', 'utf-8');
     if (constants.DEBUG) {
-        css += await fs.readFile('src/editor.css', 'utf-8')
+        css += await fs.readFile('src/editor.css', 'utf-8');
     }
 
     const jsFiles = [...JS_FILES];
@@ -225,6 +224,7 @@ const argv = yargs(process.argv.slice(2)).options({
     // Add the level editor if needed
     if (constants.DEBUG) {
         jsFiles.push('screen/level-editor-screen.js');
+        jsFiles.push('level/matrix.js');
     }
 
     let js = (await Promise.all(
