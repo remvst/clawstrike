@@ -5,10 +5,14 @@ canvasPrototype.drawCommandText = function(text) {
 
         ctx.miterLimit = 2;
 
+        const { width } = ctx.measureText(text);
         if (this.textAlign == nomangle('center')) {
-            this.translate(-ctx.measureText(text).width / 2, 0);
-            this.textAlign = nomangle('left');
+            this.translate(-width / 2, 0);
+        } else if (this.textAlign == nomangle('right')) {
+            this.translate(-width, 0);
         }
+
+        this.textAlign = nomangle('left');
 
         for (const char of chars) {
             if (char == '[') colorStack.push('#f00');
