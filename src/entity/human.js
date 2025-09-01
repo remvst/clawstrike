@@ -305,11 +305,7 @@ class Human extends Entity {
             ctx.fillRect(0, -ARM_THICKNESS / 2, ARM_LENGTH + 1, ARM_THICKNESS);
 
             // Gun
-            ctx.wrap(() => {
-                ctx.translate(ARM_LENGTH - 5, -ARM_THICKNESS / 2);
-                ctx.fillRect(0, 0, 15, -5);
-                // ctx.fillRect(0, 0, 5, 5);
-            });
+            ctx.fillRect(ARM_LENGTH - 5, -ARM_THICKNESS / 2, 15, -5);
         });
 
         if (this.age - this.lastSeenCat < 1) ctx.wrap(() => {
