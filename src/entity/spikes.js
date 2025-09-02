@@ -37,7 +37,7 @@ class Spikes extends Entity {
         ctx.rotate(this.angle);
 
         ctx.wrap(() => {
-            ctx.translate(-this.length / 2, 0);
+            ctx.translate(-this.length / 2, 1);
 
             ctx.beginPath();
             for (let x = 0 ; x < this.length; x += 10) {
