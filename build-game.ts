@@ -260,6 +260,11 @@ const argv = yargs(process.argv.slice(2)).options({
         jsFiles.map(path => fs.readFile('src/' + path, 'utf-8')))
     ).join('\n');
 
+    const deminifyMatrix = (minified: string): number[][] => {
+        return minified.split('|').map(row => row.split('').map(Number));
+    }
+    js += 'deminifyMatrix = ' + deminifyMatrix.toString() + ';\n\n';
+
     js += 'ALL_LEVELS = [\n';
 
     for (const path of [
@@ -278,7 +283,35 @@ const argv = yargs(process.argv.slice(2)).options({
         'level/levels/climb.js',
         'level/levels/cramped.js',
     ]) {
-        js += (await fs.readFile('src/' + path, 'utf-8')).trim() + ',\n';
+        js += '    [';
+
+        const levelJson = JSON.parse(await fs.readFile('src/' + path, 'utf-8'));
+        for (const entity of levelJson) {
+            js += '{';
+            for (const propertyKey in entity) {
+                const propertyValue = entity[propertyKey];
+
+                let value: any;
+                if (propertyKey === "matrix") {
+                    const minifiedMatrix = propertyValue.map((row: number[]) => row.join('')).join('|');
+                    value = 'deminifyMatrix(`' + minifiedMatrix + '`)';
+                } else if (propertyValue === 0) {
+                    continue;
+                } else if (propertyKey === "angle") {
+                    const inDegrees = Math.round(propertyValue * 180 / Math.PI);
+                    value = (inDegrees / 180) + ' * PI';
+                } else if (propertyKey === "text") {
+                    value = 'nomangle(' + JSON.stringify(propertyValue) + ')';
+                } else {
+                    value = JSON.stringify(propertyValue);
+                }
+
+                js += `${JSON.stringify(propertyKey)}: ${value},`;
+            }
+            js += '},';
+        }
+
+        js += '],\n';
     }
 
     js += '];\n';
