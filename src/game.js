@@ -112,8 +112,8 @@ class Game {
 
                 ctx.translate(10, 10);
                 ctx.font = '20px Courier';
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
+                ctx.textAlign = nomangle('left');
+                ctx.textBaseline = nomangle('middle');
                 ctx.fillStyle = '#fff';
                 ctx.shadowColor = '#000';
                 ctx.shadowOffsetY = 2;

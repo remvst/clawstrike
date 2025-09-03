@@ -106,8 +106,9 @@ class IntroScreen extends StoryScreen {
         ctx.wrap(() => super.render());
         ctx.wrap(() => {
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 32px Impact';
-            ctx.textAlign = 'right';
+            ctx.font = nomangle('bold 32px Impact');
+            ctx.textAlign = nomangle('right');
+            ctx.textBaseline = nomangle('bottom');
 
             ctx.translate(CANVAS_WIDTH - 20, CANVAS_HEIGHT - 20);
             ctx.drawCommandText(nomangle('[ENTER] SKIP'));

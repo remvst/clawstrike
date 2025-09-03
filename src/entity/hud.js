@@ -36,8 +36,8 @@ class HUD extends Entity {
         ctx.lineWidth = 10;
 
         ctx.wrap(() => {
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
+            ctx.textAlign = nomangle('left');
+            ctx.textBaseline = nomangle('top');
             ctx.lineWidth = 1;
 
             ctx.translate(50, 50);
@@ -57,27 +57,6 @@ class HUD extends Entity {
                 ctx.fillText(value, 0, 0);
                 ctx.strokeText(value, 0, 0);
                 ctx.translate(0, 50);
-            }
-        });
-
-        ctx.wrap(() => {
-            return;
-            ctx.translate(CANVAS_WIDTH / 2, 50);
-            ctx.font = nomangle('bold 60px Impact');
-            ctx.textBaseline = nomangle('top');
-            ctx.lineWidth = 2;
-
-            const formatted = formatTime(G.runTime).split('');
-            const totalWidth = formatted.reduce((acc, x) => acc + ctx.measureText(charForWidthCalculation(x)).width, 0);
-
-            ctx.translate(-totalWidth / 2, 0);
-            ctx.textAlign = nomangle('center');
-
-            for (const char of formatted) {
-                const { width } = ctx.measureText(charForWidthCalculation(char));
-                ctx.fillText(char, width / 2, 0);
-                ctx.strokeText(char, width / 2, 0);
-                ctx.translate(width, 0);
             }
         });
 
