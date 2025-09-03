@@ -7,10 +7,6 @@
 **CLAWSTRIKE** is my entry for 2025's [JS13K](https://js13kgames.com/).
 The theme for the competition was **Black Cat**.
 
-<p align="center">
-<img src="/assets/intro.gif" width="200">
-</p>
-
 The game is a 2D die and retry platformer. Your goal is to clear all the levels as quickly as possible by triple striking all the humans.
 
 > Avenge your fallen human and cut through waves of enemies across fast-paced, punishingly fun levels. CLAWSTRIKE is a die-and-retry action game: you’ll fall often, but each retry is instant, keeping the momentum alive.
@@ -32,6 +28,10 @@ You can play the game at https://meow.tap2play.io/
     - Preprod: `make preprod`
     - Prod: `make prod`
     - All: `make`
+
+<p align="center">
+<img src="/assets/intro.gif" width="400">
+</p>
 
 ## Level Editor
 
