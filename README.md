@@ -27,13 +27,13 @@ You can play the game at https://meow.tap2play.io/
 
 ## Level Editor
 
-- `make debug`
-- Open `build/debug.html`
+- Editor is available at https://meow.tap2play.io/debug.html
 - Press <kbd>E</kbd> in the main menu
-- Controls
+- Controls:
     - Switch to entity mode: <kbd>1</kbd> (lets you drag things around)
     - Switch to structure mode: <kbd>2</kbd> (lets you edit obstacles)
-    - Change color, add entity, test level, etc...: Right click
+    - Change color, add entity, test level, etc...: `Right click`
+- Share your level: `Right click > Share Link`
 
 ## Tools used
 
