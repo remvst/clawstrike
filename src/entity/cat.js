@@ -39,6 +39,8 @@ class Cat extends Entity {
         this.wallStickX = 0;
         this.wallStickDirection = 0;
         this.lastStickToWall = -9;
+
+        this.color = '#000';
     }
 
     get attackHitbox() {
@@ -430,7 +432,7 @@ class Cat extends Entity {
             ctx.scale(0.8, 0.8);
         }
 
-        ctx.fillStyle = ctx.strokeStyle = this.age - this.lastDamage < 0.1 ? '#fff' : '#000';
+        ctx.fillStyle = ctx.strokeStyle = this.age - this.lastDamage < 0.1 ? '#fff' : this.color;
 
         // Body
         ctx.wrap(() => {
@@ -559,7 +561,6 @@ class Cat extends Entity {
                     ctx.wrap(() => {
                         ctx.scale(1, scaleY);
                         ctx.rotate(angle);
-                        ctx.strokeStyle = '#000';
                         ctx.lineWidth = 0.5;
                         ctx.globalAlpha = 0.5;
                         ctx.beginPath();

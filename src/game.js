@@ -18,7 +18,7 @@ class Game {
 
         this.frame();
         setTimeout(async () => {
-            await this.navigate(new StoryScreen()).awaitCompletion();
+            await this.navigate(new IntroScreen()).awaitCompletion();
             this.startNavigation();
         }, 0);
     }
@@ -75,6 +75,7 @@ class Game {
             localStorage[nomangle("bt")] = this.bestRunTime;
 
             const blankScreen = this.navigate(new WorldScreen([]));
+            await this.navigate(new RevengeScreen()).awaitCompletion();
             await this.navigate(new GameCompleteScreen(blankScreen)).awaitCompletion();
         }
     }
