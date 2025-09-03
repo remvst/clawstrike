@@ -43,6 +43,7 @@ class ClawEffect extends Entity {
         const LENGTH = 40;
         const l = LENGTH * min(1, this.age / 0.1);
 
+        ctx.miterLimit = 10;
         ctx.beginPath();
         ctx.translate(-LENGTH / 2, 0);
         ctx.moveTo(0, 0);
