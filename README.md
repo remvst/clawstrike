@@ -1,5 +1,5 @@
 <p align="center">
-<img src="/assets/mainmenu-screenshot.png">
+<img src="/assets/logo.png">
 </p>
 
 # CLAWSTRIKE
@@ -11,6 +11,10 @@ The game is a 2D die and retry platformer. Your goal is to clear all the levels 
 
 You can play the game at https://meow.tap2play.io/
 
+<p align="center">
+<img src="/assets/mainmenu-screenshot.png">
+</p>
+
 ## Build
 
 - Install depencies: `make install`
@@ -20,6 +24,16 @@ You can play the game at https://meow.tap2play.io/
     - Preprod: `make preprod`
     - Prod: `make prod`
     - All: `make`
+
+## Level Editor
+
+- `make debug`
+- Open `build/debug.html`
+- Press <kbd>E</kbd> in the main menu
+- Controls
+    - Switch to entity mode: <kbd>1</kbd> (lets you drag things around)
+    - Switch to structure mode: <kbd>2</kbd> (lets you edit obstacles)
+    - Change color, add entity, test level, etc...: Right click
 
 ## Tools used
 
