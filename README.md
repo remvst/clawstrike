@@ -30,7 +30,7 @@ You can play the game at https://meow.tap2play.io/
     - All: `make`
 
 <p align="center">
-<img src="/assets/intro.gif" width="400">
+<img src="/assets/intro.gif">
 </p>
 
 ## Level Editor
