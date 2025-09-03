@@ -297,7 +297,7 @@ const argv = yargs(process.argv.slice(2)).options({
 
                 let value: any;
                 if (propertyKey === "matrix") {
-                    value = 'deminifyMatrix(' + minifyMatrix(propertyValue) + ')';
+                    value = 'deminifyMatrix(`' + minifyMatrix(propertyValue) + '`)';
                 } else if (propertyValue === 0) {
                     continue;
                 } else if (propertyKey === "angle") {
