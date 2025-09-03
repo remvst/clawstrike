@@ -12,7 +12,7 @@ The game is a 2D die and retry platformer. Your goal is to clear all the levels 
 You can play the game at https://meow.tap2play.io/
 
 <p align="center">
-<img src="/assets/mainmenu-screenshot.png">
+<img src="/assets/intro.gif">
 </p>
 
 ## Build
