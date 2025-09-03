@@ -206,6 +206,11 @@ const MANGLE_PARAMS = {
         "transitionProgress",
         "water",
         "acceleration",
+        "top",
+        "left",
+        "right",
+        "bottom",
+        "animate",
     ]
 };
 

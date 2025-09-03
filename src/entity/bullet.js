@@ -23,7 +23,7 @@ class Bullet extends Entity {
                 this.world.removeEntity(this);
 
                 for (let i = 0; i < 5; i++) {
-                    const part = this.world.addEntity(new PhysicalParticle('#fff'));
+                    const part = this.world.addEntity(new PhysicalParticle());
                     part.x = x;
                     part.y = y;
                 }

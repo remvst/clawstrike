@@ -1,8 +1,6 @@
 class PhysicalParticle extends Entity {
-    constructor(color = '#fff') {
+    constructor() {
         super();
-
-        this.color = color;
 
         this.speed = rnd(200, 400);
         this.angle = rnd(-PI, 0);
@@ -41,7 +39,7 @@ class PhysicalParticle extends Entity {
         const s = pointDistance(0, 0, this.vX, this.vY) / 25;
         ctx.translate(this.x, this.y);
         ctx.rotate(atan2(this.vY, this.vX) + PI);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = '#fff';
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
         ctx.fillRect(0, -2, s, 4);

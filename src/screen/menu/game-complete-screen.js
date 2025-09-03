@@ -38,7 +38,7 @@ class GameCompleteScreen extends MenuScreen {
                 const y = camera.y + rnd(-CANVAS_HEIGHT / 4, 0);
 
                 for (let i = 0 ; i < 50; i++) {
-                    const particle = this.worldScreen.world.addEntity(new PhysicalParticle('#fff'));
+                    const particle = this.worldScreen.world.addEntity(new PhysicalParticle());
                     particle.x = x;
                     particle.y = y;
                     particle.z = 999;

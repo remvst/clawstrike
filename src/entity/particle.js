@@ -1,8 +1,7 @@
 class Particle extends Entity {
-    constructor(color = '#fff') {
+    constructor() {
         super();
 
-        this.color = color;
         this.z = Z_PARTICLE;
         this.alpha = 1;
         this.size = 1;
@@ -11,7 +10,7 @@ class Particle extends Entity {
     render() {
         ctx.globalAlpha = this.alpha;
         ctx.translate(this.x, this.y);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = '#fff';
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
         ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);

@@ -71,7 +71,7 @@ class Cat extends Entity {
         }
 
         for (let i = 0 ; i < 10 ; i++) {
-            const particle = this.world.addEntity(new Particle('#fff'));
+            const particle = this.world.addEntity(new Particle());
             particle.size = rnd(5, 10);
 
             if (this.stickingToWall) {
@@ -262,7 +262,7 @@ class Cat extends Entity {
 
         if (this.landed && !landed) {
             for (let i = 0 ; i < 10 ; i++) {
-                const particle = this.world.addEntity(new Particle('#fff'));
+                const particle = this.world.addEntity(new Particle());
                 particle.x = this.x - rnd(-1, 1) * this.hitbox.width / 2;
                 particle.y = this.y + this.hitbox.height / 2;
                 particle.size = rnd(5, 10);
@@ -321,7 +321,7 @@ class Cat extends Entity {
         if (this.rolling && this.landed && this.age - (this.lastRollParticle || 0) > 1 / 60) {
             this.lastRollParticle = this.age;
 
-            const particle = this.world.addEntity(new Particle('#fff'));
+            const particle = this.world.addEntity(new Particle());
             particle.x = this.x + rnd(-10, 10);
             particle.y = this.y + this.hitbox.height / 2 + rnd(0, -10);
             particle.size = rnd(4, 8);

@@ -179,7 +179,7 @@ class Human extends Entity {
         this.lastBullet = bullet;
 
         for (let i = 0 ; i < 5 ; i++) {
-            const particle = this.world.addEntity(new Particle('#fff'));
+            const particle = this.world.addEntity(new Particle());
             particle.x = bullet.x;
             particle.y = bullet.y;
             particle.size = rnd(5, 10);
@@ -216,7 +216,7 @@ class Human extends Entity {
             this.world.removeEntity(this);
 
             for (let i = 0 ; i < 50 ; i++) {
-                const particle = this.world.addEntity(new Particle('#fff'));
+                const particle = this.world.addEntity(new Particle());
                 particle.x = this.x + rnd(-this.hitbox.width, this.hitbox.width) / 2;
                 particle.y = this.y + rnd(-this.hitbox.height, this.hitbox.height) / 2;
                 particle.size = rnd(5, 10);
