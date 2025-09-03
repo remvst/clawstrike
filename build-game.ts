@@ -261,31 +261,11 @@ const argv = yargs(process.argv.slice(2)).options({
     ).join('\n');
 
     const minifyMatrix = (matrix: number[][]): string => {
-        const minified: string[] = [];
-        for (let row = 0; row < matrix.length; row++) {
-            const minifiedRow: string[] = [];
-
-            let accNumber = '';
-            for (let col = 0 ; col <= matrix[row].length; col++) {
-                if (col < matrix[row].length) {
-                    accNumber += matrix[row][col].toString();
-                }
-                if (accNumber.length >= 15) {
-                    const asInt = parseInt(accNumber);
-                    minifiedRow.push(asInt.toString(36));
-                    accNumber = '';
-                }
-            }
-            minified.push(minifiedRow.join(','));
-        }
-
-        return minified.join('|');
+        return matrix.map(row => row.join('')).join('|');
     }
 
     const deminifyMatrix = (minified: string): number[][] => {
-        return minified.split('|').map(row => {
-            return row.split(',').map(x => parseInt(x, 36)).join('').split('').map(parseInt);
-        });
+        return minified.split('|').map(row => row.split('').map(x => parseInt(x)));
     }
     js += 'deminifyMatrix = ' + deminifyMatrix.toString() + ';\n\n';
 
@@ -317,7 +297,7 @@ const argv = yargs(process.argv.slice(2)).options({
 
                 let value: any;
                 if (propertyKey === "matrix") {
-                    value = 'deminifyMatrix(`' + minifyMatrix(propertyValue) + '`)';
+                    value = 'deminifyMatrix(' + minifyMatrix(propertyValue) + ')';
                 } else if (propertyValue === 0) {
                     continue;
                 } else if (propertyKey === "angle") {
