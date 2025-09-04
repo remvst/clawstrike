@@ -68,6 +68,7 @@ const CONSTANTS = {
     "false": 0,
     "const": "let",
     "null": 0,
+    "Infinity": 999,
 
     "CELL_SIZE": 50,
 
