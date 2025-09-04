@@ -23,7 +23,7 @@ class FullGameOverScreen extends MenuScreen {
         super();
         this.title = nomangle('9 LIVES, 0 LEFT');
         this.addCommand(
-            nomangle('PRESS [SPACE] TO GO BACK TO MAIN MENU'),
+            (inputMode == INPUT_MODE_TOUCH ? nomangle('[TAP]') : nomangle('PRESS [SPACE]')) + nomangle(' TO GO BACK TO MAIN MENU'),
             () => downKeys[32] || TOUCH_DOWN,
             () => this.resolve(),
         );

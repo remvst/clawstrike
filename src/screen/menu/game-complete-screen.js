@@ -13,8 +13,8 @@ class GameCompleteScreen extends MenuScreen {
         this.addCommand('(9 LIVES MODE) UNLOCKED!');
         this.addCommand('');
         this.addCommand(
-            nomangle('PRESS [SPACE] TO DISMISS'),
-            () => downKeys[32] || (inputMode == INPUT_MODE_TOUCH && TOUCH_DOWN),
+            (inputMode == INPUT_MODE_TOUCH ? nomangle('[TAP]') : nomangle('PRESS [SPACE]')) + nomangle(' TO DISMISS'),
+            () => downKeys[32] || TOUCH_DOWN,
             () => this.resolve(),
         );
 
