@@ -75,7 +75,7 @@ class IntroScreen extends StoryScreen {
         this.owner.health = 1;
 
         this.addCommand(
-            () => '',
+            '',
             () => downKeys[13],
             () => this.resolve(),
         );

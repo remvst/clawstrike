@@ -26,7 +26,7 @@ class Screen {
 
     addMainMenuCommand() {
         this.addCommand(
-            () => nomangle('PRESS [M] TO RETURN TO MAIN MENU'),
+            nomangle('PRESS [M] TO RETURN TO MAIN MENU'),
             () => downKeys[77],
             () => G.startNavigation(),
         );
