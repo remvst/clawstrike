@@ -72,6 +72,8 @@ const CONSTANTS = {
 
     "CELL_SIZE": 50,
 
+    "COMMAND_SPACING": 50,
+
     "INPUT_MODE_KEYBOARD": 0,
     "INPUT_MODE_TOUCH": 1,
 

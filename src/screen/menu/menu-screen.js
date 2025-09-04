@@ -17,13 +17,11 @@ class MenuScreen extends Screen {
     }
 
     renderCommands() {
-        const spacing = 50;
-
-        ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * spacing) / 2);
+        ctx.translate(CANVAS_WIDTH / 2,  CANVAS_HEIGHT * 2 / 3 + 60 - ((this.commands.length - 1) * COMMAND_SPACING) / 2);
 
         for (const { label, detect } of this.commands) {
             if (this.age % 2 < 1.5 || !detect) ctx.wrap(() => this.renderCommandText(label.call ? label() : label));
-            ctx.translate(0, spacing);
+            ctx.translate(0, COMMAND_SPACING);
         }
     }
 
