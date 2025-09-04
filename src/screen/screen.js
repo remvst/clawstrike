@@ -1,15 +1,12 @@
 class Screen {
     age = 0;
     commands = [];
+    songVolume = 1;
 
     constructor() {
         if (DEBUG) {
             this.debugValues = () => ([]);
         }
-    }
-
-    get songVolume() {
-        return 1;
     }
 
     addCommand(label, detect, action, playSound = true) {

@@ -1,6 +1,7 @@
 class PauseScreen extends MenuScreen {
 
-    title = nomangle('PAUSED')
+    title = nomangle('PAUSED');
+    songVolume = 0.2;
 
     constructor() {
         super();
@@ -15,9 +16,5 @@ class PauseScreen extends MenuScreen {
 
     absorb() {
         return true;
-    }
-
-    get songVolume() {
-        return 0.2;
     }
 }

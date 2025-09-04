@@ -945,7 +945,6 @@ playSong = () => new MusicGenerator(SONG).createAudioBuffer(buffer => {
 
     playSong = () => 0;
     setSongVolume = (x) => gainNode.gain.value = x * SONG_VOLUME;
-
     setSongVolume(1);
 });
 
