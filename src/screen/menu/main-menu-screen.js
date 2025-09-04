@@ -86,10 +86,8 @@ class MainMenuScreen extends MenuScreen {
         const camera = firstItem(world.category('camera'));
         camera.target = cat;
 
-        camera.interp('zoom', camera.zoom, 1.3, 2, easeInQuad);
-
         (async () => {
-            await zoomOut.awaitCompletion();
+            await camera.interp('zoom', camera.zoom, 1.3, 2, easeInQuad);
             world.addEntity(new HUD(cat));
         })();
 
