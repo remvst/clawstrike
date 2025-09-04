@@ -12,6 +12,8 @@ class World {
     }
 
     render() {
+        this.entities.sort((a, b) => a.z - b.z);
+
         ctx.wrap(() => {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, can.width, can.height);
@@ -47,8 +49,6 @@ class World {
             this.categories[categoryId] ||= new Set();
             this.categories[categoryId].add(entity);
         }
-
-        this.entities.sort((a, b) => a.z - b.z);
 
         return entity;
     }
