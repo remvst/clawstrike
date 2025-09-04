@@ -1,6 +1,6 @@
 class GameCompleteScreen extends MenuScreen {
 
-    title = nomangle('CONGRATULATIONS');
+    title = nomangle('CONGRATS');
 
     constructor(worldScreen) {
         super();
