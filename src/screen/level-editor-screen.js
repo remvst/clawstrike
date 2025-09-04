@@ -109,7 +109,7 @@ class LevelEditorScreen extends WorldScreen {
 
         ctx.wrap(() => {
             const camera = firstItem(this.world.category('camera'));
-            ctx.scale(camera.appliedZoom, camera.appliedZoom);
+            ctx.scale(camera.zoom, camera.zoom);
             ctx.translate(
                 CANVAS_WIDTH / 2 / camera.zoom - camera.x,
                 CANVAS_HEIGHT / 2 / camera.zoom - camera.y,

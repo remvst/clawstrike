@@ -18,7 +18,7 @@ class World {
             ctx.fillRect(0, 0, can.width, can.height);
 
             const camera = firstItem(this.category('camera'));
-            ctx.scale(camera.appliedZoom, camera.appliedZoom);
+            ctx.scale(camera.zoom, camera.zoom);
             ctx.translate(
                 CANVAS_WIDTH / 2 / camera.zoom - camera.actual.x,
                 CANVAS_HEIGHT / 2 / camera.zoom - camera.actual.y,
