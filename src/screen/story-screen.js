@@ -25,6 +25,8 @@ class StoryScreen extends WorldScreen {
         const camera = firstItem(this.world.category('camera'));
         this.removeAllEntities();
 
+        if (inputMode == INPUT_MODE_TOUCH) camera.zoom = 1.3;
+
         const label = this.world.addEntity(new Label(message));
         label.x = camera.x;
         label.y = camera.y;
