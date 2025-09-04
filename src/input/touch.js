@@ -23,13 +23,14 @@ updateTouches = (touches) => {
     for (const touch of touches) {
         getEventPosition(touch, can, out);
 
-        const relX = out.x / can.width;
-        downKeys[37] ||= isBetween(0, relX, 0.25);
-        downKeys[39] ||= isBetween(0.25, relX, 0.5);
-        downKeys[40] ||= isBetween(0.5, relX, 0.75);
-        downKeys[38] ||= isBetween(0.75, relX, 1) && out.y > can.height - 300;
-        downKeys[32] ||= isBetween(0.75, relX, 1) && isBetween(can.height - 300, out.y, can.height - 500);
-        downKeys[69] ||= isBetween(0.75, relX, 1) && isBetween(can.height - 500, out.y, can.height - 800);
+        const cellX = ~~(4 * out.x / can.width);
+        const cellY = ~~((can.height - out.y) / 250);
+        downKeys[37] ||= cellX == 0;
+        downKeys[39] ||= cellX == 1;
+        downKeys[40] ||= cellX == 2;
+        downKeys[38] ||= cellX == 3 && cellY == 0;
+        downKeys[32] ||= cellX == 3 && cellY == 1;
+        downKeys[69] ||= cellX == 3 && cellY == 2;
     }
 
     TOUCH_DOWN = touches.length > 0;

@@ -123,7 +123,7 @@ class HUD extends Entity {
                 this.claw.scale = 3;
                 this.claw.angle = PI / 4;
                 this.claw.x = CANVAS_WIDTH * 7 / 8;
-                this.claw.y = CANVAS_HEIGHT - 400;
+                this.claw.y = CANVAS_HEIGHT - 375;
                 this.claw.stroke = false;
                 this.claw.render();
             });
@@ -131,7 +131,7 @@ class HUD extends Entity {
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[69] ? 1 : 0.5;
 
-                ctx.translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 600);
+                ctx.translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 625);
                 ctx.rotate(-PI / 2);
                 ctx.scale(2, 2);
                 renderCatHead(true);
