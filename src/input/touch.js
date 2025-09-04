@@ -37,6 +37,6 @@ updateTouches = (touches) => {
 getEventPosition = (evt, can, out) => {
     if (!can) return;
     const canvasRect = can.getBoundingClientRect();
-    out.x = (evt.pageX - canvasRect.left) / canvasRect.width * can.width;
-    out.y = (evt.pageY - canvasRect.top) / canvasRect.height * can.height;
+    out.x = (evt.pageX - canvasRect.nomangle(left)) / canvasRect.width * can.width;
+    out.y = (evt.pageY - canvasRect.nomangle(top)) / canvasRect.height * can.height;
 }
