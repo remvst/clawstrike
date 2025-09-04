@@ -48,11 +48,11 @@ class HUD extends Entity {
             ctx.translate(50, 50);
 
             for (const [label, value] of [
-                [nomangle('TOTAL TIME'), formatTime(G.runTime)],
                 [nomangle('LEVEL'), (G.runLevelIndex) + '/' + (ALL_LEVELS.length - 1)],
-                [nomangle('TOTAL DEATHS'), G.runDeaths],
-                [nomangle('DIFFICULTY [K]'), G.difficulty.label],
+                [nomangle('TIME'), formatTime(G.runTime)],
                 [nomangle('BEST'), formatTime(G.bestRunTime)],
+                [nomangle('DEATHS'), G.runDeaths],
+                [nomangle('DIFFICULTY [K]'), G.difficulty.label],
             ]) {
                 ctx.font = nomangle('italic bold 16px Impact');
                 ctx.drawCommandText(label);
