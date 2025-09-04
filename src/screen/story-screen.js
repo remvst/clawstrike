@@ -131,6 +131,8 @@ class RevengeScreen extends StoryScreen {
         this.cat.color = this.enemy.color = '#fff';
         this.cat.y = this.enemy.y = CELL_SIZE * 2;
 
+        this.world.addEntity(new HUD(this.cat));
+
         (async () => {
             await this.fadeIn();
 

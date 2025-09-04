@@ -36,6 +36,9 @@ class HUD extends Entity {
         ctx.lineWidth = 10;
 
         ctx.wrap(() => {
+            const camera = firstItem(this.world.category('camera'));
+            if (camera.zoom >= 2) return;
+
             ctx.textAlign = nomangle('left');
             ctx.textBaseline = nomangle('top');
             ctx.lineWidth = 1;
