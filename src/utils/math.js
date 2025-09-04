@@ -1,7 +1,7 @@
 normalizeAngle = (angle) => {
     let normalized = angle;
-    while (normalized < -PI) normalized += PI * 2;
-    while (normalized > PI) normalized -= PI * 2;
+    while (normalized < -PI) normalized += TWO_PI;
+    while (normalized > PI) normalized -= TWO_PI;
     return normalized;
 }
 
