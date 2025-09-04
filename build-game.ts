@@ -211,6 +211,7 @@ const MANGLE_PARAMS = {
         "right",
         "bottom",
         "animate",
+        "navigate",
     ]
 };
 
