@@ -99,7 +99,7 @@ class Game {
             while (this.screens[--i]) {
                 const screen = this.screens[i];
                 screen.cycle(elapsed);
-                if (screen.absorb()) break;
+                if (screen.absorb) break;
             }
 
             for (const screen of this.screens) {

@@ -1,4 +1,6 @@
 class WorldScreen extends Screen {
+    absorb = true;
+
     constructor(serializedWorld) {
         super();
 
@@ -44,9 +46,5 @@ class WorldScreen extends Screen {
     render() {
         super.render();
         ctx.wrap(() => this.world.render());
-    }
-
-    absorb() {
-        return true;
     }
 }

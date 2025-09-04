@@ -2,6 +2,7 @@ class PauseScreen extends MenuScreen {
 
     title = nomangle('PAUSED');
     songVolume = 0.2;
+    absorb = true;
 
     constructor() {
         super();
@@ -12,9 +13,5 @@ class PauseScreen extends MenuScreen {
         );
         this.addDifficultyChangeCommand();
         this.addMainMenuCommand();
-    }
-
-    absorb() {
-        return true;
     }
 }

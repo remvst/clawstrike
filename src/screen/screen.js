@@ -85,10 +85,6 @@ class Screen {
 
     }
 
-    absorb() {
-        return false;
-    }
-
     isForeground() {
         return G?.screens?.[G.screens.length - 1] === this;
     }
