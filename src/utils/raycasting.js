@@ -3,7 +3,6 @@ class Raycaster {
         this.structure = structure;
     }
 
-
     castRay(x, y, angle, maxDistance) {
         const castHorizontal = this.castAgainstHorizontal(x, y, angle, maxDistance);
         const castVertical = this.castAgainstVertical(x, y, angle, maxDistance);
@@ -14,7 +13,9 @@ class Raycaster {
         } else if(!castVertical) {
             impact = castHorizontal;
         } else {
-            impact = pointDistance(x, y, castHorizontal.x, castHorizontal.y) < pointDistance(x, y, castVertical.x, castVertical.y) ? castHorizontal : castVertical;
+            impact = pointDistance(x, y, castHorizontal.x, castHorizontal.y) < pointDistance(x, y, castVertical.x, castVertical.y)
+                ? castHorizontal
+                : castVertical;
         }
 
         if (pointDistance(x, y, impact.x, impact.y) > maxDistance) {
@@ -59,12 +60,9 @@ class Raycaster {
             if (DEBUG && G) {
                 G.castIterations++;
             }
-            if (this.hasBlock(x, y, 0)) {
+            if (this.structure.cellAt(x, y)) {
                 // Got a block!
-                return {
-                    'x': x,
-                    'y': y
-                };
+                return { x, y };
             } else if(this.isOut(x, y)) {
                 // Out of bounds
                 break;
@@ -74,21 +72,11 @@ class Raycaster {
             }
         }
 
-        return {
-            'x': x,
-            'y': y
-        };
-    }
-
-    hasBlock(x, y, radius = 0) {
-        return this.structure.cellAt(x, y) ||
-            this.structure.cellAt(x - radius, y - radius) ||
-            this.structure.cellAt(x - radius, y + radius) ||
-            this.structure.cellAt(x + radius, y - radius) ||
-            this.structure.cellAt(x + radius, y + radius);
+        return { x, y };
     }
 
     isOut(x, y) {
-        return !between(0, x, this.structure.width) || !between(0, y, this.structure.height);
+        return !between(0, x, this.structure.width) ||
+            !between(0, y, this.structure.height);
     }
 }
