@@ -5,14 +5,16 @@ class GameOverScreen extends MenuScreen {
             ? (G.difficulty.maxDeaths - G.runDeaths) + nomangle(' LIVES LEFT')
             : nomangle('CAT-ASTROPHE!');
         this.addCommand(
-            nomangle('PRESS [R] TO TRY AGAIN'),
+            (inputMode == INPUT_MODE_TOUCH ? nomangle('[TAP]') : nomangle('PRESS [R]')) + nomangle(' TO TRY AGAIN'),
             () => downKeys[82] || TOUCH_DOWN,
             () => this.resolve(),
         );
-        if (G.difficulty.maxDeaths == Infinity) {
-            this.addDifficultyChangeCommand();
+        if (inputMode == INPUT_MODE_KEYBOARD) {
+            if (G.difficulty.maxDeaths == Infinity) {
+                this.addDifficultyChangeCommand();
+            }
+            this.addMainMenuCommand();
         }
-        this.addMainMenuCommand();
     }
 }
 
