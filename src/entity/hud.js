@@ -83,7 +83,6 @@ class HUD extends Entity {
 
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[40] ? 1 : 0.5;
-                ctx.lineCap = 'butt';
 
                 ctx.translate(CANVAS_WIDTH * 5 / 8, CANVAS_HEIGHT - 100);
 
@@ -92,21 +91,9 @@ class HUD extends Entity {
                 for (let i = 0 ; i < 2 ; i++) {
                     ctx.rotate(PI);
 
-                    ctx.save();
-
                     ctx.beginPath();
                     ctx.arc(0, 0, radius, PI / 4, PI);
-
-                    ctx.translate(-radius, 0)
-                    ctx.rotate(PI / 3 + PI / 10);
-
-                    const LENGTH = MOBILE_BUTTON_SIZE / 8;
-                    ctx.moveTo(LENGTH, LENGTH);
-                    ctx.lineTo(0, 0);
-                    ctx.lineTo(LENGTH, -LENGTH);
                     ctx.stroke();
-
-                    ctx.restore();
                 }
             });
 
