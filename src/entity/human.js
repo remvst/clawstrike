@@ -231,12 +231,13 @@ class Human extends Entity {
             }
         }
 
-        for (let i = 0; i < (this.health ? 10 : 50); i++) {
-            const part = new PhysicalParticle();
-            part.x = this.x + rnd(-this.radiusX, this.radiusX);
-            part.y = this.y + rnd(-this.radiusY, this.radiusY);
-            this.world.addEntity(part);
-        }
+        fireworks(
+            this.world,
+            this,
+            this.health ? 10 : 50,
+            this.radiusX,
+            this.radiusY
+        );
     }
 
     render() {

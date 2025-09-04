@@ -42,3 +42,11 @@ class PhysicalParticle extends Entity {
         ctx.strokeRect(0, -2, s, 4);
     }
 }
+
+fireworks = (world, position, count, radiusX = 0, radiusY = 0) => {
+    for (let i = 0 ; i < count; i++) {
+        const particle = world.addEntity(new PhysicalParticle());
+        particle.x = position.x + rnd(-1, 1) * radiusX;
+        particle.y = position.y + rnd(-1, 1) * radiusY;
+    }
+}

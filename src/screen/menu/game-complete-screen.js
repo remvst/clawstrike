@@ -32,18 +32,15 @@ class GameCompleteScreen extends MenuScreen {
         }
 
         (async () => {
-            await camera.interp('', 0, 0, 0.5);
-
             while (true) {
-                const x = camera.x + rnd(-CANVAS_WIDTH / 3, CANVAS_WIDTH / 3);
-                const y = camera.y + rnd(-CANVAS_HEIGHT / 4, 0);
-
-                for (let i = 0 ; i < 50; i++) {
-                    const particle = this.worldScreen.world.addEntity(new PhysicalParticle());
-                    particle.x = x;
-                    particle.y = y;
-                    particle.z = 999;
-                }
+                fireworks(
+                    world,
+                    {
+                        x: camera.x + rnd(-CANVAS_WIDTH / 3, CANVAS_WIDTH / 3),
+                        y: camera.y + rnd(-CANVAS_HEIGHT / 4, 0),
+                    },
+                    50,
+                );
 
                 await camera.interp('', 0, 0, rnd(0.25, 0.5));
             }

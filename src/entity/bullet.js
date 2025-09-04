@@ -24,11 +24,11 @@ class Bullet extends Entity {
             if (structure.cellAt(this.x, this.y)) {
                 this.world.removeEntity(this);
 
-                for (let i = 0; i < 5; i++) {
-                    const part = this.world.addEntity(new PhysicalParticle());
-                    part.x = x;
-                    part.y = y;
-                }
+                fireworks(
+                    this.world,
+                    { x, y },
+                    5,
+                );
                 return;
             }
         }

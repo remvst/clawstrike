@@ -396,11 +396,13 @@ class Cat extends Entity {
             zzfx(...[2,,69,.02,.17,.55,4,3.3,2,,,,,1,,.1,.2,.4,.15]); // Explosion 128
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            const part = this.world.addEntity(new PhysicalParticle());
-            part.x = this.x + rnd(-this.radiusX, this.radiusX);
-            part.y = this.y + rnd(-this.radiusY, this.radiusY);
-        }
+        fireworks(
+            this.world,
+            this,
+            particleCount,
+            this.radiusX,
+            this.radiusY,
+        );
 
         this.world.addEntity(new Flash('#fff')).interp('alpha', 0.5, 0, 0.2);
         // TODO maybe should clean up the flash? eh not much of a perf hit
