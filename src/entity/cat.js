@@ -402,8 +402,7 @@ class Cat extends Entity {
             part.y = this.y + rnd(-this.radiusY, this.radiusY);
         }
 
-        const flash = this.world.addEntity(new Flash('#fff'));
-        this.world.addEntity(new Interpolator(flash, 'alpha', 0.5, 0, 0.2));
+        this.world.addEntity(new Flash('#fff')).interp('alpha', 0.5, 0, 0.2);
         // TODO maybe should clean up the flash? eh not much of a perf hit
     }
 

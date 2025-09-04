@@ -58,7 +58,15 @@ class Entity {
         fromValue,
         toValue,
         interpDuration,
+        easing = linear,
     ) {
-        return this.world.addEntity(new Interpolator(this, interpProperty, fromValue, toValue, interpDuration)).awaitCompletion();
+        return this.world.addEntity(new Interpolator(
+            this,
+            interpProperty,
+            fromValue,
+            toValue,
+            interpDuration,
+            easing,
+        )).awaitCompletion();
     }
 }

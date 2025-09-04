@@ -56,7 +56,7 @@ class MainMenuScreen extends MenuScreen {
         (async () => {
             const flash = world.addEntity(new Flash('#000'));
 
-            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.3)).awaitCompletion();
+            await flash.interp('', 0, 0, 0.3);
 
             for (const angle of [PI / 8, PI * 3 / 4, PI / 4]) {
                 camera.shake(0.1, 5);
@@ -67,11 +67,11 @@ class MainMenuScreen extends MenuScreen {
                 claw.angle = angle;
                 claw.scale = 5;
 
-                await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.3)).awaitCompletion();
+                await flash.interp('_', 0, 0, 0.3);
             }
 
-            await world.addEntity(new Interpolator(flash, '_', 0, 0, 0.5)).awaitCompletion();
-            await world.addEntity(new Interpolator(flash, 'alpha', 1, 0, 1)).awaitCompletion();
+            await flash.interp('_', 0, 0, 0.5);
+            await flash.interp('alpha', 1, 0, 1);
         })();
     }
 
@@ -86,8 +86,7 @@ class MainMenuScreen extends MenuScreen {
         const camera = firstItem(world.category('camera'));
         camera.target = cat;
 
-        const zoomOut = new Interpolator(camera, 'zoom', camera.zoom, 1.3, 2, easeInQuad);
-        world.addEntity(zoomOut);
+        camera.interp('zoom', camera.zoom, 1.3, 2, easeInQuad);
 
         (async () => {
             await zoomOut.awaitCompletion();

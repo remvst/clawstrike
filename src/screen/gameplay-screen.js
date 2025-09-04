@@ -33,7 +33,7 @@ class GameplayScreen extends WorldScreen {
                 this.timeFactor = 0.25;
 
                 (async () => {
-                    await this.world.addEntity(new Interpolator(camera, 'zoom', camera.zoom, 2, 0.5)).awaitCompletion();
+                    await camera.interp('zoom', camera.zoom, 2, 0.5);
                     this.resolve();
                 })();
             }
