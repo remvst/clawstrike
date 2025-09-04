@@ -526,50 +526,7 @@ class Cat extends Entity {
 
             ctx.translate(10, 0);
             if (this.walking) ctx.rotate(sin(this.age * 3 * PI * 2) * PI / 16);
-
-            ctx.fillRect(-CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2, CAT_HEAD_WIDTH, CAT_HEAD_HEIGHT);
-
-            // Eyes
-            if (this.age % 3 > 0.1) ctx.wrap(() => {
-                ctx.fillStyle = '#fff';
-                ctx.beginPath();
-
-                for (const scaleY of [-1, 1]) {
-                    ctx.wrap(() => {
-                        ctx.scale(1, scaleY);
-                        ctx.moveTo(0, 3);
-                        ctx.lineTo(0, 7);
-                        ctx.lineTo(4, 7);
-                        ctx.lineTo(2, 3);
-                    });
-                }
-                ctx.fill();
-            });
-
-            // Ears
-            ctx.beginPath();
-            ctx.moveTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2);
-            ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, -CAT_HEAD_HEIGHT / 2);
-            ctx.lineTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2 + CAT_EAR_WIDTH);
-            ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2 - CAT_EAR_WIDTH);
-            ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, CAT_HEAD_HEIGHT / 2);
-            ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2);
-            ctx.fill();
-
-            for (const scaleY of [-1, 1]) {
-                for (const angle of [0, PI / 16]) {
-                    ctx.wrap(() => {
-                        ctx.scale(1, scaleY);
-                        ctx.rotate(angle);
-                        ctx.lineWidth = 0.5;
-                        ctx.globalAlpha = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(-5, 5);
-                        ctx.lineTo(-5, 20);
-                        ctx.stroke();
-                    });
-                }
-            }
+            renderCatHead(this.age % 3 < 0.1);
         });
     }
 
@@ -588,5 +545,51 @@ class Cat extends Entity {
             ctx.fillRect(this.x - 100, peakY, 200, 2);
             ctx.fillRect(this.x - 100, this.jumpStartY, 200, 2);
         });
+    }
+}
+
+renderCatHead = (blink) => {
+    ctx.fillRect(-CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2, CAT_HEAD_WIDTH, CAT_HEAD_HEIGHT);
+
+    // Eyes
+    if (!blink) ctx.wrap(() => {
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+
+        for (const scaleY of [-1, 1]) {
+            ctx.wrap(() => {
+                ctx.scale(1, scaleY);
+                ctx.moveTo(0, 3);
+                ctx.lineTo(0, 7);
+                ctx.lineTo(4, 7);
+                ctx.lineTo(2, 3);
+            });
+        }
+        ctx.fill();
+    });
+
+    // Ears
+    ctx.beginPath();
+    ctx.moveTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2);
+    ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, -CAT_HEAD_HEIGHT / 2);
+    ctx.lineTo(CAT_HEAD_WIDTH / 2, -CAT_HEAD_HEIGHT / 2 + CAT_EAR_WIDTH);
+    ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2 - CAT_EAR_WIDTH);
+    ctx.lineTo(CAT_HEAD_WIDTH / 2 + CAT_EAR_LENGTH, CAT_HEAD_HEIGHT / 2);
+    ctx.lineTo(CAT_HEAD_WIDTH / 2, CAT_HEAD_HEIGHT / 2);
+    ctx.fill();
+
+    for (const scaleY of [-1, 1]) {
+        for (const angle of [0, PI / 16]) {
+            ctx.wrap(() => {
+                ctx.scale(1, scaleY);
+                ctx.rotate(angle);
+                ctx.lineWidth = 0.5;
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(-5, 5);
+                ctx.lineTo(-5, 20);
+                ctx.stroke();
+            });
+        }
     }
 }

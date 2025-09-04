@@ -64,6 +64,8 @@ class HUD extends Entity {
         });
 
         if (inputMode == INPUT_MODE_TOUCH) ctx.wrap(() => {
+            ctx.strokeStyle = '#fff';
+
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[37] ? 1 : 0.5;
                 ctx.translate(CANVAS_WIDTH / 8, CANVAS_HEIGHT - 100);
@@ -80,7 +82,6 @@ class HUD extends Entity {
             ctx.wrap(() => {
                 ctx.globalAlpha = downKeys[40] ? 1 : 0.5;
                 ctx.lineCap = 'butt';
-                ctx.strokeStyle = '#fff';
 
                 ctx.translate(CANVAS_WIDTH * 5 / 8, CANVAS_HEIGHT - 100);
 
@@ -125,6 +126,15 @@ class HUD extends Entity {
                 this.claw.y = CANVAS_HEIGHT - 400;
                 this.claw.stroke = false;
                 this.claw.render();
+            });
+
+            ctx.wrap(() => {
+                ctx.globalAlpha = downKeys[69] ? 1 : 0.5;
+
+                ctx.translate(CANVAS_WIDTH * 7 / 8, CANVAS_HEIGHT - 600);
+                ctx.rotate(-PI / 2);
+                ctx.scale(2, 2);
+                renderCatHead(true);
             });
         });
     }
