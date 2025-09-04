@@ -12,7 +12,7 @@ class MainMenuScreen extends MenuScreen {
                 ? nomangle('PRESS [SPACE] TO START')
                 : nomangle('[TAP] TO START'),
             () => downKeys[32] || TOUCH_DOWN,
-            () => this.start(),
+            () => this.startGame(),
             false,
         );
 
@@ -23,7 +23,7 @@ class MainMenuScreen extends MenuScreen {
                     () => downKeys[57],
                     () => {
                         G.difficulty = DIFFICULTY_NINE_LIVES;
-                        this.start();
+                        this.startGame();
                     },
                 );
             }
@@ -75,7 +75,7 @@ class MainMenuScreen extends MenuScreen {
         })();
     }
 
-    start() {
+    startGame() {
         // TODO fade out instead
         G.screens.pop();
 
@@ -99,7 +99,9 @@ class MainMenuScreen extends MenuScreen {
 
     cycle(elapsed) {
         super.cycle(elapsed);
-        for (let k = 37 ; k <= 40 ; k++) downKeys[k] = false; // disable arrow keys
+
+        // Only allow space bar
+        downKeys = {32: downKeys[32]};
     }
 
     renderTitle() {
