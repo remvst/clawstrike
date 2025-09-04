@@ -1,6 +1,6 @@
-let downKeys = {};
+downKeys = {};
 
-const alternatives = {
+ALT_KEYS = {
     // WASD
     65: 37,
     68: 39,
@@ -14,7 +14,7 @@ const alternatives = {
 
 document.onkeydown = (evt) => {
     inputMode = INPUT_MODE_KEYBOARD;
-    downKeys[alternatives[evt.keyCode] || evt.keyCode] = true;
+    downKeys[ALT_KEYS[evt.keyCode] || evt.keyCode] = true;
 };
-document.onkeyup = (evt) => downKeys[alternatives[evt.keyCode] || evt.keyCode] = false;
+document.onkeyup = (evt) => downKeys[ALT_KEYS[evt.keyCode] || evt.keyCode] = false;
 onblur = () => downKeys = {};
