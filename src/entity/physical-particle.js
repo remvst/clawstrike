@@ -1,15 +1,11 @@
 class PhysicalParticle extends Entity {
-    constructor() {
-        super();
 
-        this.speed = rnd(200, 400);
-        this.angle = rnd(-PI, 0);
+    z = Z_PARTICLE;
+    speed = rnd(200, 400);
+    angle = rnd(-PI, 0);
 
-        this.vX = cos(this.angle) * this.speed;
-        this.vY = sin(this.angle) * this.speed;
-
-        this.z = Z_PARTICLE;
-    }
+    vX = cos(this.angle) * this.speed;
+    vY = sin(this.angle) * this.speed;
 
     cycle(elapsed) {
         super.cycle(elapsed);

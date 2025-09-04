@@ -1,8 +1,9 @@
 class PauseScreen extends MenuScreen {
 
+    title = nomangle('PAUSED')
+
     constructor() {
         super();
-        this.title = nomangle('PAUSED');
         this.addCommand(
             nomangle('PRESS [ESC] TO RESUME'),
             () => downKeys[27],

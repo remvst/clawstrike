@@ -1,9 +1,10 @@
 class Flash extends Entity {
+    alpha = 1;
+    z = Z_FLASH;
+
     constructor(color) {
         super();
         this.color = color;
-        this.alpha = 1;
-        this.z = Z_FLASH;
     }
 
     render() {

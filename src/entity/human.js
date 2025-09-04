@@ -1,37 +1,39 @@
 class Human extends Entity {
 
+    type = 'human';
+
+    z = Z_HUMAN;
+
+    facing = 1;
+    walking = false;
+    walkingDirection = 1;
+
+    lastDamage = -9;
+
+    vY = 0;
+    lastLanded = -9;
+
+    radiusX = 10;
+    radiusY = 40;
+
+    nextShot = 0;
+
+    aim = 0;
+    lastSeenCat = -9;
+    lastCatCheck = 0;
+    visionDistance = 0;
+
+    health = 3;
+
+    color = '#000';
+
+    categories = ['human'];
+
     constructor() {
         super();
 
-        this.type = 'human';
-
-        this.z = Z_HUMAN;
-
-        this.categories.push('human');
-        this.aim = 0;
-        this.facing = 1;
-        this.lastDamage = -9;
-        this.vY = 0;
-        this.walkingDirection = 1;
-
-        this.walking = false;
-        this.lastLanded = -9;
-
-        this.radiusX = 10;
-        this.radiusY = 40;
-
         this.hitbox.width = this.radiusX * 2;
         this.hitbox.height = this.radiusY * 2;
-
-        this.nextShot = 0;
-        this.lastSeenCat = -9;
-        this.lastCatCheck = 0;
-
-        this.health = 3;
-
-        this.visionDistance = 0;
-
-        this.color = '#000';
     }
 
     get landed() {

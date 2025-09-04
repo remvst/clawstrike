@@ -1,13 +1,15 @@
 class Game {
+
+    bestRunTime = parseInt(localStorage[nomangle("bt")]) || 0;
+    screens = [];
+    difficulty = inputMode == INPUT_MODE_TOUCH ? DIFFICULTY_EASY : DIFFICULTY_NORMAL;
+
     constructor() {
         if (DEBUG) {
             this.lastFrameIndex = 0;
             this.frameTimes = Array(60).fill(0);
         }
 
-        this.bestRunTime = parseInt(localStorage[nomangle("bt")]) || 0;
-        this.screens = [];
-        this.difficulty = inputMode == INPUT_MODE_TOUCH ? DIFFICULTY_EASY : DIFFICULTY_NORMAL;
 
         if (DEBUG) {
             const params = new URLSearchParams(location.search);

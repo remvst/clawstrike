@@ -1,12 +1,13 @@
 class ClawEffect extends Entity {
 
+    color = '#fff';
+    z = Z_CLAW;
+    stroke = true;
+
     constructor() {
         super();
         this.angle = this.seed * TWO_PI;
         this.scale = 1 + this.seed * 0.5;
-        this.color = '#fff';
-        this.z = Z_CLAW;
-        this.stroke = true;
     }
 
     cycle(elapsed) {

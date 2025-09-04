@@ -1,24 +1,23 @@
-class MeowEffect extends Entity {
-    constructor() {
-        super();
-        this.z = Z_MEOW;
-        this.affected = new Set();
+MEOWS = [
+    nomangle('MEOW'),
+    nomangle('MEWR'),
+    nomangle('MEW'),
+    nomangle('MOW'),
+    nomangle('MAW'),
+    nomangle('VRAOW'),
+    nomangle('MEWR'),
+    nomangle('MAORRAO'),
+    nomangle('MEWP'),
+];
 
-        const labels = [
-            nomangle('MEOW'),
-            nomangle('MEWR'),
-            nomangle('MEW'),
-            nomangle('MOW'),
-            nomangle('MAW'),
-            nomangle('VRAOW'),
-            nomangle('MEWR'),
-            nomangle('MAORRAO'),
-            nomangle('MEWP'),
-        ]
-        this.textLabel = labels[~~(this.seed * labels.length)];
-        this.textX = rnd(-50, 50);
-        this.textY = rnd(-20, -50);
-    }
+class MeowEffect extends Entity {
+
+    z = Z_MEOW;
+    affected = new Set();
+    textLabel = MEOWS[~~(this.seed * MEOWS.length)];
+
+    textX = rnd(-50, 50);
+    textY = rnd(-20, -50);
 
     get radius() {
         return interpolate(0, 400, this.age / 0.5);

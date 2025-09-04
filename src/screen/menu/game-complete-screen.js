@@ -1,10 +1,12 @@
 class GameCompleteScreen extends MenuScreen {
+
+    title = nomangle('CONGRATULATIONS');
+
     constructor(worldScreen) {
         super();
 
         this.worldScreen = worldScreen;
 
-        this.title = nomangle('CONGRATULATIONS');
         this.addCommand(nomangle('DIFFICULTY: ') + G.difficulty.label);
         this.addCommand(nomangle('DEATHS: ') + G.runDeaths);
         this.addCommand(nomangle('TIME: ') + formatTime(G.runTime));

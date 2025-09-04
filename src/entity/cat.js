@@ -1,46 +1,50 @@
 class Cat extends Entity {
+
+    type = 'cat';
+
+    z = Z_CAT;
+
+    lastDamage = -9;
+    damageTaken = 0;
+
+    facing = 1;
+    attackCooldown = 0;
+    lastAttack = -9;
+    heat = 0;
+    nextHeatReset = 0;
+    releasedAttack = false;
+
+    radiusX = 20;
+    radiusY = 20;
+
+    rolling = false;
+    rollingAge = 0;
+
+    releasedJump = false;
+    jumpStartAge = -9;
+    jumpEndAge = -9;
+    jumpStartY = 0;
+    jumpHoldTime = 0;
+    lastLanded = -9;
+
+    vX = 0;
+    vY = 0;
+
+    viewAngle = 0;
+
+    wallStickX = 0;
+    wallStickDirection = 0;
+    lastStickToWall = -9;
+
+    color = '#000';
+
+    categories = ['cat'];
+
     constructor() {
         super();
 
-        this.type = 'cat';
-
-        this.z = Z_CAT;
-
-        this.lastDamage = -9;
-        this.damageTaken = 0;
-
-        this.categories.push('cat');
-        this.facing = 1;
-        this.attackCooldown = 0;
-        this.lastAttack = -9;
-        this.heat = 0;
-        this.nextHeatReset = 0;
-        this.releasedAttack = false;
-
-        this.rolling = false;
-        this.rollingAge = 0;
-
-        this.releasedJump = false;
-        this.jumpStartAge = this.jumpEndAge = -9999;
-        this.jumpStartY = 0;
-        this.jumpHoldTime = 0;
-        this.lastLanded = -9;
-
-        this.vX = 0;
-        this.vY = 0;
-
-        this.viewAngle = 0;
-
-        this.radiusX = 20;
-        this.radiusY = 20;
         this.hitbox.width = this.radiusX * 2;
         this.hitbox.height = this.radiusY * 2;
-
-        this.wallStickX = 0;
-        this.wallStickDirection = 0;
-        this.lastStickToWall = -9;
-
-        this.color = '#000';
     }
 
     get attackHitbox() {

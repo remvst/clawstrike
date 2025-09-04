@@ -1,11 +1,8 @@
 class Particle extends Entity {
-    constructor() {
-        super();
 
-        this.z = Z_PARTICLE;
-        this.alpha = 1;
-        this.size = 1;
-    }
+    z = Z_PARTICLE;
+    alpha = 1;
+    size = 1;
 
     render() {
         ctx.globalAlpha = this.alpha;

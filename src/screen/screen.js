@@ -1,10 +1,11 @@
 class Screen {
+    age = 0;
+    commands = [];
+
     constructor() {
         if (DEBUG) {
             this.debugValues = () => ([]);
         }
-        this.age = 0;
-        this.commands = [];
     }
 
     get songVolume() {

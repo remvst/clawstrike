@@ -32,15 +32,13 @@ BACKGROUND_STRIPES = (() => {
 })();
 
 class Structure extends Entity {
-    constructor() {
-        super();
-        this.type = 'structure';
-        this.categories.push('structure');
-        this.color = '#f00';
-        this.raycaster = new Raycaster(this);
 
-        this.z = Z_STRUCTURE;
-    }
+    type = 'structure';
+    categories = ['structure'];
+    color = '#f00';
+    raycaster = new Raycaster(this);
+
+    z = Z_STRUCTURE;
 
     cycle(elapsed) {
         super.cycle(elapsed);

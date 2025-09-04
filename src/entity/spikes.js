@@ -1,15 +1,11 @@
 class Spikes extends Entity {
 
-    constructor() {
-        super();
+    type = 'spikes';
 
-        this.type = 'spikes';
+    angle = 0;
+    length = CELL_SIZE;
 
-        this.angle = 0;
-        this.length = CELL_SIZE;
-
-        this.z = Z_SPIKES;
-    }
+    z = Z_SPIKES;
 
     get hitbox() {
         const hitbox = super.hitbox;

@@ -1,10 +1,12 @@
 class MainMenuScreen extends MenuScreen {
+
+    title = document.title;
+
     constructor(worldScreen) {
         super();
 
         this.worldScreen = worldScreen;
 
-        this.title = document.title;
         this.addCommand(
             inputMode == INPUT_MODE_KEYBOARD
                 ? nomangle('PRESS [SPACE] TO START')

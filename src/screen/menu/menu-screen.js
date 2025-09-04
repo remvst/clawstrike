@@ -1,9 +1,5 @@
 class MenuScreen extends Screen {
 
-    constructor() {
-        super();
-    }
-
     render() {
         ctx.wrap(() => this.renderTitle());
         ctx.wrap(() => this.renderCommands());

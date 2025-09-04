@@ -1,14 +1,14 @@
 class Entity {
+    categories = [];
+    seed = random();
+
     constructor() {
         this.x = this.y = this.previousX = this.previousY = this.age = 0;
         this.z = 0;
-        this.categories = [];
-        this.seed = random();
-
-        this.cachedHitbox = new Rect();
     }
 
     get hitbox() {
+        this.cachedHitbox ||= new Rect();
         this.cachedHitbox.x = this.x;
         this.cachedHitbox.y = this.y;
         return this.cachedHitbox;

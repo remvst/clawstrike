@@ -11,12 +11,14 @@ formatTime = x => {
 };
 
 class HUD extends Entity {
+
+    alpha = 1;
+    z = Z_HUD;
+    categories = ['hud'];
+
     constructor(cat) {
         super();
-        this.categories.push('hud');
         this.cat = cat;
-        this.alpha = 1;
-        this.z = Z_HUD;
     }
 
     cycle(elapsed) {

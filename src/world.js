@@ -1,8 +1,7 @@
 class World {
-    constructor() {
-        this.entities = [];
-        this.categories = {};
-    }
+
+    entities = [];
+    categories = {};
 
     cycle(elapsed) {
         for (const entity of this.entities.slice()) {

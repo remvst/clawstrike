@@ -1,13 +1,11 @@
 class Camera extends Entity {
-    constructor() {
-        super();
-        this.categories.push('camera');
-        this.zoom = 1.3;
-        this.cachedActual = {};
-    }
+
+    zoom = 1.3;
+    categories = ['camera'];
 
     get actual() {
         const factor = (this.age < this.shakeEndAge) * (this.shakePower || 0);
+        this.cachedActual ||= {};
         this.cachedActual.x = this.x + sin(this.age * TWO_PI * 10) * factor;
         this.cachedActual.y = this.y + cos(this.age * TWO_PI * 15) * factor;
         return this.cachedActual;

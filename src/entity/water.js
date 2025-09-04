@@ -1,15 +1,11 @@
 class Water extends Entity {
 
-    constructor() {
-        super();
+    z = Z_WATER;
 
-        this.z = Z_WATER;
+    type = 'water';
 
-        this.type = 'water';
-
-        this.length = CELL_SIZE;
-        this.depth = CELL_SIZE;
-    }
+    length = CELL_SIZE;
+    depth = CELL_SIZE;
 
     get hitbox() {
         const hitbox = super.hitbox;

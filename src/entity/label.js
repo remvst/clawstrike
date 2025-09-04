@@ -1,12 +1,11 @@
 class Label extends Entity {
+    type = 'text';
+    z = Z_LABEL;
+    visibleStartAge = 0;
+
     constructor(text = '') {
         super();
-        this.type = 'text';
         this.text = text;
-
-        this.z = Z_LABEL;
-
-        this.visibleStartAge = 0;
 
         if (DEBUG) {
             this.hitbox.width = 25;

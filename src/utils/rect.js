@@ -1,7 +1,8 @@
 class Rect {
-    constructor() {
-        this.x = this.y = this.width = this.height = 0;
-    }
+    x = 0;
+    y = 0;
+    width = 0;
+    height = 0;
 
     intersects(other) {
         return abs(this.x - other.x) < (this.width + other.width) / 2 &&
