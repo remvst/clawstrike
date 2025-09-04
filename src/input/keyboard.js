@@ -12,6 +12,9 @@ const alternatives = {
     81: 37,
 };
 
-document.onkeydown = (evt) => downKeys[alternatives[evt.keyCode] || evt.keyCode] = true;
+document.onkeydown = (evt) => {
+    inputMode = INPUT_MODE_KEYBOARD;
+    downKeys[alternatives[evt.keyCode] || evt.keyCode] = true;
+};
 document.onkeyup = (evt) => downKeys[alternatives[evt.keyCode] || evt.keyCode] = false;
 onblur = () => downKeys = {};
